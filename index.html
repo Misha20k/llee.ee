@@ -100,24 +100,60 @@
     }
 
     .logo{
-      width:92px;
-      height:92px;
-      border-radius:18px;
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      flex:0 0 auto;
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
-    }
+  position: relative;           /* важно! */
+  width:160px;
+  height:160px;
+  border-radius:20px;
+
+  background: rgba(255,255,255,.03);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow: hidden;             /* оставляем: чтобы картинка не вылазила */
+  flex:0 0 auto;
+
+  /* растворяем края капсулы */
+-webkit-mask-image: radial-gradient(circle at center, #000 64%, transparent 100%);
+mask-image: radial-gradient(circle at center, #000 64%, transparent 100%);
+
+
+
+  /* мягкая “дымка” по краям + глубина */
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.42),
+    0 0 28px rgba(255,210,74,.10),
+    0 0 0 1px rgba(255,255,255,.05) inset;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* внешний мягкий ореол (он СНАРУЖИ и не обрезается) */
+.logo:before{
+  content:"";
+  position:absolute;
+  inset:-34px;                  /* выходим наружу */
+  border-radius:50px;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,210,74,.18), transparent 70%),
+    radial-gradient(circle at 70% 70%, rgba(255,159,26,.12), transparent 70%);
+  filter: blur(16px);
+  opacity:.55;
+  z-index:-1;                   /* важно: уходит ЗА .logo */
+  pointer-events:none;
+}
+
+
 
     .logo img{
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:contain;
+      image-rendering:auto;
       display:block;
+      transform: scale(1.70);
     }
 
     .brand h1{
@@ -329,7 +365,7 @@
               <h1>LL Elektri <span>Expert</span></h1>
               <div class="tag">
                 <span class="pill"><span class="dot"></span> Электромонтаж</span>
-                <span class="pill"><span class="dot"></span> Электрощиты</span>
+                <span class="pill"><span class="dot"></span> Автоматика</span>
                 <span class="pill"><span class="dot"></span> Диагностика</span>
               </div>
             </div>
@@ -339,13 +375,14 @@
 
           <p class="headline">Инженерный подход. Аккуратно. По стандартам.</p>
           <p class="lead">
-            Сайт готовится к запуску. Пока мы принимаем заявки напрямую — быстро отвечаем и подскажем оптимальное решение
-            по работам и материалам.
-          </p>
+                 Мы запускаем сайт. Уже сейчас можно оставить заявку — оценим объём работ, предложим оптимальное решение
+                 и согласуем выезд.
+             </p>
+
 
           <div class="ctaRow" role="navigation" aria-label="Контакты">
-            <a class="btn primary" href="tel:+37258279469">
-              <span class="icon">T</span> Позвонить: +372 5827 9469
+            <a class="btn primary" href="tel:+37258203015">
+              <span class="icon">T</span> Позвонить: +372 5827 9469 ; +372 5820 3015
             </a>
 
             <a class="btn" href="mailto:dmitry.npmneo@gmail.com?subject=Запрос%20на%20работы%20LL%20Elektri%20Expert">
@@ -391,10 +428,7 @@
               </div>
             </div>
 
-            <div class="note">
-              <b>Важно:</b> если ты хочешь заменить Gmail на доменную почту (например, <i>info@llee.ee</i>),
-              мы сделаем это отдельным шагом — без покупки дорогого хостинга.
-            </div>
+        
 
             <div class="divider"></div>
 
