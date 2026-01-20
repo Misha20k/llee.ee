@@ -215,11 +215,18 @@ mask-image: radial-gradient(circle at center, #000 64%, transparent 100%);
     }
 
     .ctaRow{
-      margin-top:16px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;   /* <-- столбик */
+  gap:10px;
+  align-items:stretch;     /* <-- одинаковая ширина */
+}
+
+.ctaRow .btn{
+  width:100%;              /* <-- кнопки по ширине блока */
+  justify-content:flex-start;
+}
+
 
     .btn{
       border:1px solid rgba(255,255,255,.16);
@@ -381,11 +388,15 @@ mask-image: radial-gradient(circle at center, #000 64%, transparent 100%);
 
           <div class="ctaRow" role="navigation" aria-label="Контакты">
             <a class="btn primary" href="tel:+37258203015">
-              <span class="icon">T</span> Позвонить: +372 5820 3015
+              <span class="icon">О</span> Позвонить: +372 5820 3015
             </a>
             <a class="btn primary" href="tel:+37258279469">
-              <span class="icon">T</span> Позвонить: +372 5827 9469
+              <span class="icon">Д</span> Позвонить: +372 5827 9469
             </a>
+            <a class="btn" href="https://instagram.com/electro_kip_est" target="_blank" rel="noopener">
+              <span class="icon">IG</span> Instagram
+            </a>
+
 
 
             <a class="btn" href="mailto:dmitry.npmneo@gmail.com?subject=Запрос%20на%20работы%20LL%20Elektri%20Expert">
