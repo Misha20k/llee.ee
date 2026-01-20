@@ -3,29 +3,414 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LL Elektri Expert — сайт в разработке</title>
+  <title>LL Elektri Expert — электромонтаж в Эстонии</title>
+  <meta name="description" content="LL Elektri Expert — электромонтаж, электрощиты, диагностика. Estonia. Сайт в разработке." />
+  <meta name="theme-color" content="#0b1220" />
+
   <style>
-    body{font-family:Arial, sans-serif; margin:0; display:flex; min-height:100vh; align-items:center; justify-content:center; background:#0b1220; color:#fff;}
-    .box{max-width:720px; padding:28px; border-radius:16px; background:rgba(255,255,255,.06); box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    h1{margin:0 0 10px; font-size:28px}
-    p{margin:10px 0; line-height:1.45; color:rgba(255,255,255,.85)}
-    .badge{display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.12); font-size:13px; margin-bottom:14px}
-    .contacts{margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.12)}
-    a{color:#ffd24a; text-decoration:none}
-    a:hover{text-decoration:underline}
+    :root{
+      --bg0:#070b14;
+      --bg1:#0b1220;
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --muted2:rgba(255,255,255,.60);
+      --accent:#ffd24a;
+      --accent2:#ff9f1a;
+      --good:#6ee7b7;
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,210,74,.16), transparent 55%),
+        radial-gradient(900px 600px at 85% 30%, rgba(255,159,26,.10), transparent 60%),
+        radial-gradient(900px 700px at 55% 85%, rgba(110,231,183,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* subtle “engineering grid” */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(closest-side at 50% 40%, rgba(0,0,0,.80), transparent 70%);
+      pointer-events:none;
+      opacity:.22;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 16px;
+    }
+
+    .shell{
+      width:min(1050px, 100%);
+      display:grid;
+      gap:18px;
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+
+    @media (max-width: 920px){
+      .shell{grid-template-columns:1fr;}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .card:after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(800px 200px at 10% 0%, rgba(255,210,74,.18), transparent 55%);
+      pointer-events:none;
+      opacity:.85;
+    }
+
+    .main{
+      padding:26px 26px 22px 26px;
+      position:relative;
+      z-index:1;
+    }
+
+    .top{
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+
+    .logo{
+      width:92px;
+      height:92px;
+      border-radius:18px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size: 30px;
+      letter-spacing:.2px;
+      line-height:1.15;
+    }
+
+    .brand h1 span{
+      color: var(--accent);
+    }
+
+    .brand .tag{
+      margin-top:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color:var(--muted);
+      font-size: 14px;
+    }
+
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(8px);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(255,159,26,.15);
+      flex:0 0 auto;
+    }
+
+    .divider{
+      margin:18px 0 16px;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+    }
+
+    .headline{
+      margin:0 0 10px;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .lead{
+      margin:0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size: 15px;
+      max-width: 62ch;
+    }
+
+    .ctaRow{
+      margin-top:16px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:11px 14px;
+      border-radius: 14px;
+      text-decoration:none;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+      font-size: 14px;
+    }
+
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22); }
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(255,210,74,.20), rgba(255,159,26,.14));
+      border-color: rgba(255,210,74,.35);
+    }
+
+    .icon{
+      width:22px; height:22px; border-radius:8px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color: var(--accent);
+      flex:0 0 auto;
+    }
+
+    .side{
+      padding:20px;
+      position:relative;
+      z-index:1;
+    }
+
+    .side .box{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,.04));
+      padding:16px;
+    }
+
+    .kpi{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 920px){
+      .kpi{grid-template-columns:1fr 1fr;}
+    }
+    @media (max-width: 420px){
+      .kpi{grid-template-columns:1fr;}
+    }
+
+    .kpiItem{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      border-radius: 16px;
+      padding:12px 12px 11px;
+    }
+    .kpiItem .t{
+      font-size: 12px;
+      color: var(--muted2);
+      margin:0 0 6px;
+    }
+    .kpiItem .v{
+      margin:0;
+      font-size: 14px;
+      color: var(--text);
+      line-height:1.35;
+    }
+
+    .note{
+      margin-top:12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.45;
+    }
+
+    .footer{
+      margin-top:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+
+    .smallLink{
+      color: var(--muted2);
+      text-decoration:none;
+      border-bottom:1px dashed rgba(255,255,255,.25);
+    }
+    .smallLink:hover{ color: var(--text); border-bottom-color: rgba(255,210,74,.55); }
+
+    /* subtle corner badge */
+    .corner{
+      position:absolute;
+      top:14px; right:14px;
+      padding:8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.80);
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      z-index:2;
+      backdrop-filter: blur(10px);
+    }
+    .corner .led{
+      width:9px; height:9px; border-radius:50%;
+      background: var(--good);
+      box-shadow: 0 0 0 4px rgba(110,231,183,.12);
+    }
   </style>
 </head>
+
 <body>
-  <div class="box">
-    <div class="badge">⚡ Электромонтаж • Электрощиты • Диагностика</div>
-    <h1>LL Elektri Expert</h1>
-    <p>Сайт находится в разработке. Скоро здесь будет полный перечень услуг и работ.</p>
-    <div class="contacts">
-      <p><b>Контакты:</b></p>
-      <p>📧 Email: <a href="mailto:dmitry.npmneo@gmail.com">dmitry.npmneo@gmail.com</a></p>
-      <p>📞 Телефон: <a href="tel:+37258279469">+372 5827 9469</a></p>
-      <p>🇪🇪 Estonia</p>
+  <div class="wrap">
+    <div class="shell">
+
+      <!-- MAIN CARD -->
+      <section class="card">
+        <div class="corner"><span class="led"></span> В работе / In progress</div>
+
+        <div class="main">
+          <div class="top">
+            <div class="logo" aria-label="LL Elektri Expert logo">
+              <!-- В репозитории рядом положи файл logo.png -->
+              <img src="logo.png" alt="LL Elektri Expert" />
+            </div>
+
+            <div class="brand">
+              <h1>LL Elektri <span>Expert</span></h1>
+              <div class="tag">
+                <span class="pill"><span class="dot"></span> Электромонтаж</span>
+                <span class="pill"><span class="dot"></span> Электрощиты</span>
+                <span class="pill"><span class="dot"></span> Диагностика</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <p class="headline">Инженерный подход. Аккуратно. По стандартам.</p>
+          <p class="lead">
+            Сайт готовится к запуску. Пока мы принимаем заявки напрямую — быстро отвечаем и подскажем оптимальное решение
+            по работам и материалам.
+          </p>
+
+          <div class="ctaRow" role="navigation" aria-label="Контакты">
+            <a class="btn primary" href="tel:+37258279469">
+              <span class="icon">T</span> Позвонить: +372 5827 9469
+            </a>
+
+            <a class="btn" href="mailto:dmitry.npmneo@gmail.com?subject=Запрос%20на%20работы%20LL%20Elektri%20Expert">
+              <span class="icon">@</span> Написать на email
+            </a>
+
+            <!-- Если хочешь Telegram/WhatsApp — вставим потом ссылку -->
+            <!--
+            <a class="btn" href="https://t.me/username"><span class="icon">TG</span> Telegram</a>
+            <a class="btn" href="https://wa.me/37258279469"><span class="icon">WA</span> WhatsApp</a>
+            -->
+          </div>
+
+          <div class="footer">
+            <div>Estonia • Ida-Virumaa / Tallinn</div>
+            <div>
+              <a class="smallLink" href="https://www.google.com/search?q=LL+Elektri+Expert" target="_blank" rel="noopener">Проверить бренд</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SIDE CARD -->
+      <aside class="card">
+        <div class="side">
+          <div class="box">
+            <div class="kpi">
+              <div class="kpiItem">
+                <p class="t">Работы</p>
+                <p class="v">Монтаж/замена проводки, розетки, выключатели, освещение</p>
+              </div>
+              <div class="kpiItem">
+                <p class="t">Щиты</p>
+                <p class="v">Сборка, модернизация, поиск неисправностей, маркировка</p>
+              </div>
+              <div class="kpiItem">
+                <p class="t">Диагностика</p>
+                <p class="v">Проверки, измерения, устранение аварийных ситуаций</p>
+              </div>
+              <div class="kpiItem">
+                <p class="t">Коммуникация</p>
+                <p class="v">Оценка работ • согласование • выезд</p>
+              </div>
+            </div>
+
+            <div class="note">
+              <b>Важно:</b> если ты хочешь заменить Gmail на доменную почту (например, <i>info@llee.ee</i>),
+              мы сделаем это отдельным шагом — без покупки дорогого хостинга.
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="footer">
+              <div>LL Elektri Expert</div>
+              <div>© <span id="y"></span></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
     </div>
   </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
