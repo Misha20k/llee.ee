@@ -1,464 +1,1094 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LL Elektri Expert — электромонтаж в Эстонии</title>
-  <meta name="description" content="LL Elektri Expert — электромонтаж, электрощиты, диагностика. Estonia. Сайт в разработке." />
-  <meta name="theme-color" content="#0b1220" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Электромонтаж в Ида-Вирумаа — LL Elektri Expert OÜ</title>
+    <meta name="theme-color" content="#0b4aa2" />
+   <link rel="icon" href="assets/favicon-white.ico?v=2" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="assets/site.webmanifest">
 
-  <style>
-    :root{
-      --bg0:#070b14;
-      --bg1:#0b1220;
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.08);
-      --line:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.72);
-      --muted2:rgba(255,255,255,.60);
-      --accent:#ffd24a;
-      --accent2:#ff9f1a;
-      --good:#6ee7b7;
-      --shadow: 0 18px 55px rgba(0,0,0,.55);
-      --radius:22px;
+    
+    <meta name="description" content="Надёжный электромонтаж под ключ. Услуги электрика, монтаж проводки, подключение щитов." />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
+            colors: {
+              brand: {
+                blue: '#1e3a8a',
+                lightBlue: '#2563eb',
+                orange: '#f97316',
+                lightOrange: '#ff8a3d',
+                dark: '#0f172a',
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        background-color: #f8fafc;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+      }
+      
+      /* Скроллбар */
+      ::-webkit-scrollbar { width: 10px; }
+      ::-webkit-scrollbar-track { background: #f1f5f9; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 5px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+      /* Анимация появления при прокрутке */
+      .fade-in-section {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        will-change: opacity, visibility;
+      }
+      .fade-in-section.is-visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* 3D эффект для карточек */
+      .card-3d {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .card-3d:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      }
+      .card-gradient-line {
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+        transform-origin: left;
+      }
+      .card-3d:hover .card-gradient-line {
+        transform: scaleX(1);
+      }
+
+      /* 3D перспектива для фото */
+      .perspective-1000 { perspective: 1000px; }
+      .hero-image-wrap {
+        transform-style: preserve-3d;
+        transition: transform 0.5s ease;
+      }
+      .hero-image-wrap:hover {
+        transform: rotateX(2deg) rotateY(-2deg) scale(1.02);
+      }
+
+      /* Градиентная кнопка */
+      .btn-primary {
+        background: linear-gradient(135deg, #f97316 0%, #ff8a3d 100%);
+        color: #fff;
+      }
+      .btn-primary:hover { filter: brightness(110%); }
+    </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": [
+    "LocalBusiness",
+    "Electrician"
+  ],
+  "name": "LL Elektri Expert OÜ",
+  "url": "https://llee.ee",
+  "telephone": [
+    "+37281271118",
+    "+37281271119"
+  ],
+  "areaServed": [
+    {
+      "@type": "AdministrativeArea",
+      "name": "Ida-Virumaa"
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(255,210,74,.16), transparent 55%),
-        radial-gradient(900px 600px at 85% 30%, rgba(255,159,26,.10), transparent 60%),
-        radial-gradient(900px 700px at 55% 85%, rgba(110,231,183,.08), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-
-    /* subtle “engineering grid” */
-    body:before{
-      content:"";
-      position:fixed; inset:0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size: 46px 46px;
-      mask-image: radial-gradient(closest-side at 50% 40%, rgba(0,0,0,.80), transparent 70%);
-      pointer-events:none;
-      opacity:.22;
-    }
-
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px 16px;
-    }
-
-    .shell{
-      width:min(1050px, 100%);
-      display:grid;
-      gap:18px;
-      grid-template-columns: 1.15fr 0.85fr;
-    }
-
-    @media (max-width: 920px){
-      .shell{grid-template-columns:1fr;}
-    }
-
-    .card{
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.03));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .card:after{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(800px 200px at 10% 0%, rgba(255,210,74,.18), transparent 55%);
-      pointer-events:none;
-      opacity:.85;
-    }
-
-    .main{
-      padding:26px 26px 22px 26px;
-      position:relative;
-      z-index:1;
-    }
-
-    .top{
-      display:flex;
-      gap:18px;
-      align-items:center;
-    }
-
-    .logo{
-  position: relative;           /* важно! */
-  width:160px;
-  height:160px;
-  border-radius:20px;
-
-  background: rgba(255,255,255,.03);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  overflow: hidden;             /* оставляем: чтобы картинка не вылазила */
-  flex:0 0 auto;
-
-  /* растворяем края капсулы */
--webkit-mask-image: radial-gradient(circle at center, #000 64%, transparent 100%);
-mask-image: radial-gradient(circle at center, #000 64%, transparent 100%);
-
-
-
-  /* мягкая “дымка” по краям + глубина */
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.42),
-    0 0 28px rgba(255,210,74,.10),
-    0 0 0 1px rgba(255,255,255,.05) inset;
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "Ida-Virumaa",
+    "addressCountry": "EE"
+  },
+  "sameAs": [
+    "https://instagram.com/electro_kip_est"
+  ]
 }
-
-/* внешний мягкий ореол (он СНАРУЖИ и не обрезается) */
-.logo:before{
-  content:"";
-  position:absolute;
-  inset:-34px;                  /* выходим наружу */
-  border-radius:50px;
-  background:
-    radial-gradient(circle at 35% 30%, rgba(255,210,74,.18), transparent 70%),
-    radial-gradient(circle at 70% 70%, rgba(255,159,26,.12), transparent 70%);
-  filter: blur(16px);
-  opacity:.55;
-  z-index:-1;                   /* важно: уходит ЗА .logo */
-  pointer-events:none;
-}
-
-
-
-    .logo img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      image-rendering:auto;
-      display:block;
-      transform: scale(1.70);
-    }
-
-    .brand h1{
-      margin:0;
-      font-size: 30px;
-      letter-spacing:.2px;
-      line-height:1.15;
-    }
-
-    .brand h1 span{
-      color: var(--accent);
-    }
-
-    .brand .tag{
-      margin-top:8px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      color:var(--muted);
-      font-size: 14px;
-    }
-
-    .pill{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      backdrop-filter: blur(8px);
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-    }
-
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: var(--accent2);
-      box-shadow: 0 0 0 4px rgba(255,159,26,.15);
-      flex:0 0 auto;
-    }
-
-    .divider{
-      margin:18px 0 16px;
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-    }
-
-    .headline{
-      margin:0 0 10px;
-      font-size: 18px;
-      color: var(--text);
-    }
-
-    .lead{
-      margin:0;
-      color:var(--muted);
-      line-height:1.55;
-      font-size: 15px;
-      max-width: 62ch;
-    }
-
-    .ctaRow{
-  margin-top:16px;
-  display:flex;
-  flex-direction:column;   /* <-- столбик */
-  gap:10px;
-  align-items:stretch;     /* <-- одинаковая ширина */
-}
-
-.ctaRow .btn{
-  width:100%;              /* <-- кнопки по ширине блока */
-  justify-content:flex-start;
-}
-
-
-    .btn{
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      padding:11px 14px;
-      border-radius: 14px;
-      text-decoration:none;
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      box-shadow: 0 10px 22px rgba(0,0,0,.25);
-      font-size: 14px;
-    }
-
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22); }
-    .btn.primary{
-      background: linear-gradient(90deg, rgba(255,210,74,.20), rgba(255,159,26,.14));
-      border-color: rgba(255,210,74,.35);
-    }
-
-    .icon{
-      width:22px; height:22px; border-radius:8px;
-      background: rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.12);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      color: var(--accent);
-      flex:0 0 auto;
-    }
-
-    .side{
-      padding:20px;
-      position:relative;
-      z-index:1;
-    }
-
-    .side .box{
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,.04));
-      padding:16px;
-    }
-
-    .kpi{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width: 920px){
-      .kpi{grid-template-columns:1fr 1fr;}
-    }
-    @media (max-width: 420px){
-      .kpi{grid-template-columns:1fr;}
-    }
-
-    .kpiItem{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.14);
-      border-radius: 16px;
-      padding:12px 12px 11px;
-    }
-    .kpiItem .t{
-      font-size: 12px;
-      color: var(--muted2);
-      margin:0 0 6px;
-    }
-    .kpiItem .v{
-      margin:0;
-      font-size: 14px;
-      color: var(--text);
-      line-height:1.35;
-    }
-
-    .note{
-      margin-top:12px;
-      font-size: 13px;
-      color: var(--muted);
-      line-height:1.45;
-    }
-
-    .footer{
-      margin-top:12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      color: var(--muted2);
-      font-size: 12px;
-    }
-
-    .smallLink{
-      color: var(--muted2);
-      text-decoration:none;
-      border-bottom:1px dashed rgba(255,255,255,.25);
-    }
-    .smallLink:hover{ color: var(--text); border-bottom-color: rgba(255,210,74,.55); }
-
-    /* subtle corner badge */
-    .corner{
-      position:absolute;
-      top:14px; right:14px;
-      padding:8px 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.14);
-      color: rgba(255,255,255,.80);
-      font-size: 12px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      z-index:2;
-      backdrop-filter: blur(10px);
-    }
-    .corner .led{
-      width:9px; height:9px; border-radius:50%;
-      background: var(--good);
-      box-shadow: 0 0 0 4px rgba(110,231,183,.12);
-    }
-  </style>
+</script>
 </head>
+<body class="font-sans selection:bg-brand-orange/20 selection:text-brand-orange text-slate-600">
 
-<body>
-  <div class="wrap">
-    <div class="shell">
-
-      <!-- MAIN CARD -->
-      <section class="card">
-
-        <div class="main">
-          <div class="top">
-            <div class="logo" aria-label="LL Elektri Expert logo">
-              <!-- В репозитории рядом положи файл logo.png -->
-              <img src="logo.png" alt="LL Elektri Expert" />
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent">
+        <div class="container mx-auto px-4 md:px-6 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden"><img src="data:image/webp;base64,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" alt="LL Elektri Expert logo" class="w-full h-full object-contain p-0"  loading="lazy" /></div>
+                <div class="block">
+                    <h1 class="text-base md:text-lg font-extrabold text-slate-900 tracking-tight leading-tight">LL Elektri Expert OÜ</h1>
+                    <small class="text-xs font-medium text-slate-500 tracking-wide block" data-i18n="brand.subtitle">Электромонтаж • Ida-Virumaa</small>
+                </div>
             </div>
 
-            <div class="brand">
-              <h1>LL Elektri <span>Expert</span></h1>
-              <div class="tag">
-                <span class="pill"><span class="dot"></span> Электромонтаж</span>
-                <span class="pill"><span class="dot"></span> Автоматика</span>
-                <span class="pill"><span class="dot"></span> Диагностика</span>
-              </div>
-            </div>
-          </div>
+            <nav class="hidden lg:flex items-center gap-8">
+                <a href="#advantages" class="text-sm font-semibold text-slate-600 hover:text-brand-blue transition-colors relative group">
+                    <span data-i18n="menu.advantages">Преимущества</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="#services" class="text-sm font-semibold text-slate-600 hover:text-brand-blue transition-colors relative group">
+                    <span data-i18n="menu.services">Услуги</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="#pricing" class="text-sm font-semibold text-slate-600 hover:text-brand-blue transition-colors relative group">
+                    <span data-i18n="menu.pricing">Цены</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="#portfolio" class="text-sm font-semibold text-slate-600 hover:text-brand-blue transition-colors relative group">
+                    <span data-i18n="menu.portfolio">Портфолио</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="#reviews" class="text-sm font-semibold text-slate-600 hover:text-brand-blue transition-colors relative group">
+                    <span data-i18n="menu.reviews">Отзывы</span>
+                    <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
 
-          <div class="divider"></div>
+                <div class="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200/60" id="lang-switcher">
+                    <button data-lang="ru" class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200">RU</button>
+                    <button data-lang="ee" class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200">EE</button>
+                    <button data-lang="en" class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200">EN</button>
+                </div>
 
-          <p class="headline">Инженерный подход. Аккуратно. По стандартам.</p>
-          <p class="lead">
-                 Мы запускаем сайт. Уже сейчас можно оставить заявку — оценим объём работ, предложим оптимальное решение
-                 и согласуем выезд.
-             </p>
+                <a href="#contacts" class="btn-primary px-5 py-2.5 rounded-xl text-sm shadow-brand-orange/20 shadow-lg hover:shadow-brand-orange/40 transition-all hover:-translate-y-0.5 active:translate-y-0 text-white font-bold">
+                    <span data-i18n="menu.call">Заказать звонок</span>
+                </a>
+            </nav>
 
-
-          <div class="ctaRow" role="navigation" aria-label="Контакты">
-            <a class="btn primary" href="tel:+37258203015">
-              <span class="icon">О</span> Позвонить: +372 5820 3015
-            </a>
-            <a class="btn primary" href="tel:+37258279469">
-              <span class="icon">Д</span> Позвонить: +372 5827 9469
-            </a>
-            <a class="btn" href="https://instagram.com/electro_kip_est" target="_blank" rel="noopener">
-              <span class="icon">IG</span> Instagram
-            </a>
-
-
-
-            <a class="btn" href="mailto:dmitry.npmneo@gmail.com?subject=Запрос%20на%20работы%20LL%20Elektri%20Expert">
-              <span class="icon">@</span> Написать на email
-            </a>
-
-            <!-- Если хочешь Telegram/WhatsApp — вставим потом ссылку -->
-            <!--
-            <a class="btn" href="https://t.me/username"><span class="icon">TG</span> Telegram</a>
-            <a class="btn" href="https://wa.me/37258279469"><span class="icon">WA</span> WhatsApp</a>
-            -->
-          </div>
-
-          <div class="footer">
-            <div>Estonia • Ida-Virumaa / Tallinn</div>
-            <div>
-              <a class="smallLink" href="https://www.google.com/search?q=LL+Elektri+Expert" target="_blank" rel="noopener">Проверить бренд</a>
-            </div>
-          </div>
+            <button class="lg:hidden p-2 text-slate-700" id="mobile-menu-btn">
+                <i data-lucide="menu"></i>
+            </button>
         </div>
-      </section>
 
-      <!-- SIDE CARD -->
-      <aside class="card">
-        <div class="side">
-          <div class="box">
-            <div class="kpi">
-              <div class="kpiItem">
-                <p class="t">Работы</p>
-                <p class="v">Монтаж/замена проводки, розетки, выключатели, освещение</p>
-              </div>
-              <div class="kpiItem">
-                <p class="t">Щиты</p>
-                <p class="v">Сборка, модернизация, поиск неисправностей, маркировка</p>
-              </div>
-              <div class="kpiItem">
-                <p class="t">Диагностика</p>
-                <p class="v">Проверки, измерения, устранение аварийных ситуаций</p>
-              </div>
-              <div class="kpiItem">
-                <p class="t">Коммуникация</p>
-                <p class="v">Оценка работ • согласование • выезд</p>
-              </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-100 overflow-hidden absolute top-full left-0 right-0 shadow-lg">
+            <div class="container mx-auto px-4 py-6 flex flex-col gap-4">
+                <a href="#advantages" class="mobile-link text-lg font-medium text-slate-800 py-2 border-b border-slate-50" data-i18n="menu.advantages">Преимущества</a>
+                <a href="#services" class="mobile-link text-lg font-medium text-slate-800 py-2 border-b border-slate-50" data-i18n="menu.services">Услуги</a>
+                <a href="#pricing" class="mobile-link text-lg font-medium text-slate-800 py-2 border-b border-slate-50" data-i18n="menu.pricing">Цены</a>
+                <a href="#portfolio" class="mobile-link text-lg font-medium text-slate-800 py-2 border-b border-slate-50" data-i18n="menu.portfolio">Портфолио</a>
+                <a href="#reviews" class="mobile-link text-lg font-medium text-slate-800 py-2 border-b border-slate-50" data-i18n="menu.reviews">Отзывы</a>
+                
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200/60" id="mobile-lang-switcher">
+                        <button data-lang="ru" class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200">RU</button>
+                        <button data-lang="ee" class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200">EE</button>
+                        <button data-lang="en" class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200">EN</button>
+                    </div>
+                    <a href="#contacts" class="mobile-link btn-primary px-6 py-2 rounded-lg text-sm font-bold" data-i18n="menu.call">Заказать звонок</a>
+                </div>
             </div>
-
-        
-
-            <div class="divider"></div>
-
-            <div class="footer">
-              <div>LL Elektri Expert</div>
-              <div>© <span id="y"></span></div>
-            </div>
-          </div>
         </div>
-      </aside>
+    </header>
 
-    </div>
-  </div>
+    <main>
+        <section id="hero" class="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-400/10 rounded-full blur-3xl -z-10 mix-blend-multiply"></div>
+            <div class="absolute top-20 right-0 w-[800px] h-[600px] bg-orange-300/10 rounded-full blur-3xl -z-10 mix-blend-multiply"></div>
 
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+            <div class="container mx-auto px-4 md:px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div class="fade-in-section">
+                    <div class="inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white border border-blue-100/50 shadow-sm mb-8 cursor-default">
+                         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-50 text-brand-blue">
+                            <i data-lucide="shield" size="12"></i>
+                         </span>
+                         <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider" data-i18n="hero.label">
+                            Работаем по европейским стандартам
+                         </span>
+                    </div>
+
+                    <h2 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] mb-6" data-i18n="hero.title">
+                        Надёжный электромонтаж под ключ
+                    </h2>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl" data-i18n="hero.p">
+                        Услуги электрика в Ида-Вирумаа: монтаж проводки, подключение щитов.
+                    </p>
+                    <div class="flex flex-wrap gap-4 mb-10">
+  <a href="tel:+37281271118" class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" aria-label="Позвонить +372 8127 1118">
+    <i data-lucide="phone" size="18"></i>
+    <span data-i18n="cta.call">Позвонить</span>
+  </a>
+
+  <a href="tel:+37281271119" class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" aria-label="Позвонить +372 8127 1119">
+    <i data-lucide="phone" size="18"></i>
+    <span data-i18n="cta.call">Позвонить</span>
+  </a>
+
+  <a href="https://instagram.com/electro_kip_est" target="_blank" rel="noopener"
+     class="px-8 py-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold shadow-sm hover:bg-slate-50 hover:border-brand-orange/30 transition-all flex items-center gap-2"
+     aria-label="Написать в Instagram @electro_kip_est">
+    <i data-lucide="instagram" size="18"></i>
+    <span data-i18n="cta.instagram">Написать в Instagram</span>
+  </a>
+</div>
+
+                    </div>
+                    <div class="flex flex-wrap gap-y-3 gap-x-6 text-sm font-semibold text-slate-500">
+                        <span class="flex items-center gap-2"><i data-lucide="check" size="16" class="text-brand-orange"></i> <span data-i18n="hero.t1">Бесплатный выезд</span></span>
+                        <span class="flex items-center gap-2"><i data-lucide="check" size="16" class="text-brand-orange"></i> <span data-i18n="hero.t2">Скидка новым</span></span>
+                        <span class="flex items-center gap-2"><i data-lucide="check" size="16" class="text-brand-orange"></i> <span data-i18n="hero.t3">24/7</span></span>
+                    </div>
+                </div>
+
+                <div class="relative fade-in-section perspective-1000">
+                    <div class="hero-image-wrap relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/3] group">
+                        <img src="assets/hero.png" data-i18n-attr="alt:hero.imageAlt" alt="Electrician work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-60"></div>
+                        
+                        <div class="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/40 max-w-[200px]">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                <span class="text-xs font-bold uppercase text-slate-400">Status</span>
+                            </div>
+                            <div class="font-bold text-slate-900 text-sm">Eco / Standard / Pro</div>
+                            <div class="text-xs text-slate-500 mt-1" data-i18n="hero.badgeSub">Фотоотчёт, акт, гарантия</div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-orange/20 rounded-full blur-2xl"></div>
+                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-blue/20 rounded-full blur-2xl"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="advantages" class="py-24 bg-slate-50">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="max-w-3xl mx-auto text-center mb-16 fade-in-section">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900" data-i18n="adv.title">Почему выбирают нас</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed" data-i18n="adv.lead">Профессионализм и дисциплина.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden card-3d fade-in-section">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue to-brand-orange card-gradient-line"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center mb-6">
+                            <i data-lucide="check" size="28"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="adv.c1.t">Стандарты</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed" data-i18n="adv.c1.p">Описание стандартов.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden card-3d fade-in-section">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue to-brand-orange card-gradient-line"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mb-6">
+                            <i data-lucide="shield" size="28"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="adv.c2.t">Гарантия</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed" data-i18n="adv.c2.p">Описание гарантии.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden card-3d fade-in-section">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue to-brand-orange card-gradient-line"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center mb-6">
+                            <i data-lucide="euro" size="28"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="adv.c3.t">Цены</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed" data-i18n="adv.c3.p">Описание цен.</p>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden card-3d fade-in-section">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-blue to-brand-orange card-gradient-line"></div>
+                        <div class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mb-6">
+                            <i data-lucide="zap" size="28"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="adv.c4.t">Скорость</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed" data-i18n="adv.c4.p">Описание скорости.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-24 bg-white relative">
+            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+            
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="mb-16 fade-in-section">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900" data-i18n="srv.title">Услуги электрика</h2>
+                    <p class="text-slate-600 text-lg max-w-2xl" data-i18n="srv.lead">Описание услуг.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                    <div class="group p-6 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-brand-blue/20 transition-all duration-300 fade-in-section">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="zap" size="24"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors" data-i18n="srv.s1.t">Розетки</h3>
+                        <p class="text-slate-500 text-sm" data-i18n="srv.s1.p">Текст услуги.</p>
+                    </div>
+                    <div class="group p-6 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-brand-blue/20 transition-all duration-300 fade-in-section">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="lightbulb" size="24"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors" data-i18n="srv.s2.t">Свет</h3>
+                        <p class="text-slate-500 text-sm" data-i18n="srv.s2.p">Текст услуги.</p>
+                    </div>
+                    <div class="group p-6 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-brand-blue/20 transition-all duration-300 fade-in-section">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield" size="24"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors" data-i18n="srv.s3.t">Щиты</h3>
+                        <p class="text-slate-500 text-sm" data-i18n="srv.s3.p">Текст услуги.</p>
+                    </div>
+                    <div class="group p-6 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-brand-blue/20 transition-all duration-300 fade-in-section">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="settings" size="24"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors" data-i18n="srv.s4.t">Проводка</h3>
+                        <p class="text-slate-500 text-sm" data-i18n="srv.s4.p">Текст услуги.</p>
+                    </div>
+                    <div class="group p-6 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-brand-blue/20 transition-all duration-300 fade-in-section">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="activity" size="24"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors" data-i18n="srv.s5.t">Диагностика</h3>
+                        <p class="text-slate-500 text-sm" data-i18n="srv.s5.p">Текст услуги.</p>
+                    </div>
+                    <div class="group p-6 rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-brand-blue/20 transition-all duration-300 fade-in-section">
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="file-text" size="24"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors" data-i18n="srv.s6.t">Документы</h3>
+                        <p class="text-slate-500 text-sm" data-i18n="srv.s6.p">Текст услуги.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 fade-in-section">
+                    <div class="flex items-start gap-4 p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-green-100 text-green-700 flex items-center justify-center text-xl font-black shrink-0">E</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-lg">Eco</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed" data-i18n="pkg.eco">Desc</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-black shrink-0">S</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-lg">Standard</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed" data-i18n="pkg.std">Desc</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-xl font-black shrink-0">P</div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-lg">Pro</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed" data-i18n="pkg.pro">Desc</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-24 bg-slate-50">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900" data-i18n="price.title">Цены</h2>
+                    <p class="text-slate-600 text-lg max-w-2xl mx-auto" data-i18n="price.lead">Описание цен.</p>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden max-w-4xl mx-auto fade-in-section">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-brand-blue/5 border-b border-brand-blue/10">
+                                    <th class="p-5 font-extrabold text-brand-blue uppercase text-xs tracking-wider" data-i18n="price.th.work">Работа</th>
+                                    <th class="p-5 font-extrabold text-brand-blue uppercase text-xs tracking-wider" data-i18n="price.th.cost">Цена</th>
+                                    <th class="p-5 font-extrabold text-brand-blue uppercase text-xs tracking-wider hidden md:table-cell" data-i18n="price.th.note">Коммент</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r1.work">R1</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">25 € <span class="text-slate-400 font-normal text-xs" data-i18n="price.unit">шт</span></td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r1.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r2.work">R2</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">28 € <span class="text-slate-400 font-normal text-xs" data-i18n="price.unit">шт</span></td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r2.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r3.work">R3</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">45 € <span class="text-slate-400 font-normal text-xs" data-i18n="price.unit">шт</span></td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r3.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r4.work">R4</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">25 € <span class="text-slate-400 font-normal text-xs" data-i18n="price.unit">шт</span></td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r4.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r5.work">R5</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">30 € <span class="text-slate-400 font-normal text-xs" data-i18n="price.unit">шт</span></td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r5.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r6.work">R6</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">1,5 €/m</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r6.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r7.work">R7</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">3,5 €/m</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r7.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r8.work">R8</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">5 €/m</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r8.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r9.work">R9</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">120 €</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r9.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r10.work">R10</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">32 €/h</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r10.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r11.work">R11</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">55 €/h</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r11.note">Note</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="p-5 font-semibold text-slate-800" data-i18n="price.r12.work">R12</td>
+                                    <td class="p-5 font-bold text-brand-orange whitespace-nowrap">25 €</td>
+                                    <td class="p-5 text-sm text-slate-500 hidden md:table-cell" data-i18n="price.r12.note">Note</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-6 bg-slate-50 border-t border-slate-100">
+                         <p class="text-xs text-slate-500 leading-relaxed mb-6" data-i18n="price.note">Примечание.</p>
+                         <div class="flex flex-wrap items-center gap-4">
+                           <a href="#contacts" class="btn-primary px-6 py-3 rounded-xl text-sm shadow-md font-bold" data-i18n="price.cta">Смета</a>
+                           <span class="text-xs font-medium text-slate-400" data-i18n="price.reply">Ответ 30 мин</span>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-24 bg-white">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="mb-12 flex flex-col md:flex-row justify-between items-end gap-4 fade-in-section">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-900" data-i18n="port.title">Портфолио</h2>
+                        <p class="text-slate-600 max-w-lg" data-i18n="port.lead">Описание портфолио.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 fade-in-section">
+                     <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md bg-slate-100">
+                        <img src="https://picsum.photos/600/400?random=1" data-i18n-attr="alt:port.alt1" alt="Work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"  loading="lazy" />
+                    </div>
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md bg-slate-100">
+                        <img src="https://picsum.photos/600/400?random=2" data-i18n-attr="alt:port.alt2" alt="Work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"  loading="lazy" />
+                    </div>
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md bg-slate-100">
+                        <img src="https://picsum.photos/600/400?random=3" data-i18n-attr="alt:port.alt3" alt="Work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"  loading="lazy" />
+                    </div>
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md bg-slate-100">
+                        <img src="https://picsum.photos/600/400?random=4" data-i18n-attr="alt:port.alt4" alt="Work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"  loading="lazy" />
+                    </div>
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md bg-slate-100">
+                        <img src="https://picsum.photos/600/400?random=5" data-i18n-attr="alt:port.alt5" alt="Work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"  loading="lazy" />
+                    </div>
+                    <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md bg-slate-100">
+                        <img src="https://picsum.photos/600/400?random=6" data-i18n-attr="alt:port.alt6" alt="Work" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"  loading="lazy" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" class="py-24 bg-slate-50">
+            <div class="container mx-auto px-4 md:px-6 fade-in-section">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-900 text-center" data-i18n="rev.title">Отзывы</h2>
+                <p class="text-center text-slate-600 mb-16" data-i18n="rev.lead">Макет отзывов.</p>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative mt-8 hover:-translate-y-1 transition-transform duration-300">
+                        <div class="absolute -top-8 left-6">
+                            <img src="https://ui-avatars.com/api/?name=Anna&background=random" data-i18n-attr="alt:rev.a1.alt" alt="Avatar" class="w-16 h-16 rounded-full border-4 border-white shadow-md"  loading="lazy" />
+                        </div>
+                        <div class="pt-10">
+                            <div class="flex text-yellow-400 mb-3 gap-1">
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                            </div>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-4 italic">"<span data-i18n="rev.a1.text">Text</span>"</p>
+                            <div class="font-bold text-brand-blue text-sm text-right" data-i18n="rev.a1.author">Name</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative mt-8 hover:-translate-y-1 transition-transform duration-300">
+                        <div class="absolute -top-8 left-6">
+                            <img src="https://ui-avatars.com/api/?name=Boris&background=random" data-i18n-attr="alt:rev.a2.alt" alt="Avatar" class="w-16 h-16 rounded-full border-4 border-white shadow-md"  loading="lazy" />
+                        </div>
+                        <div class="pt-10">
+                            <div class="flex text-yellow-400 mb-3 gap-1">
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                            </div>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-4 italic">"<span data-i18n="rev.a2.text">Text</span>"</p>
+                            <div class="font-bold text-brand-blue text-sm text-right" data-i18n="rev.a2.author">Name</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative mt-8 hover:-translate-y-1 transition-transform duration-300">
+                        <div class="absolute -top-8 left-6">
+                            <img src="https://ui-avatars.com/api/?name=Katrin&background=random" data-i18n-attr="alt:rev.a3.alt" alt="Avatar" class="w-16 h-16 rounded-full border-4 border-white shadow-md"  loading="lazy" />
+                        </div>
+                        <div class="pt-10">
+                            <div class="flex text-yellow-400 mb-3 gap-1">
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                                <i data-lucide="star" size="16" fill="currentColor"></i>
+                            </div>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-4 italic">"<span data-i18n="rev.a3.text">Text</span>"</p>
+                            <div class="font-bold text-brand-blue text-sm text-right" data-i18n="rev.a3.author">Name</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacts" class="py-24 bg-white">
+            <div class="container mx-auto px-4 md:px-6 fade-in-section">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900" data-i18n="cnt.title">Контакты</h2>
+                        <p class="text-slate-600 text-lg mb-10" data-i18n="cnt.lead">Описание контактов.</p>
+
+                        <div class="space-y-6 mb-10">
+                                                        <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-brand-blue">
+                                    <i data-lucide="phone" size="24"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold uppercase text-slate-400" data-i18n="cnt.phone">Телефон</div>
+                                    <div class="space-y-1">
+                                        <a href="tel:+37281271118" class="block text-lg font-bold text-slate-900 hover:text-brand-orange">+372 8127 1118</a>
+                                        <a href="tel:+37281271119" class="block text-lg font-bold text-slate-900 hover:text-brand-orange">+372 8127 1119</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-brand-orange"><i data-lucide="mail" size="24"></i></div>
+                                <div><div class="text-xs font-bold uppercase text-slate-400" data-i18n="cnt.email">Email</div><a href="mailto:info@llee.ee" class="text-lg font-bold text-slate-900 hover:text-brand-orange">info@llee.ee</a></div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+                                    <i data-lucide="instagram" size="24"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold uppercase text-slate-400">Instagram</div>
+                                    <a href="https://instagram.com/electro_kip_est" target="_blank" rel="noopener noreferrer" class="text-lg font-bold text-slate-900 hover:text-brand-orange">@electro_kip_est</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600"><i data-lucide="map-pin" size="24"></i></div>
+                                <div><div class="text-xs font-bold uppercase text-slate-400" data-i18n="cnt.addr">Адрес</div><div class="text-lg font-bold text-slate-900">Ida-Virumaa, Estonia</div></div>
+                            </div>
+                        </div>
+
+                        <div class="h-64 w-full rounded-3xl overflow-hidden shadow-lg border border-slate-200 relative">
+                           <img src="assets/hero2.png" class="w-full h-full object-cover" data-i18n-attr="alt:cnt.mapAlt" alt="Ida-Virumaa, Estonia" loading="lazy" />
+                           <div class="absolute inset-0 flex items-center justify-center bg-black/10 pointer-events-none">
+                             <div class="bg-white px-4 py-2 rounded-lg shadow-xl font-bold text-sm flex items-center gap-2"><i data-lucide="map-pin" size="16" class="text-red-500"></i> Ida-Virumaa, Estonia</div>
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-8 rounded-3xl shadow-inner border border-slate-100">
+                        <form id="contact-form" class="space-y-5">
+                            <div class="grid md:grid-cols-2 gap-5">
+                                <div class="space-y-2">
+                                    <label for="name" class="text-sm font-bold text-slate-700 ml-1" data-i18n="form.name">Имя</label>
+                                    <input id="name" name="name" type="text" required data-i18n-attr="placeholder:form.namePh" placeholder="Имя" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-brand-blue/10 focus:border-brand-blue transition-all outline-none" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="phone" class="text-sm font-bold text-slate-700 ml-1" data-i18n="form.phone">Телефон</label>
+                                    <input id="phone" name="phone" type="tel" required data-i18n-attr="placeholder:form.phonePh" placeholder="Телефон" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-brand-blue/10 focus:border-brand-blue transition-all outline-none" />
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="email" class="text-sm font-bold text-slate-700 ml-1" data-i18n="form.email">Email</label>
+                                <input id="email" name="email" type="email" required data-i18n-attr="placeholder:form.emailPh" placeholder="Email" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-brand-blue/10 focus:border-brand-blue transition-all outline-none" />
+                            </div>
+                            <div class="space-y-2">
+                                <label for="message" class="text-sm font-bold text-slate-700 ml-1" data-i18n="form.msg">Сообщение</label>
+                                <textarea id="message" name="message" rows="4" data-i18n-attr="placeholder:form.msgPh" placeholder="Сообщение" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-brand-blue/10 focus:border-brand-blue transition-all outline-none resize-none"></textarea>
+                            </div>
+                            <p class="text-xs text-slate-400" data-i18n="form.help">Согласие.</p>
+                            <button type="submit" class="w-full btn-primary py-4 rounded-xl shadow-lg shadow-brand-orange/20 text-base font-bold hover:-translate-y-1 transition-all" data-i18n="form.submit">
+                                Отправить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-300 py-16">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="bg-gradient-to-r from-brand-blue to-brand-lightBlue p-8 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-brand-blue/30 mb-16">
+                <div class="max-w-xl">
+                    <h3 class="text-2xl text-white font-bold mb-2" data-i18n="f.cta">Готовы?</h3>
+                    <p class="text-blue-100" data-i18n="f.sub">Описание футера.</p>
+                </div>
+                <a href="#contacts" class="px-8 py-4 bg-white text-brand-blue font-extrabold rounded-xl shadow-lg hover:bg-blue-50 transition-colors whitespace-nowrap" data-i18n="f.btn">
+                    Оставить заявку
+                </a>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium opacity-70 border-t border-slate-800 pt-8">
+                <div>© <span id="year"></span> LL Elektri Expert OÜ</div>
+                <div class="flex gap-6">
+                    <span><span data-i18n="f.reg">Рег. nr</span> —</span>
+                    <span></span>
+                                        <a href="https://llee.ee" class="hover:text-white transition-colors font-semibold" target="_blank" rel="noopener noreferrer">llee.ee</a>
+                    <a href="https://instagram.com/electro_kip_est" class="hover:text-white transition-colors font-semibold" target="_blank" rel="noopener noreferrer">@electro_kip_est</a>
+                    <span>Ida-Virumaa</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#contacts" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-brand-orange rounded-full flex items-center justify-center text-white shadow-2xl shadow-brand-orange/40 border-2 border-white/20 md:hidden transition-transform hover:scale-110 active:scale-95">
+        <i data-lucide="mail" size="24"></i>
+    </a>
+
+    <script>
+        // --- Данные переводов (Из constants.ts) ---
+        const I18N = {
+          ru: {
+            metaTitle: "Электромонтаж в Ида-Вирумаа — LL Elektri Expert OÜ",
+            metaDesc: "Надёжный электромонтаж под ключ — быстро, безопасно, профессионально. Услуги электрика, монтаж проводки, подключение щитов. Прозрачные цены и гарантия.",
+            brand: { subtitle:"Электромонтаж • Ida-Virumaa" },
+            menu: { advantages:"Преимущества", services:"Услуги", pricing:"Цены", portfolio:"Портфолио", reviews:"Отзывы", call:"Заказать звонок" },
+            cta: { call:"Позвонить", instagram:"Написать в Instagram" },
+            hero: {
+              label:"Работаем по европейским стандартам • EVS-EN",
+              title:"Надёжный электромонтаж под ключ — быстро, безопасно, профессионально",
+              p:"Услуги электрика в Ида-Вирумаа: монтаж проводки, подключение щитов, свет и автоматика. Прозрачные цены, чистый монтаж и официальные документы.",
+              ctaPrimary:"Заказать звонок",
+              ctaSecondary:"Смотреть цены",
+              t1:"Бесплатный выезд",
+              t2:"Скидка новым клиентам",
+              t3:"Работаем 24/7",
+              imageAlt:"Электромонтаж — пример работ",
+              badgeSub:"Фотоотчёт, акт, гарантия"
+            },
+            adv:{
+              title:"Почему выбирают нас",
+              lead:"Профессионализм, дисциплина и прозрачность — основа нашей репутации. Мы делаем так, как сделали бы «для себя».",
+              c1:{t:"По европейским стандартам", p:"Монтаж по EVS-EN, аккуратная проводка, правильные сечения, УЗО/RCBO. Безопасность прежде всего."},
+              c2:{t:"Гарантия на монтаж", p:"Официальный акт приёмки и гарантийный талон. Поддержка и пост-сервис."},
+              c3:{t:"Прозрачные цены", p:"Честная смета: работы, материалы, логистика, НДС. Без скрытых платежей."},
+              c4:{t:"Срочно и чисто", p:"Оперативный выезд, аккуратность на объекте, уборка после работ. Фото «до/после» по запросу."}
+            },
+            srv:{
+              title:"Услуги электрика",
+              lead:"Частные дома и квартиры, малый бизнес, КÜ. Малые и средние объёмы, без лишней бюрократии.",
+              s1:{t:"Розетки и выключатели", p:"Замена и установка «с нуля». Маркировка, проверка, аккуратный финиш."},
+              s2:{t:"Свет и освещение", p:"LED-светильники, люстры до 10 кг, датчики движения, сценарии освещения."},
+              s3:{t:"Щиты и защита", p:"Сборка щитов 6–24 мод., автоматы, УЗО/RCBO, порядок в щитах."},
+              s4:{t:"Проводка и штроба", p:"Прокладка линий поверх/в коробе, штробление кирпич/бетон, подрозетники."},
+              s5:{t:"Диагностика и ремонт", p:"Поиск неисправностей, аварийные вызовы, восстановление работоспособности."},
+              s6:{t:"Документы и акт", p:"Hinnapakkumine, Lisa 1, Tööakt, Arve (KMS §37). Фотоотчёт и гарантия."}
+            },
+            pkg:{
+              eco:"Минимально и безопасно. Скидка -10% от стандарта.",
+              std:"Стандартная цена (0%). Фотоотчёт, чек-лист. Гарантия 6 мес.",
+              pro:"Исполнительная схема, акт, приоритет. Наценка +18%, гарантия 12 мес."
+            },
+            price:{
+              title:"Ориентировочные цены",
+              lead:"Прозрачная смета: работы, материалы и логистика — отдельно. НДС 24% добавляется официально.",
+              th:{work:"Работа", cost:"Цена (без НДС)", note:"Комментарий"},
+              unit:"шт",
+              r1:{work:"Розетка/выключатель — замена", note:"Стандартный монтаж"},
+              r2:{work:"Светильник простой — замена", note:"LED/накладной, без переделки проводки"},
+              r3:{work:"Люстра/сложный светильник (до 10 кг)", note:"Сборка и подвес"},
+              r4:{work:"Автомат в щите", note:"При нескольких подряд — от 20 €"},
+              r5:{work:"УЗО / RCBO", note:"Тест и маркировка"},
+              r6:{work:"Прокладка кабеля по поверхности/в коробе", note:"Материалы отдельно"},
+              r7:{work:"Штроба: кирпич / газобетон", note:"Чистовая отделка не включена"},
+              r8:{work:"Штроба: бетон", note:"Алмазная коронка при необходимости"},
+              r9:{work:"Сборка щита 6–12 модулей", note:"18 мод — 150 €, 24 мод — 180 €"},
+              r10:{work:"Почасовая: день (пн-пт 9:00–18:00)", note:"Мелкая работа ≤2 ч: +25%"},
+              r11:{work:"Почасовая: вечер/выходные", note:"+10 € к вызову после 18:00"},
+              r12:{work:"Выезд (до 10 км)", note:"Дальше — 0,35 €/км туда-обратно"},
+              note:"Цены ориентировочные. Итог зависит от условий, объёма и выбранного пакета (Eco / Standard / Pro). Материалы: закупка + наценка (Eco -10%, Standard 0%, Pro +18%). Срочность <4 ч: +30%.",
+              cta:"Рассчитать смету",
+              reply:"Ответ в течение 30–90 минут."
+            },
+            port:{
+              title:"Портфолио",
+              lead:"Первые примеры и фото «до/после» появятся после пилотных объектов. Пока — заглушки.",
+              alt1:"Пример работы 1", alt2:"Пример работы 2", alt3:"Пример работы 3",
+              alt4:"Монтаж щита", alt5:"Освещение", alt6:"Прокладка кабеля"
+            },
+            rev:{
+              title:"Отзывы клиентов",
+              lead:"Пока собираем первые кейсы. Ниже — макет отзывов.",
+              a1:{alt:"Аватар клиента", text:"Быстро нашли неисправность и аккуратно всё восстановили. Приятно, что цены совпали со сметой.", author:"— Анна, Jõhvi"},
+              a2:{alt:"Аватар клиента", text:"Заменили весь свет на LED, сделали фотоотчёт. Чистота и порядок на объекте — редкость сейчас.", author:"— Борис, Sillamäe"},
+              a3:{alt:"Аватар клиента", text:"Собрали новый щит, подписали каждый автомат. Документы и гарантия — всё официально.", author:"— Катрин, Narva"},
+              cta:"Оставить отзыв / запрос"
+            },
+            cnt:{
+              title:"Контакты",
+              lead:"Оставьте заявку — перезвоним, уточним детали и подготовим смету под ваш объект.",
+              phone:"Телефон:", email:"Email:", addr:"Адрес:",
+              repeat:"Повторить заявку",
+              mapAria:"Карта региона", mapAlt:"Карта Ida-Virumaa, Estonia"
+            },
+            form:{
+              name:"Имя", phone:"Телефон", email:"Email", msg:"Коротко о задаче",
+              namePh:"Как к вам обращаться?", phonePh:"+372 ...", emailPh:"example@mail.ee", msgPh:"Например: заменить 6 розеток и 1 выключатель, Jõhvi",
+              help:"Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.",
+              submit:"Отправить заявку",
+              alertReq:"Пожалуйста, заполните имя, телефон и email.",
+              alertOk:"Спасибо! Ваша заявка отправлена.\nМы свяжемся с вами в ближайшее время."
+            },
+            f:{cta:"Готовы обсудить ваш проект?", sub:"Бесплатная консультация и ориентировочная смета в день обращения.", btn:"Оставить заявку", reg:"Рег. nr"},
+            float:{cta:"Быстрый запрос"}
+          },
+          ee: {
+            metaTitle: "Elektritööd Ida-Virumaal — LL Elektri Expert OÜ",
+            metaDesc: "Usaldusväärne elektritöövõtt võtmed kätte — kiiresti, ohutult ja professionaalselt. Elektriku teenused, juhtmete paigaldus, elektrikilbid. Läbipaistvad hinnad ja garantii.",
+            brand: { subtitle:"Elektritööd • Ida-Virumaa" },
+            menu: { advantages:"Eelised", services:"Teenused", pricing:"Hinnad", portfolio:"Portfoolio", reviews:"Tagasiside", call:"Telli tagasikõne" },
+            cta: { call:"Helista", instagram:"Kirjuta Instagramis" },
+            hero: {
+              label:"Töötame Euroopa standardite järgi • EVS-EN",
+              title:"Usaldusväärne elektritöövõtt võtmed kätte — kiiresti, ohutult ja professionaalselt",
+              p:"Elektriku teenused Ida-Virumaal: juhtmete paigaldus, elektrikilbid, valgustus ja automaatika. Läbipaistev hinnastus, puhas töö ja ametlikud dokumendid.",
+              ctaPrimary:"Telli tagasikõne",
+              ctaSecondary:"Vaata hindu",
+              t1:"Tasuta väljasõit",
+              t2:"Soodustus uutele",
+              t3:"Töötame 24/7",
+              imageAlt:"Elektritööd — näidistöö",
+              badgeSub:"Fotoraport, üleandmisakt, garantii"
+            },
+            adv:{
+              title:"Miks meid valitakse",
+              lead:"Professionaalsus, distsipliin ja läbipaistvus — meie maine alus. Teeme nii, nagu teeksime endale.",
+              c1:{t:"Euroopa standardid", p:"Paigaldus EVS-EN järgi, korrektne kaabeldus, õiged ristlõiked, RCD/RCBO. Ohutus ennekõike."},
+              c2:{t:"Paigaldusgarantii", p:"Ametlik üleandmisakt ja garantiitalong. Tugi ja järelteenindus."},
+              c3:{t:"Läbipaistev hinnakujundus", p:"Aus hinnapakkumine: töö, materjalid, logistika, KM. Peidetud tasudeta."},
+              c4:{t:"Kiire ja puhas", p:"Operatiivne väljasõit, korrektsus objektil, koristus pärast töid. Foto „enne/pärast” soovi korral."}
+            },
+            srv:{
+              title:"Elektriku teenused",
+              lead:"Eramud ja korterid, väikeettevõte, KÜ. Väiksed ja keskmised mahud, ilma liigse bürokraatiata.",
+              s1:{t:"Pistikupesad ja lülitid", p:"Vahetus ja paigaldus nullist. Markeerimine, kontroll, korrektne viimistlus."},
+              s2:{t:"Valgustus", p:"LED-valgustid, lühtrid kuni 10 kg, liikumisandurid, valgusstsenaariumid."},
+              s3:{t:"Kilbid ja kaitse", p:"Kilpide koost 6–24 moodulit, automaadid, RCD/RCBO, kord kilpides."},
+              s4:{t:"Juhtmestik ja freesimine", p:"Liini paigaldus pinnal/kanalis, lõiked tellises/betonis, podrosettide paigaldus."},
+              s5:{t:"Diagnostika ja remont", p:"Rikkeotsing, erakorralised väljakutsed, töö taastamine."},
+              s6:{t:"Dokumendid ja akt", p:"Hinnapakkumine, Lisa 1, Tööakt, Arve (KMS §37). Fotoraport ja garantii."}
+            },
+            pkg:{
+              eco:"Miinimum ja ohutus. -10% võrreldes Standardiga.",
+              std:"Standardhind (0%). Fotoraport, kontrollnimekiri. Garantii 6 kuud.",
+              pro:"Tööjoonis, akt, prioriteet. +18%, garantii 12 kuud."
+            },
+            price:{
+              title:"Hinnad (orienteeruvad)",
+              lead:"Läbipaistev pakkumine: töö, materjalid ja logistika — eraldi. KM 24% lisandub ametlikult.",
+              th:{work:"Töö", cost:"Hind (KM-ta)", note:"Märkus"},
+              unit:"tk",
+              r1:{work:"Pistikupesa/lüliti — vahetus", note:"Standardpaigaldus"},
+              r2:{work:"Lihtne valgusti — vahetus", note:"LED/pinnapealne, juhtmestiku muutuseta"},
+              r3:{work:"Lühter/keerukas valgusti (kuni 10 kg)", note:"Kokkupanek ja riputus"},
+              r4:{work:"Automaat kilbis", note:"Mitme järjest korral — alates 20 €"},
+              r5:{work:"RCD / RCBO", note:"Test ja markeerimine"},
+              r6:{work:"Kaabli paigaldus pinnal/kanalis", note:"Materjalid eraldi"},
+              r7:{work:"Lõige: tellis / gaasbetoon", note:"Lõppviimistlus ei sisaldu"},
+              r8:{work:"Lõige: betoon", note:"Teemantkroon vajadusel"},
+              r9:{work:"Kilbi koost 6–12 moodulit", note:"18 mood — 150 €, 24 mood — 180 €"},
+              r10:{work:"Tunnitasu: päev (E–R 9:00–18:00)", note:"Väike töö ≤2 h: +25%"},
+              r11:{work:"Tunnitasu: õhtu/nädalavahetus", note:"+10 € väljakutsele pärast 18:00"},
+              r12:{work:"Väljasõit (kuni 10 km)", note:"Edasi-tagasi 0,35 €/km"},
+              note:"Hinnad on orienteeruvad. Lõplik hind sõltub tingimustest, mahust ja paketist (Eco / Standard / Pro). Materjalid: ost + juurdehindlus (Eco -10%, Standard 0%, Pro +18%). Kiirtöö <4 h: +30%.",
+              cta:"Arvuta pakkumine",
+              reply:"Vastus 30–90 minuti jooksul."
+            },
+            port:{
+              title:"Portfoolio",
+              lead:"Esimesed näited ja fotod „enne/pärast” lisanduvad pilootobjektide järel. Praegu — kohatäited.",
+              alt1:"Töö näide 1", alt2:"Töö näide 2", alt3:"Töö näide 3",
+              alt4:"Kilbi paigaldus", alt5:"Valgustus", alt6:"Kaabli paigaldus"
+            },
+            rev:{
+              title:"Klienditagasiside",
+              lead:"Kogume esimesi juhtumeid. Allpool — tagasiside makett.",
+              a1:{alt:"Kliendi avatar", text:"Leidsid rikke kiiresti ja taastasid kõik korrektselt. Meeldis, et hind kattus pakkumisega.", author:"— Anna, Jõhvi"},
+              a2:{alt:"Kliendi avatar", text:"Vahetasid kogu valgustuse LED-i vastu, fotoraport lisaks. Kord ja puhtus objektil — praegu haruldus.", author:"— Boris, Sillamäe"},
+              a3:{alt:"Kliendi avatar", text:"Panid uue kilbi kokku ja märgistasid iga automaadi. Dokumendid ja garantii — ametlikult.", author:"— Katrin, Narva"},
+              cta:"Jäta tagasiside / päring"
+            },
+            cnt:{
+              title:"Kontakt",
+              lead:"Jätke päring — helistame tagasi, täpsustame detailid ja teeme objekti järgi pakkumise.",
+              phone:"Telefon:", email:"E-post:", addr:"Aadress:",
+              repeat:"Korda päringut",
+              mapAria:"Piirkonna kaart", mapAlt:"Ida-Virumaa, Estonia"
+            },
+            form:{
+              name:"Nimi", phone:"Telefon", email:"E-post", msg:"Lühikirjeldus",
+              namePh:"Kuidas teid kõnetada?", phonePh:"+372 ...", emailPh:"example@mail.ee", msgPh:"Nt: vahetada 6 pistikut ja 1 lüliti, Jõhvi",
+              help:"Nupule vajutades nõustute oma andmete töötlemisega, et võtta teiega ühendust päringu osas.",
+              submit:"Saada päring",
+              alertReq:"Palun täitke nimi, telefon ja e-post.",
+              alertOk:"Aitäh! Teie päring on saadetud.\nVõtame teiega peagi ühendust."
+            },
+            f:{cta:"Valmis oma projekti arutama?", sub:"Tasuta konsultatsioon ja orienteeruv pakkumine samal päeval.", btn:"Esita päring", reg:"Reg. nr"},
+            float:{cta:"Kiire päring"}
+          },
+          en: {
+            metaTitle: "Electrical Works in Ida-Viru — LL Elektri Expert OÜ",
+            metaDesc: "Reliable turnkey electrical works — fast, safe, professional. Electrician services, wiring, distribution boards. Transparent pricing and warranty.",
+            brand: { subtitle:"Electrical works • Ida-Viru" },
+            menu: { advantages:"Advantages", services:"Services", pricing:"Pricing", portfolio:"Portfolio", reviews:"Reviews", call:"Request a call" },
+            cta: { call:"Call", instagram:"Message on Instagram" },
+            hero: {
+              label:"We work to European standards • EVS-EN",
+              title:"Reliable turnkey electrical works — fast, safe, professional",
+              p:"Electrician services in Ida-Viru: wiring installation, distribution boards, lighting and automation. Transparent pricing, clean workmanship, official documents.",
+              ctaPrimary:"Request a call",
+              ctaSecondary:"See pricing",
+              t1:"Free site visit",
+              t2:"Discount for new clients",
+              t3:"We work 24/7",
+              imageAlt:"Electrical works — sample job",
+              badgeSub:"Photo report, acceptance act, warranty"
+            },
+            adv:{
+              title:"Why choose us",
+              lead:"Professionalism, discipline and transparency are the core of our reputation. We work as if it were our own home.",
+              c1:{t:"European standards", p:"EVS-EN compliant installation, neat wiring, proper cross-sections, RCD/RCBO. Safety first."},
+              c2:{t:"Installation warranty", p:"Official acceptance act and warranty card. Support and after-service."},
+              c3:{t:"Transparent pricing", p:"Honest quote: labor, materials, logistics, VAT. No hidden fees."},
+              c4:{t:"Urgent & tidy", p:"Rapid call-out, cleanliness on site, cleanup after work. Before/after photos on request."}
+            },
+            srv:{
+              title:"Electrician services",
+              lead:"Private homes and apartments, small businesses, housing associations. Small to medium jobs without red tape.",
+              s1:{t:"Sockets & switches", p:"Replacement and new installation. Labelling, testing, clean finish."},
+              s2:{t:"Lighting", p:"LED fixtures, chandeliers up to 10 kg, motion sensors, lighting scenes."},
+              s3:{t:"Boards & protection", p:"Boards 6–24 modules, breakers, RCD/RCBO, tidy labeling."},
+              s4:{t:"Wiring & chasing", p:"Surface/duct routing, chasing in brick/concrete, wall boxes."},
+              s5:{t:"Diagnostics & repair", p:"Fault finding, emergency call-outs, restoring operation."},
+              s6:{t:"Documents & act", p:"Offer, Appendix (Lisa 1), Acceptance Act, Invoice (KMS §37). Photo report and warranty."}
+            },
+            pkg:{
+              eco:"Minimal & safe. -10% vs Standard.",
+              std:"Standard price (0%). Photo report, checklist. 6‑month warranty.",
+              pro:"As-built drawing, act, priority. +18%, 12‑month warranty."
+            },
+            price:{
+              title:"Pricing (indicative)",
+              lead:"Transparent quote: labor, materials and logistics are separate. 24% VAT applies.",
+              th:{work:"Work", cost:"Price (excl. VAT)", note:"Note"},
+              unit:"pc",
+              r1:{work:"Socket/switch — replacement", note:"Standard installation"},
+              r2:{work:"Simple fixture — replacement", note:"LED/surface, no rewiring"},
+              r3:{work:"Chandelier/complex light (up to 10 kg)", note:"Assembly and hang"},
+              r4:{work:"Breaker in board", note:"For several in a row — from €20"},
+              r5:{work:"RCD / RCBO", note:"Test and labeling"},
+              r6:{work:"Cable routing (surface/duct)", note:"Materials separate"},
+              r7:{work:"Chasing: brick / aerated concrete", note:"Final finishing not included"},
+              r8:{work:"Chasing: concrete", note:"Diamond core if needed"},
+              r9:{work:"Board assembly 6–12 modules", note:"18 modules — €150, 24 — €180"},
+              r10:{work:"Hourly: day (Mon–Fri 9:00–18:00)", note:"Small job ≤2 h: +25%"},
+              r11:{work:"Hourly: evening/weekend", note:"+€10 to call-out after 18:00"},
+              r12:{work:"Call-out (within 10 km)", note:"Beyond — €0.35/km round trip"},
+              note:"Prices are indicative. Final price depends on conditions, scope and package (Eco / Standard / Pro). Materials: purchase + markup (Eco -10%, Standard 0%, Pro +18%). Urgent <4 h: +30%.",
+              cta:"Get a quote",
+              reply:"Reply within 30–90 minutes."
+            },
+            port:{
+              title:"Portfolio",
+              lead:"Initial before/after examples will appear after pilot jobs. For now — placeholders.",
+              alt1:"Work example 1", alt2:"Work example 2", alt3:"Work example 3",
+              alt4:"Board installation", alt5:"Lighting", alt6:"Cable routing"
+            },
+            rev:{
+              title:"Customer reviews",
+              lead:"We are collecting first case studies. Below is a mockup of reviews.",
+              a1:{alt:"Customer avatar", text:"They quickly found the fault and restored everything neatly. Liked that the price matched the quote.", author:"— Anna, Jõhvi"},
+              a2:{alt:"Customer avatar", text:"Replaced all lighting with LED and provided a photo report. Clean and tidy work on site.", author:"— Boris, Sillamäe"},
+              a3:{alt:"Customer avatar", text:"Assembled a new board and labeled every breaker. Documents and warranty — officially.", author:"— Katrin, Narva"},
+              cta:"Leave a review / request"
+            },
+            cnt:{
+              title:"Contacts",
+              lead:"Send a request — we will call back, clarify details and prepare a tailored quote.",
+              phone:"Phone:", email:"Email:", addr:"Address:",
+              repeat:"Submit again",
+              mapAria:"Region map", mapAlt:"Map of Ida-Virumaa, Estonia"
+            },
+            form:{
+              name:"Name", phone:"Phone", email:"Email", msg:"Short description",
+              namePh:"How should we address you?", phonePh:"+372 ...", emailPh:"example@mail.ee", msgPh:"e.g., replace 6 sockets and 1 switch, Jõhvi",
+              help:"By clicking the button you agree to the processing of your data to contact you regarding the request.",
+              submit:"Send request",
+              alertReq:"Please fill in name, phone and email.",
+              alertOk:"Thank you! Your request has been sent.\nWe will contact you shortly."
+            },
+            f:{cta:"Ready to discuss your project?", sub:"Free consultation and indicative quote the same day.", btn:"Send request", reg:"Reg. nr"},
+            float:{cta:"Quick request"}
+          }
+        };
+
+        // --- Логика приложения ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация иконок
+            lucide.createIcons();
+            
+            // Установка года
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Обработка языка
+            let currentLang = localStorage.getItem('lang');
+            if (!currentLang || !I18N[currentLang]) {
+                const browser = (navigator.language || 'ru').toLowerCase();
+                if (browser.startsWith('et')) currentLang = 'ee';
+                else if (browser.startsWith('en')) currentLang = 'en';
+                else currentLang = 'ru';
+            }
+
+            function updateLanguage(lang) {
+                currentLang = lang;
+                localStorage.setItem('lang', lang);
+                document.documentElement.lang = lang === 'ee' ? 'et' : lang;
+
+                const t = I18N[lang];
+                
+                // Обновление мета-тегов
+                document.title = t.metaTitle;
+                document.querySelector('meta[name="description"]').setAttribute('content', t.metaDesc);
+
+                // Обновление текстов
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    const val = key.split('.').reduce((o, i) => o ? o[i] : null, t);
+                    if (val) {
+                        // HTML для спец. случаев (футер)
+                        if (key === 'f.cta') el.innerHTML = val; 
+                        else el.textContent = val;
+                    }
+                });
+
+                // Обновление атрибутов (плейсхолдеры, альты)
+                document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+                    const attrs = el.getAttribute('data-i18n-attr').split('|');
+                    attrs.forEach(pair => {
+                        const [attr, key] = pair.split(':');
+                        const val = key.split('.').reduce((o, i) => o ? o[i] : null, t);
+                        if (val) el.setAttribute(attr, val);
+                    });
+                });
+
+                // Обновление UI кнопок языка
+                const updateSwitcher = (selector) => {
+                    document.querySelectorAll(`${selector} button`).forEach(btn => {
+                        if (btn.dataset.lang === lang) {
+                            btn.className = "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-white text-brand-blue shadow-sm ring-1 ring-black/5";
+                        } else {
+                            btn.className = "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 text-slate-500 hover:text-slate-700";
+                        }
+                    });
+                };
+                updateSwitcher('#lang-switcher');
+                updateSwitcher('#mobile-lang-switcher');
+            }
+
+            updateLanguage(currentLang);
+
+            // Слушатели для кнопок языка
+            document.querySelectorAll('button[data-lang]').forEach(btn => {
+                btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+            });
+
+            // Эффект прокрутки хедера
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.className = "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm";
+                } else {
+                    header.className = "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent";
+                }
+            });
+
+            // Мобильное меню
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                const icon = mobileMenu.classList.contains('hidden') ? 'menu' : 'x';
+                menuBtn.innerHTML = `<i data-lucide="${icon}"></i>`;
+                lucide.createIcons();
+            });
+
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.innerHTML = `<i data-lucide="menu"></i>`;
+                    lucide.createIcons();
+                });
+            });
+
+            // Форма (демо отправка)
+            const form = document.getElementById('contact-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert(I18N[currentLang].form.alertOk);
+                form.reset();
+            });
+
+            // Анимации при скролле
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Анимировать только один раз
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+            document.querySelectorAll('.fade-in-section').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
