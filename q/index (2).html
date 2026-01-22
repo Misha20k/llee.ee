@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LL Elektri Expert — Kontakt</title>
+  <meta name="description" content="Elektritööd / Электромонтаж. Ida-Viru. Kiire väljakutse 24/7." />
+
+  <meta property="og:title" content="LL Elektri Expert — Elektritööd / Электромонтаж" />
+  <meta property="og:description" content="Ida-Viru • Kiire väljakutse 24/7 / Быстрый выезд 24/7" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --bg:#070b11;
+      --text:#eaf1fb;
+      --muted: rgba(234,241,251,.72);
+      --accent:#ffd400;
+
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(255,255,255,.16);
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --radius: 22px;
+
+      --cardTop: rgba(255,255,255,.08);
+      --cardBottom: rgba(255,255,255,.04);
+
+      --btnTop: rgba(255,255,255,.07);
+      --btnBottom: rgba(0,0,0,.22);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 650px at 22% 8%, rgba(255,212,0,.11), transparent 55%),
+        radial-gradient(850px 550px at 85% 0%, rgba(0,130,255,.10), transparent 55%),
+        radial-gradient(900px 650px at 50% 105%, rgba(255,255,255,.06), transparent 60%),
+        var(--bg);
+
+      /* Fix for QR in-app browsers (WebView) that miscalculate 100vh */
+      min-height: 100svh;
+      min-height: 100dvh;
+      display:block;
+
+      /* Safe areas (iOS notch / dynamic bars) */
+      padding-top: max(18px, env(safe-area-inset-top));
+      padding-right: max(18px, env(safe-area-inset-right));
+      padding-bottom: max(18px, env(safe-area-inset-bottom));
+      padding-left: max(18px, env(safe-area-inset-left));
+    }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 650px at 22% 8%, rgba(255,212,0,.11), transparent 55%),
+        radial-gradient(850px 550px at 85% 0%, rgba(0,130,255,.10), transparent 55%),
+        radial-gradient(900px 650px at 50% 105%, rgba(255,255,255,.06), transparent 60%),
+        var(--bg);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:18px;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:440px;
+      margin: 0 auto;
+    }
+
+    .card{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Background watermark logo (separate file) */
+    .bgLogo{
+      position:absolute;
+      inset:-50px -70px auto auto;
+      width:min(520px, 120%);
+      opacity:.10;
+      transform: rotate(-8deg);
+      filter: saturate(1.05) contrast(1.05);
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .hero{
+      position:relative;
+      padding:22px 18px 14px;
+      text-align:center;
+    }
+
+    .brandLogo{
+      width:84px;
+      height:84px;
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Make top logo less bright */
+    .brandLogo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transform: scale(1.05);
+      filter: brightness(.88) contrast(.92) saturate(.95);
+      opacity: .92;
+    }
+
+    .brand{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:.2px;
+      text-shadow: 0 6px 26px rgba(0,0,0,.25);
+    }
+
+    .subtitle{
+      margin:7px 0 0;
+      font-size:14px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+    .subtitle b{ color: rgba(255,255,255,.92); }
+
+    .badgeRow{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:10px 0 0;
+    }
+    .badge{
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color:rgba(255,255,255,.86);
+      letter-spacing:.2px;
+    }
+    .badge strong{ color:var(--accent); font-weight:900; }
+
+    .btns{
+      position:relative;
+      padding:14px 14px 16px;
+      display:grid;
+      gap:10px;
+    }
+
+    /* Fix overflow: responsive grid without breaking */
+    .subgrid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap:10px;
+    }
+
+    .sep{
+      height:1px;
+      background: rgba(255,255,255,.10);
+      margin:4px 2px;
+    }
+
+    /* Buttons */
+    .btn{
+      position:relative;
+      text-decoration:none;
+      color:var(--text);
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, var(--btnTop), var(--btnBottom));
+      padding:12px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      transition: transform .16s ease, filter .16s ease, border-color .16s ease, box-shadow .16s ease;
+      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+      overflow:hidden; /* for shine animation */
+      will-change: transform;
+    }
+
+    /* Subtle shine animation on hover (desktop) */
+    .btn::before{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-60%;
+      width:55%;
+      height:180%;
+      transform: rotate(20deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      opacity:0;
+      transition: opacity .18s ease;
+      pointer-events:none;
+    }
+
+    .btn:hover{
+      filter: brightness(1.05);
+      border-color: rgba(255,255,255,.20);
+      box-shadow: 0 14px 34px rgba(0,0,0,.26);
+      transform: translateY(-1px);
+    }
+    .btn:hover::before{
+      opacity:1;
+      animation: shine 0.9s ease forwards;
+    }
+
+    .btn:active{
+      transform: translateY(0px) scale(.992);
+      filter: brightness(1.02);
+    }
+
+    @keyframes shine{
+      0% { left:-60%; }
+      100% { left:120%; }
+    }
+
+    /* Left content */
+    .left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .ico{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex:0 0 auto;
+      color: #0b0f14;
+      background: linear-gradient(180deg, rgba(255,212,0,.98), rgba(255,170,0,.96));
+      box-shadow: 0 10px 22px rgba(255,212,0,.14);
+      transform: translateZ(0);
+    }
+
+    .ico.secondary{
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:none;
+    }
+
+    .t{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+
+    .t b{
+      font-size:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .t span{
+      font-size:12px;
+      color:rgba(255,255,255,.62);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      margin-top:2px;
+    }
+
+    .arrow{
+      color:rgba(255,255,255,.30);
+      font-weight:900;
+      font-size:18px;
+      padding:0 2px;
+      transition: transform .16s ease, color .16s ease;
+    }
+
+    .btn:hover .arrow{
+      transform: translateX(2px);
+      color: rgba(255,255,255,.45);
+    }
+
+    .footer{
+      padding:0 16px 16px;
+      text-align:center;
+      font-size:12px;
+      color: rgba(255,255,255,.42);
+    }
+    .footer .cta{
+      margin-top:6px;
+      font-size:12px;
+      color: rgba(255,255,255,.55);
+    }
+
+    /* Extra safety for ultra-small devices */
+    @media (max-width: 320px){
+      .wrap{ max-width: 100%; }
+      .brand{ font-size:20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+
+      <!-- watermark background logo (you will upload as logo1.png) -->
+      <img class="bgLogo" src="./logo1.png" alt="" />
+
+      <div class="hero">
+        <!-- top logo (logo.png) -->
+        <div class="brandLogo" aria-label="LL Elektri Expert logo">
+          <img src="./logo.png" alt="LL Elektri Expert" />
+        </div>
+
+        <h1 class="brand">LL Elektri Expert</h1>
+
+        <p class="subtitle">
+          <b>Elektritööd / Электромонтаж</b><br>
+          Ida-Viru • <b>Kiire väljakutse 24/7</b> / Быстрый выезд 24/7
+        </p>
+
+        <div class="badgeRow">
+          <div class="badge"><strong>24/7</strong> väljakutse</div>
+          <div class="badge">Arvega / со счётом</div>
+          <div class="badge">Garantii / гарантия</div>
+        </div>
+      </div>
+
+      <div class="btns">
+
+        <!-- CALL BLOCK -->
+        <div class="subgrid">
+          <a class="btn" href="tel:+37281271119" aria-label="Позвонить Дмитрию">
+            <div class="left">
+              <div class="ico">📞</div>
+              <div class="t">
+                <b>Helista / Позвонить — Dmitry</b>
+                <span>+372 8127 1119</span>
+              </div>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+          <a class="btn" href="tel:+37281271118" aria-label="Позвонить Олегу">
+            <div class="left">
+              <div class="ico">📞</div>
+              <div class="t">
+                <b>Helista / Позвонить — Oleg</b>
+                <span>+372 8127 1118</span>
+              </div>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+        </div>
+
+        <div class="sep"></div>
+
+        
+
+        <!-- EMAIL (added) -->
+        <a class="btn" href="mailto:info@llee.ee" aria-label="Написать на Email">
+          <div class="left">
+            <div class="ico secondary">✉️</div>
+            <div class="t">
+              <b>E-mail / Email</b>
+              <span>info@llee.ee</span>
+            </div>
+          </div>
+          <div class="arrow">›</div>
+        </a>
+
+        <!-- SITE -->
+        <a class="btn" href="https://llee.ee" target="_blank" rel="noopener" aria-label="Открыть сайт">
+          <div class="left">
+            <div class="ico secondary">🌐</div>
+            <div class="t">
+              <b>Veebileht / Сайт</b>
+              <span>llee.ee</span>
+            </div>
+          </div>
+          <div class="arrow">›</div>
+        </a>
+
+        <!-- INSTAGRAM -->
+        <a class="btn" href="https://instagram.com/electro_kip_est" target="_blank" rel="noopener" aria-label="Открыть Instagram">
+          <div class="left">
+            <div class="ico secondary">📸</div>
+            <div class="t">
+              <b>Instagram</b>
+              <span>@electro_kip_est</span>
+            </div>
+          </div>
+          <div class="arrow">›</div>
+        </a>
+
+      </div>
+
+      <div class="footer">
+        LL Elektri Expert • Ida-Viru, Estonia
+        <div class="cta">Skaneeri QR — salvesta kontakt / küsi pakkumist</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
