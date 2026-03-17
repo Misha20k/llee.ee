@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Установка EV-зарядных станций в Ida-Virumaa — LL Elektri Expert OÜ</title>
+<meta content="#0d1117" name="theme-color"/>
+<link href="assets/favicon-white.ico?v=2" rel="icon" sizes="any"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="Установка зарядных станций для электромобилей в Ida-Virumaa. Лицензированный электрик, монтаж под ключ, документы. Нарва, Йыхви, Кохтла-Ярве, Силламяэ." name="description"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Barlow', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace']
+        },
+        colors: {
+          brand: { blue:'#3b82f6', lightBlue:'#60a5fa', orange:'#f59e0b', lightOrange:'#fbbf24', dark:'#0d1117' },
+          surface: { DEFAULT:'#0d1117', card:'#161b22', elevated:'#1c2333', border:'#30363d' },
+          volt: { DEFAULT:'#f59e0b', light:'#fbbf24', glow:'#f59e0b33', dim:'#78350f' }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --volt: #f59e0b;
+    --volt-light: #fbbf24;
+    --volt-glow: rgba(245, 158, 11, 0.15);
+    --surface: #0d1117;
+    --surface-card: #161b22;
+    --surface-elevated: #1c2333;
+    --border: #30363d;
+    --blue-glow: rgba(59, 130, 246, 0.12);
+    --text-primary: #e6edf3;
+    --text-secondary: #9ca3af;
+    --text-muted: #7c8490;
+  }
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    background-color: var(--surface);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #0d1117; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+  .circuit-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.035; }
+  .circuit-bg svg { width:100%; height:100%; }
+  .grid-overlay {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
+    background-image: linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px);
+    background-size: 60px 60px;
+  }
+  #logoWatermark {
+    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.06;
+    background-image: url('assets/hero2.png');
+    background-repeat:no-repeat; background-position:50% 70%;
+    background-size: min(900px,85vw);
+    filter: grayscale(1) contrast(1.15) brightness(1.05);
+    mix-blend-mode: soft-light;
+    contain:paint; transform:translateZ(0); backface-visibility:hidden;
+  }
+  @media (max-width:768px) {
+    #logoWatermark { opacity:.04; background-size:min(520px,92vw); background-position:50% 75%; }
+  }
+  .fx-canvas {
+    position:fixed; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:2; opacity:1;
+    contain:paint; transform:translateZ(0); backface-visibility:hidden;
+  }
+
+  /* Scroll animations */
+  .fade-in-section {
+    opacity:0; transform:translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    will-change: opacity, transform;
+  }
+  .fade-in-section.is-visible { opacity:1; transform:none; will-change:auto; }
+  .stagger-children .fade-in-section:nth-child(2) { transition-delay:0.08s; }
+  .stagger-children .fade-in-section:nth-child(3) { transition-delay:0.16s; }
+  .stagger-children .fade-in-section:nth-child(4) { transition-delay:0.24s; }
+
+  /* Cards */
+  .card-3d {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.3s ease;
+    border:1px solid var(--border); background:var(--surface-card);
+  }
+  .card-3d:hover {
+    transform:translateY(-6px);
+    box-shadow:0 0 30px rgba(245,158,11,0.08), 0 10px 30px rgba(0,0,0,0.3);
+    border-color:rgba(245,158,11,0.3);
+  }
+  .card-gradient-line {
+    transform:scaleX(0); transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    transform-origin:left;
+    background:linear-gradient(90deg,var(--volt),var(--volt-light),var(--volt)) !important;
+  }
+  .card-3d:hover .card-gradient-line { transform:scaleX(1); }
+
+  .service-card {
+    background:var(--surface-card); border:1px solid var(--border);
+    transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+    position:relative; overflow:hidden;
+  }
+  .service-card::before {
+    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+    background:radial-gradient(circle at 50% 0%,var(--volt-glow),transparent 70%);
+    opacity:0; transition:opacity 0.4s ease;
+  }
+  .service-card:hover::before { opacity:1; }
+  .service-card:hover {
+    border-color:rgba(245,158,11,0.25);
+    box-shadow:0 0 40px rgba(245,158,11,0.06);
+    transform:translateY(-4px);
+  }
+
+  .icon-box { position:relative; transition:all 0.3s ease; }
+  .icon-box::after {
+    content:''; position:absolute; inset:-3px; border-radius:inherit;
+    background:var(--volt); opacity:0; filter:blur(8px);
+    transition:opacity 0.3s ease; z-index:-1;
+  }
+  .group:hover .icon-box::after, .card-3d:hover .icon-box::after { opacity:0.3; }
+
+  /* Buttons */
+  .btn-primary {
+    background:linear-gradient(135deg,#f59e0b 0%,#fbbf24 100%);
+    color:#0d1117; font-weight:700; position:relative; overflow:hidden;
+  }
+  .btn-primary::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);
+    opacity:0; transition:opacity 0.3s ease;
+  }
+  .btn-primary:hover::before { opacity:1; }
+  .btn-primary:hover { box-shadow:0 0 25px rgba(245,158,11,0.35); }
+  .btn-primary span, .btn-primary i { position:relative; z-index:1; }
+
+  /* Header */
+  .header-scrolled {
+    background:rgba(13,17,23,0.85) !important;
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+
+  /* Section divider */
+  .section-divider {
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--border),rgba(245,158,11,0.2),var(--border),transparent);
+  }
+
+  /* Pulse dot */
+  .pulse-dot { animation:pulse-glow 2s ease-in-out infinite; }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow:0 0 4px var(--volt),0 0 8px var(--volt-glow); }
+    50% { box-shadow:0 0 8px var(--volt),0 0 20px var(--volt-glow); }
+  }
+
+  /* Comparison table */
+  .compare-table { background:var(--surface-card); border:1px solid var(--border); }
+  .compare-table thead tr { background:rgba(245,158,11,0.06); border-bottom:1px solid rgba(245,158,11,0.15); }
+  .compare-table tbody tr { border-bottom:1px solid var(--border); transition:background 0.2s ease; }
+  .compare-table tbody tr:hover { background:rgba(245,158,11,0.04); }
+
+  /* Contact icon */
+  .contact-icon { background:var(--surface-elevated); border:1px solid var(--border); transition:all 0.3s ease; }
+  .contact-icon:hover { border-color:var(--volt); box-shadow:0 0 15px var(--volt-glow); }
+
+  /* Form */
+  .dark-input {
+    background:var(--surface) !important; border-color:var(--border) !important;
+    color:var(--text-primary) !important;
+  }
+  .dark-input::placeholder { color:var(--text-muted) !important; }
+  .dark-input:focus { border-color:var(--volt) !important; box-shadow:0 0 0 3px var(--volt-glow) !important; }
+
+  /* Selection */
+  ::selection { background:rgba(245,158,11,0.25); color:#fbbf24; }
+
+  /* Noise texture */
+  body::before {
+    content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; z-index:0; opacity:0.015;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat:repeat; background-size:256px 256px;
+  }
+
+  /* EV page — hero accent (green tint for eco/electric vibe) */
+  .ev-hero-badge {
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+    color: #4ade80;
+  }
+  .ev-accent { color: #4ade80; }
+  .ev-accent-bg { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); }
+
+  /* Pkg cards */
+  .pkg-card { background:var(--surface-card); border:1px solid var(--border); transition:all 0.3s ease; }
+  .pkg-card:hover { border-color:rgba(245,158,11,0.2); box-shadow:0 4px 20px rgba(0,0,0,0.2); }
+
+  /* Back link */
+  .back-link {
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--text-muted); font-size:14px; font-weight:600;
+    transition:color 0.2s ease;
+  }
+  .back-link:hover { color:var(--volt); }
+
+  /* Process step */
+  .step-num {
+    background:linear-gradient(135deg,rgba(245,158,11,0.1),transparent);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+
+  /* FAQ accordion */
+  .faq-item { border:1px solid var(--border); background:var(--surface-card); transition:border-color 0.3s ease; }
+  .faq-item:hover, .faq-item.open { border-color:rgba(245,158,11,0.25); }
+  .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.4s ease, padding 0.3s ease; }
+  .faq-item.open .faq-answer { max-height:300px; }
+  .faq-toggle { transition:transform 0.3s ease; }
+  .faq-item.open .faq-toggle { transform:rotate(45deg); }
+
+  /* scroll performance */
+  .is-scrolling .header-scrolled { backdrop-filter:blur(10px) !important; -webkit-backdrop-filter:blur(10px) !important; }
+  .circuit-bg, .grid-overlay { contain:paint; transform:translateZ(0); backface-visibility:hidden; }
+
+  @media (prefers-reduced-motion:reduce) {
+    .fx-canvas { display:none !important; }
+    .fade-in-section { transition:none !important; opacity:1 !important; transform:none !important; }
+    .card-3d, .service-card, .pkg-card, .contact-icon, .btn-primary { transition:none !important; }
+    .pulse-dot { animation:none !important; }
+    .grid-overlay { opacity:0.015 !important; }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness","Electrician"],
+  "name": "LL Elektri Expert OÜ",
+  "url": "https://llee.ee",
+  "telephone": ["+37281271118","+37281271119"],
+  "email": "info@llee.ee",
+  "areaServed": [{"@type":"AdministrativeArea","name":"Ida-Virumaa"}],
+  "address": {"@type":"PostalAddress","addressRegion":"Ida-Virumaa","addressCountry":"EE"}
+}
+</script>
+</head>
+<body class="font-sans">
+
+<!-- Background layers (identical to index.html) -->
+<div aria-hidden="true" class="circuit-bg">
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+<line opacity="0.5" stroke="#f59e0b" stroke-width="0.5" x1="0" x2="400" y1="100" y2="100"/>
+<line opacity="0.3" stroke="#f59e0b" stroke-width="0.5" x1="500" x2="600" y1="100" y2="100"/>
+<line opacity="0.4" stroke="#3b82f6" stroke-width="0.5" x1="0" x2="300" y1="250" y2="250"/>
+<line opacity="0.4" stroke="#3b82f6" stroke-width="0.5" x1="350" x2="350" y1="250" y2="400"/>
+<line opacity="0.3" stroke="#3b82f6" stroke-width="0.5" x1="350" x2="700" y1="400" y2="400"/>
+<line opacity="0.4" stroke="#f59e0b" stroke-width="0.5" x1="800" x2="1200" y1="200" y2="200"/>
+<line opacity="0.3" stroke="#3b82f6" stroke-width="0.5" x1="900" x2="1200" y1="500" y2="500"/>
+<line opacity="0.3" stroke="#f59e0b" stroke-width="0.5" x1="600" x2="600" y1="600" y2="800"/>
+<circle cx="400" cy="100" fill="#f59e0b" opacity="0.6" r="3"/>
+<circle cx="300" cy="250" fill="#3b82f6" opacity="0.5" r="3"/>
+<circle cx="800" cy="200" fill="#f59e0b" opacity="0.5" r="3"/>
+<circle cx="600" cy="600" fill="#f59e0b" opacity="0.4" r="3"/>
+<rect fill="none" height="6" opacity="0.4" stroke="#f59e0b" stroke-width="0.5" width="6" x="148" y="97"/>
+<rect fill="none" height="6" opacity="0.3" stroke="#f59e0b" stroke-width="0.5" width="6" x="847" y="197"/>
+</svg>
+</div>
+<div aria-hidden="true" class="grid-overlay"></div>
+<canvas aria-hidden="true" class="fx-canvas" id="fxCanvas"></canvas>
+<div aria-hidden="true" id="logoWatermark"></div>
+
+<!-- HEADER (identical structure to index.html) -->
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent" id="main-header">
+<div class="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-10">
+  <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+    <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-surface-card border border-surface-border shadow-lg overflow-hidden">
+      <img src="logo.png" alt="LL Elektri Expert logo" class="w-full h-full object-contain p-1" loading="lazy">
+    </div>
+    <div class="block">
+      <h1 class="text-base md:text-lg font-extrabold text-white tracking-tight leading-tight">LL Elektri Expert OÜ</h1>
+      <small class="text-xs font-medium text-volt tracking-wide block font-mono" data-i18n="brand.subtitle">Электромонтаж • Ida-Virumaa</small>
+    </div>
+  </div>
+  <nav class="hidden lg:flex items-center gap-8">
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="index.html">
+      <span data-i18n="menu.home">Главная</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="korter.html">
+      <span data-i18n="menu.korter">Квартиры</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="ku.html">
+      <span data-i18n="menu.ku">KÜ</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-volt transition-colors relative group" href="ev.html">
+      <span data-i18n="menu.ev">EV-зарядки</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="index.html#contacts">
+      <span data-i18n="menu.contacts">Контакты</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <div class="flex items-center bg-surface-elevated p-1 rounded-full border border-surface-border" id="lang-switcher">
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ru">RU</button>
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ee">EE</button>
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="en">EN</button>
+    </div>
+    <a class="btn-primary px-5 py-2.5 rounded-xl text-sm shadow-lg shadow-volt/20 hover:shadow-volt/40 transition-all hover:-translate-y-0.5 active:translate-y-0 font-bold" href="#contacts">
+      <span data-i18n="menu.call">Заказать звонок</span>
+    </a>
+  </nav>
+  <button class="lg:hidden p-2 text-gray-300" id="mobile-menu-btn">
+    <i data-lucide="menu"></i>
+  </button>
+</div>
+<div class="hidden lg:hidden bg-surface-card border-b border-surface-border overflow-hidden absolute top-full left-0 right-0 shadow-2xl" id="mobile-menu">
+  <div class="container mx-auto px-4 py-6 flex flex-col gap-4">
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.home" href="index.html">Главная</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.korter" href="korter.html">Квартиры</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.ku" href="ku.html">KÜ</a>
+    <a class="mobile-link text-lg font-medium text-volt py-2 border-b border-surface-border" data-i18n="menu.ev" href="ev.html">EV-зарядки</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.contacts" href="index.html#contacts">Контакты</a>
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center bg-surface-elevated p-1 rounded-full border border-surface-border" id="mobile-lang-switcher">
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ru">RU</button>
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ee">EE</button>
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="en">EN</button>
+      </div>
+      <a class="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold" data-i18n="menu.call" href="#contacts">Заказать звонок</a>
+    </div>
+  </div>
+</div>
+</header>
+
+<main class="relative z-10">
+
+  <!-- HERO -->
+  <section class="pt-32 pb-20 md:pt-40 md:pb-28 relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-96 h-96 bg-green-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-volt/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="container mx-auto px-4 md:px-6">
+
+      <!-- Breadcrumb / back -->
+      <div class="mb-8 fade-in-section">
+        <a class="back-link" href="index.html">
+          <i data-lucide="arrow-left" size="16"></i>
+          <span data-i18n="ev.back">← Назад на главную</span>
+        </a>
+      </div>
+
+      <div class="max-w-4xl fade-in-section">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full ev-hero-badge mb-6">
+          <span class="w-2 h-2 rounded-full bg-green-400 pulse-dot"></span>
+          <span class="text-xs font-bold uppercase tracking-wider font-mono" data-i18n="ev.hero.badge">EV · Зарядные станции · Ida-Virumaa</span>
+        </div>
+
+        <!-- UTP — главное сразу -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-volt/10 border border-volt/20 mb-6 ml-3">
+          <i class="text-volt" data-lucide="zap" size="14"></i>
+          <span class="text-xs font-bold text-volt font-mono" data-i18n="ev.hero.utp">90% клиентов выбирают 11 kW — и это правильно</span>
+        </div>
+
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight" data-i18n="ev.hero.title">
+          Установка зарядной станции для электромобиля под ключ
+        </h2>
+        <p class="text-xl text-gray-300 mb-4 leading-relaxed max-w-2xl" data-i18n="ev.hero.p">
+          Частные дома, дачи и бизнес в Ida-Virumaa. Лицензированный электрик — монтаж за 1 день, документы на руки.
+        </p>
+        <!-- Trust badge -->
+        <div class="flex items-center gap-2 mb-8">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-green-400" data-lucide="shield-check" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="ev.hero.trust">B-kategooria pädevustunnistus · Действует до 2030</span>
+          </div>
+        </div>
+
+        <!-- CTA #1 -->
+        <div class="flex flex-wrap gap-4 mb-10">
+          <a aria-label="Позвонить +372 8127 1118" class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" href="tel:+37281271118">
+            <i data-lucide="phone" size="18"></i>
+            <span data-i18n="cta.call">Позвонить</span>
+          </a>
+          <a aria-label="Позвонить +372 8127 1119" class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" href="tel:+37281271119">
+            <i data-lucide="phone" size="18"></i>
+            <span data-i18n="cta.call">Позвонить</span>
+          </a>
+          <a class="px-8 py-4 rounded-xl border border-surface-border bg-surface-card text-gray-300 font-bold shadow-sm hover:bg-surface-elevated hover:border-volt/30 hover:text-volt transition-all flex items-center gap-2" href="#contacts">
+            <i data-lucide="mail" size="18"></i>
+            <span data-i18n="ev.hero.ctaForm">Написать</span>
+          </a>
+        </div>
+
+        <!-- Trust points -->
+        <div class="flex flex-wrap gap-y-3 gap-x-6 text-sm font-semibold text-gray-400">
+          <span class="flex items-center gap-2"><i class="text-volt" data-lucide="check" size="16"></i><span data-i18n="ev.hero.t1">Монтаж за 1 день</span></span>
+          <span class="flex items-center gap-2"><i class="text-volt" data-lucide="check" size="16"></i><span data-i18n="ev.hero.t2">Документы (tööakt)</span></span>
+          <span class="flex items-center gap-2"><i class="text-volt" data-lucide="check" size="16"></i><span data-i18n="ev.hero.t3">Подбор без переплат</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ВЫБОР МОЩНОСТИ -->
+  <section class="py-20 relative" id="variants">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.variants.title">Выберите мощность</h2>
+        <p class="text-gray-400 text-lg" data-i18n="ev.variants.lead">Два варианта — подберём подходящий после осмотра щита и ввода.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto stagger-children">
+
+        <!-- 11 kW -->
+        <div class="rounded-3xl p-8 relative overflow-hidden card-3d fade-in-section" style="border-color:rgba(245,158,11,0.35);">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line" style="transform:scaleX(1);"></div>
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-volt/10 text-volt flex items-center justify-center icon-box">
+              <i data-lucide="zap" size="28"></i>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-volt/15 text-volt text-xs font-bold font-mono border border-volt/30" data-i18n="ev.v1.badge">Выбор большинства</span>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-2 font-mono">11 kW</h3>
+          <p class="text-gray-300 font-semibold mb-5" data-i18n="ev.v1.sub">Оптимальное решение для дома</p>
+          <ul class="space-y-3 text-sm text-gray-300">
+            <li class="flex items-start gap-2"><i class="text-volt mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v1.f1">Подходит для 90% электромобилей</span></li>
+            <li class="flex items-start gap-2"><i class="text-volt mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v1.f2">Полная зарядка за ночь (5–8 часов)</span></li>
+            <li class="flex items-start gap-2"><i class="text-volt mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v1.f3">Стандартный ввод — чаще без модернизации</span></li>
+            <li class="flex items-start gap-2"><i class="text-volt mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v1.f4">Меньше нагрузка на сеть</span></li>
+          </ul>
+          <div class="mt-6 p-3 rounded-xl bg-volt/5 border border-volt/15">
+            <p class="text-xs text-volt font-semibold" data-i18n="ev.v1.note">💡 Лучший баланс цены, скорости и надёжности</p>
+          </div>
+        </div>
+
+        <!-- 22 kW -->
+        <div class="rounded-3xl p-8 relative overflow-hidden card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line"></div>
+          <div class="flex items-center justify-between mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center icon-box">
+              <i data-lucide="zap-fast" size="28"></i>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold font-mono border border-blue-500/20" data-i18n="ev.v2.badge">С запасом</span>
+          </div>
+          <h3 class="text-3xl font-black text-white mb-2 font-mono">22 kW</h3>
+          <p class="text-gray-300 font-semibold mb-5" data-i18n="ev.v2.sub">Для повышенных требований</p>
+          <ul class="space-y-3 text-sm text-gray-300">
+            <li class="flex items-start gap-2"><i class="text-blue-400 mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v2.f1">Зарядка до 2× быстрее (при поддержке авто)</span></li>
+            <li class="flex items-start gap-2"><i class="text-blue-400 mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v2.f2">Подходит для бизнеса и парковок</span></li>
+            <li class="flex items-start gap-2"><i class="text-blue-400 mt-0.5 shrink-0" data-lucide="check-circle" size="16"></i><span data-i18n="ev.v2.f3">Несколько автомобилей одновременно</span></li>
+            <li class="flex items-start gap-2"><i class="text-yellow-500 mt-0.5 shrink-0" data-lucide="alert-triangle" size="16"></i><span data-i18n="ev.v2.f4">Требует мощного ввода и расчёта нагрузки</span></li>
+          </ul>
+          <div class="mt-6 p-3 rounded-xl bg-surface-elevated border border-border">
+            <p class="text-xs text-gray-400 font-semibold" data-i18n="ev.v2.note">⚠ Честно скажем, когда 22 kW не даёт реального преимущества</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- СРАВНИТЕЛЬНАЯ ТАБЛИЦА -->
+  <section class="py-20 relative" id="compare">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.compare.title">Сравнение 11 kW и 22 kW</h2>
+      </div>
+      <div class="compare-table rounded-3xl shadow-2xl overflow-hidden max-w-3xl mx-auto fade-in-section">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="p-5 font-extrabold text-volt uppercase text-xs tracking-wider font-mono" data-i18n="ev.compare.th.param">Параметр</th>
+                <th class="p-5 font-extrabold text-volt uppercase text-xs tracking-wider font-mono text-center">11 kW</th>
+                <th class="p-5 font-extrabold text-volt uppercase text-xs tracking-wider font-mono text-center">22 kW</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-surface-border hover:bg-volt/5 transition-colors">
+                <td class="p-5 font-semibold text-gray-200" data-i18n="ev.compare.r1.p">Подходит для авто</td>
+                <td class="p-5 text-center text-volt font-bold">90%</td>
+                <td class="p-5 text-center text-blue-400 font-bold" data-i18n="ev.compare.all">все</td>
+              </tr>
+              <tr class="border-b border-surface-border hover:bg-volt/5 transition-colors">
+                <td class="p-5 font-semibold text-gray-200" data-i18n="ev.compare.r2.p">Скорость зарядки</td>
+                <td class="p-5 text-center text-gray-300 font-mono text-sm" data-i18n="ev.compare.r2.v1">5–8 ч</td>
+                <td class="p-5 text-center text-gray-300 font-mono text-sm" data-i18n="ev.compare.r2.v2">3–5 ч</td>
+              </tr>
+              <tr class="border-b border-surface-border hover:bg-volt/5 transition-colors">
+                <td class="p-5 font-semibold text-gray-200" data-i18n="ev.compare.r3.p">Требования к сети</td>
+                <td class="p-5 text-center"><span class="px-2 py-1 rounded-md bg-green-500/10 text-green-400 text-xs font-bold" data-i18n="ev.compare.standard">стандартные</span></td>
+                <td class="p-5 text-center"><span class="px-2 py-1 rounded-md bg-yellow-500/10 text-yellow-400 text-xs font-bold" data-i18n="ev.compare.high">повышенные</span></td>
+              </tr>
+              <tr class="border-b border-surface-border hover:bg-volt/5 transition-colors">
+                <td class="p-5 font-semibold text-gray-200" data-i18n="ev.compare.r4.p">Нужна модернизация</td>
+                <td class="p-5 text-center text-green-400 font-bold" data-i18n="ev.compare.rarely">редко</td>
+                <td class="p-5 text-center text-yellow-400 font-bold" data-i18n="ev.compare.often">часто</td>
+              </tr>
+              <tr class="border-b border-surface-border hover:bg-volt/5 transition-colors">
+                <td class="p-5 font-semibold text-gray-200" data-i18n="ev.compare.r5.p">Стоимость установки</td>
+                <td class="p-5 text-center text-volt font-bold" data-i18n="ev.compare.lower">ниже</td>
+                <td class="p-5 text-center text-gray-400 font-bold" data-i18n="ev.compare.higher">выше</td>
+              </tr>
+              <tr class="hover:bg-volt/5 transition-colors">
+                <td class="p-5 font-semibold text-gray-200" data-i18n="ev.compare.r6.p">Оптимально для дома</td>
+                <td class="p-5 text-center text-green-400 text-xl">✓</td>
+                <td class="p-5 text-center text-yellow-400 text-xl">⚠</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CTA #2 — после таблицы -->
+      <div class="max-w-3xl mx-auto mt-8 p-6 rounded-2xl bg-volt/5 border border-volt/15 flex flex-col md:flex-row items-center justify-between gap-4 fade-in-section">
+        <p class="text-gray-300 font-semibold" data-i18n="ev.compare.cta.text">Не уверены какой вариант подойдёт? Позвоните — разберём за 5 минут.</p>
+        <a class="btn-primary px-6 py-3 rounded-xl text-sm font-bold whitespace-nowrap flex items-center gap-2" href="tel:+37281271118">
+          <i data-lucide="phone" size="16"></i>
+          <span data-i18n="ev.compare.cta.btn">Позвонить</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАК РАБОТАЕТ УСТАНОВКА -->
+  <section class="py-20 relative" id="process">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.process.title">Как проходит установка</h2>
+        <p class="text-gray-400 text-lg" data-i18n="ev.process.lead">От звонка до готовой зарядки — один рабочий день.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6 fade-in-section">
+        <div class="relative p-6 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">01</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ev.process.s1.t">Отдельная линия от щита</h3>
+          <p class="text-gray-400 text-xs leading-relaxed" data-i18n="ev.process.s1.p">Прокладываем кабель нужного сечения от электрощита до места установки</p>
+        </div>
+        <div class="relative p-6 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">02</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ev.process.s2.t">Защита (автомат + УЗО)</h3>
+          <p class="text-gray-400 text-xs leading-relaxed" data-i18n="ev.process.s2.p">Устанавливаем автоматический выключатель и устройство защитного отключения</p>
+        </div>
+        <div class="relative p-6 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">03</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ev.process.s3.t">Монтаж станции</h3>
+          <p class="text-gray-400 text-xs leading-relaxed" data-i18n="ev.process.s3.p">Крепим и подключаем зарядную станцию — на стене гаража, парковки или дома</p>
+        </div>
+        <div class="relative p-6 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">04</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ev.process.s4.t">Настройка</h3>
+          <p class="text-gray-400 text-xs leading-relaxed" data-i18n="ev.process.s4.p">Проверяем работу, настраиваем через приложение, при необходимости — load balancing</p>
+        </div>
+        <div class="relative p-6 rounded-3xl border border-volt/30 bg-volt/5 hover:border-volt/50 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none font-mono text-volt">✓</div>
+          <h3 class="text-base font-bold text-volt mb-2" data-i18n="ev.process.s5.t">Готово</h3>
+          <p class="text-gray-400 text-xs leading-relaxed" data-i18n="ev.process.s5.p">Tööakt на руки. Оплата по домашнему счётчику — без подписок и скрытых платежей</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SMART LOAD BALANCING -->
+  <section class="py-20 relative" id="loadbalancing">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-10 items-center fade-in-section">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border mb-4">
+              <i class="text-blue-400" data-lucide="cpu" size="16"></i>
+              <span class="text-xs font-bold text-gray-400 font-mono" data-i18n="ev.dlm.label">Опция · Не всегда нужна</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.dlm.title">Умное управление нагрузкой</h2>
+            <p class="text-gray-400 leading-relaxed mb-6" data-i18n="ev.dlm.p">Система load balancing (DLM) регулирует мощность зарядки автоматически — чтобы не перегрузить домашнюю сеть при одновременной работе других приборов.</p>
+            <p class="text-sm text-volt font-semibold mb-5" data-i18n="ev.dlm.honest">Честно: большинству клиентов это не нужно. Скажем прямо.</p>
+            <div class="space-y-3">
+              <div class="text-sm text-gray-300 font-semibold mb-2 uppercase tracking-wide font-mono text-xs" data-i18n="ev.dlm.when">Рекомендуем когда:</div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-surface-border">
+                <i class="text-volt shrink-0 mt-0.5" data-lucide="alert-circle" size="16"></i>
+                <span class="text-sm text-gray-300" data-i18n="ev.dlm.c1">Слабый ввод (3×16A) при высокой нагрузке</span>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-surface-border">
+                <i class="text-volt shrink-0 mt-0.5" data-lucide="alert-circle" size="16"></i>
+                <span class="text-sm text-gray-300" data-i18n="ev.dlm.c2">Много мощных электроприборов одновременно</span>
+              </div>
+              <div class="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-surface-border">
+                <i class="text-volt shrink-0 mt-0.5" data-lucide="alert-circle" size="16"></i>
+                <span class="text-sm text-gray-300" data-i18n="ev.dlm.c3">Несколько автомобилей на одном объекте</span>
+              </div>
+            </div>
+          </div>
+          <!-- Cost block -->
+          <div class="space-y-4">
+            <div class="p-6 rounded-3xl bg-surface-card border border-surface-border">
+              <h3 class="text-lg font-bold text-white mb-4" data-i18n="ev.price.title">Ориентировочная стоимость</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center py-3 border-b border-surface-border">
+                  <span class="text-gray-300 font-semibold text-sm" data-i18n="ev.price.r1.work">Стандартная установка 11 kW (работа)</span>
+                  <span class="text-volt font-black font-mono text-base whitespace-nowrap ml-4">425–495 €</span>
+                </div>
+                <div class="flex justify-between items-center py-3 border-b border-surface-border">
+                  <span class="text-gray-300 font-semibold text-sm" data-i18n="ev.price.r2.work">Установка 22 kW (работа)</span>
+                  <span class="text-volt font-black font-mono text-base whitespace-nowrap ml-4">495–650 €</span>
+                </div>
+                <div class="flex justify-between items-center py-3 border-b border-surface-border">
+                  <span class="text-gray-300 font-semibold text-sm" data-i18n="ev.price.r3.work">+ Load balancing (опция)</span>
+                  <span class="text-gray-400 font-bold font-mono text-base whitespace-nowrap ml-4" data-i18n="ev.price.r3.val">по запросу</span>
+                </div>
+                <div class="flex justify-between items-center py-3">
+                  <span class="text-gray-300 font-semibold text-sm" data-i18n="ev.price.r4.work">Полный комплект (работа + станция)</span>
+                  <span class="text-volt font-black font-mono text-base whitespace-nowrap ml-4">900–1500 €</span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-500 mt-4 leading-relaxed" data-i18n="ev.price.note">Разброс зависит от длины кабельной трассы, состояния щита и условий объекта. Точная цена — после осмотра.</p>
+            </div>
+            <!-- Economy block -->
+            <div class="p-5 rounded-2xl ev-accent-bg">
+              <div class="flex items-center gap-2 mb-3">
+                <i class="text-green-400" data-lucide="trending-down" size="18"></i>
+                <span class="font-bold text-white text-sm" data-i18n="ev.economy.title">Стоимость зарядки</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="p-3 rounded-xl bg-surface-card border border-surface-border text-center">
+                  <div class="text-green-400 font-black text-xl font-mono">~3–4€</div>
+                  <div class="text-gray-400 text-xs mt-1" data-i18n="ev.economy.per100">на 100 км</div>
+                </div>
+                <div class="p-3 rounded-xl bg-surface-card border border-surface-border text-center">
+                  <div class="text-green-400 font-black text-xl font-mono">~12€</div>
+                  <div class="text-gray-400 text-xs mt-1" data-i18n="ev.economy.full">полная зарядка</div>
+                </div>
+              </div>
+              <p class="text-xs text-green-400 font-semibold mt-3" data-i18n="ev.economy.vs">В 2–3 раза дешевле бензина</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="py-20 relative" id="trust">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.trust.title">Наш подход</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
+        <div class="rounded-3xl p-7 relative overflow-hidden card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line"></div>
+          <div class="w-12 h-12 rounded-2xl bg-volt/10 text-volt flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="shield-check" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="ev.trust.c1.t">Лицензированный электрик</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ev.trust.c1.p">B-kategooria pädevustunnistus — государственная квалификация. Действует до 21.04.2030. Работаем официально.</p>
+        </div>
+        <div class="rounded-3xl p-7 relative overflow-hidden card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line"></div>
+          <div class="w-12 h-12 rounded-2xl bg-green-500/10 text-green-400 flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="file-check" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="ev.trust.c2.t">Документы на руки</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ev.trust.c2.p">Tööakt после каждой установки. Фотофиксация кабельных трасс. Гарантийный лист.</p>
+        </div>
+        <div class="rounded-3xl p-7 relative overflow-hidden card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line"></div>
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="thumb-up" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="ev.trust.c3.t">Не навязываем лишнее</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ev.trust.c3.p">90% клиентов достаточно 11 kW. Скажем честно, если 22 kW не имеет смысла для вашего объекта.</p>
+        </div>
+        <div class="rounded-3xl p-7 relative overflow-hidden card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line"></div>
+          <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="calendar-check" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="ev.trust.c4.t">1 день</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ev.trust.c4.p">Типовая установка занимает один рабочий день. Без многонедельных ожиданий.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 relative" id="faq">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-12 fade-in-section">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.faq.title">Частые вопросы</h2>
+        </div>
+        <div class="space-y-3 fade-in-section" id="faq-list">
+
+          <div class="faq-item rounded-2xl p-5 cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white" data-i18n="ev.faq.q1">Нужно ли согласование для установки?</span>
+              <i class="text-volt faq-toggle shrink-0 ml-4" data-lucide="plus" size="20"></i>
+            </div>
+            <div class="faq-answer">
+              <p class="text-gray-400 text-sm leading-relaxed pt-4" data-i18n="ev.faq.a1">Для частного дома — как правило, нет, если не увеличивается договорная мощность. После осмотра скажем точно — зависит от состояния ввода и щита.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-2xl p-5 cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white" data-i18n="ev.faq.q2">Можно ли ставить на улице?</span>
+              <i class="text-volt faq-toggle shrink-0 ml-4" data-lucide="plus" size="20"></i>
+            </div>
+            <div class="faq-answer">
+              <p class="text-gray-400 text-sm leading-relaxed pt-4" data-i18n="ev.faq.a2">Да. Зарядные станции для наружной установки имеют степень защиты IP54 и выше — защищены от влаги и мороза эстонской зимы.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-2xl p-5 cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white" data-i18n="ev.faq.q3">Можно ли заряжать от обычной розетки?</span>
+              <i class="text-volt faq-toggle shrink-0 ml-4" data-lucide="plus" size="20"></i>
+            </div>
+            <div class="faq-answer">
+              <p class="text-gray-400 text-sm leading-relaxed pt-4" data-i18n="ev.faq.a3">Технически можно, но это медленно (2–3 кВт) и небезопасно для домашней проводки при длительной нагрузке. Отдельная линия со станцией — правильное решение.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-2xl p-5 cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white" data-i18n="ev.faq.q4">Кто несёт ответственность за работу?</span>
+              <i class="text-volt faq-toggle shrink-0 ml-4" data-lucide="plus" size="20"></i>
+            </div>
+            <div class="faq-answer">
+              <p class="text-gray-400 text-sm leading-relaxed pt-4" data-i18n="ev.faq.a4">Мы — лицензированный подрядчик с B-kategooria pädevustunnistus. После работы подписываем tööakt, в котором зафиксированы все выполненные работы. Гарантийный лист прилагается.</p>
+            </div>
+          </div>
+
+          <div class="faq-item rounded-2xl p-5 cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white" data-i18n="ev.faq.q5">Нужен ли load balancing?</span>
+              <i class="text-volt faq-toggle shrink-0 ml-4" data-lucide="plus" size="20"></i>
+            </div>
+            <div class="faq-answer">
+              <p class="text-gray-400 text-sm leading-relaxed pt-4" data-i18n="ev.faq.a5">Большинству — нет. Нужен при слабом вводе (3×16A), высокой одновременной нагрузке или нескольких авто. Оценим при осмотре и скажем честно.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS (CTA #3) -->
+  <section class="py-24 relative" id="contacts">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6 fade-in-section">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ev.cnt.title">Подберём решение под ваш дом</h2>
+          <p class="text-gray-400 text-lg mb-8 leading-relaxed" data-i18n="ev.cnt.lead">Оставьте заявку или позвоните — уточним мощность ввода, порекомендуем станцию и назовём точную цену после осмотра.</p>
+          <div class="space-y-5 mb-8">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-volt"><i data-lucide="phone" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.phone">Телефон</div>
+                <div class="space-y-1">
+                  <a class="block text-lg font-bold text-white hover:text-volt transition-colors" href="tel:+37281271118">+372 8127 1118</a>
+                  <a class="block text-lg font-bold text-white hover:text-volt transition-colors" href="tel:+37281271119">+372 8127 1119</a>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-volt"><i data-lucide="mail" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.email">Email</div>
+                <a class="text-lg font-bold text-white hover:text-volt transition-colors" href="mailto:info@llee.ee">info@llee.ee</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-gray-400"><i data-lucide="map-pin" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.addr">Адрес</div>
+                <div class="text-lg font-bold text-white">Ida-Virumaa, Estonia</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card p-8 rounded-3xl border border-surface-border">
+          <form class="space-y-5" id="contact-form">
+            <div class="grid md:grid-cols-2 gap-5">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.name" for="name">Имя</label>
+                <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" data-i18n-attr="placeholder:form.namePh" id="name" name="name" placeholder="Имя" required type="text"/>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.phone" for="phone">Телефон</label>
+                <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" id="phone" name="phone" placeholder="+372 ..." required type="tel"/>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.email" for="email">Email</label>
+              <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" id="email" name="email" placeholder="Email" required type="email"/>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.msg" for="message">Сообщение</label>
+              <textarea class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none resize-none" id="message" name="message" data-i18n-attr="placeholder:ev.form.msgPh" placeholder="Например: частный дом, Йыхви, интересует 11 kW" rows="4"></textarea>
+            </div>
+            <p class="text-xs text-gray-500" data-i18n="form.help">Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.</p>
+            <button class="w-full btn-primary py-4 rounded-xl shadow-lg shadow-volt/20 text-base font-bold hover:-translate-y-1 transition-all" data-i18n="form.submit" type="submit">
+              Отправить заявку
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER (identical to index.html) -->
+<footer class="bg-surface-card border-t border-surface-border text-gray-400 py-16 relative z-10">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="bg-gradient-to-r from-volt/20 to-volt-light/10 p-8 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-8 border border-volt/20 mb-16">
+      <div class="max-w-xl">
+        <h3 class="text-2xl text-white font-bold mb-2" data-i18n="ev.f.cta">Готовы установить зарядку?</h3>
+        <p class="text-gray-300" data-i18n="ev.f.sub">Бесплатная консультация и выезд на осмотр в день обращения.</p>
+      </div>
+      <a class="px-8 py-4 bg-volt text-surface font-extrabold rounded-xl shadow-lg shadow-volt/20 hover:bg-volt-light transition-colors whitespace-nowrap" data-i18n="f.btn" href="#contacts">Оставить заявку</a>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium opacity-70 border-t border-surface-border pt-8">
+      <div class="font-mono">© <span id="year"></span> LL Elektri Expert OÜ</div>
+      <div class="flex gap-6">
+        <a class="hover:text-volt transition-colors font-semibold" href="index.html">llee.ee</a>
+        <a class="hover:text-volt transition-colors font-semibold" href="mailto:info@llee.ee">info@llee.ee</a>
+        <a class="hover:text-volt transition-colors font-semibold" href="https://instagram.com/electro_kip_est" rel="noopener noreferrer" target="_blank">@electro_kip_est</a>
+        <span>Ida-Virumaa</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating CTA (mobile) -->
+<a class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-volt rounded-full flex items-center justify-center text-surface shadow-2xl shadow-volt/40 border-2 border-volt-light/30 md:hidden transition-transform hover:scale-110 active:scale-95" href="#contacts">
+  <i data-lucide="mail" size="24"></i>
+</a>
+
+<script>
+// ===== i18n =====
+const I18N = {
+  ru: {
+    metaTitle: "Установка EV-зарядных станций в Ida-Virumaa — LL Elektri Expert OÜ",
+    metaDesc: "Установка зарядных станций для электромобилей в Ida-Virumaa. Лицензированный электрик, монтаж под ключ, документы. Нарва, Йыхви, Кохтла-Ярве, Силламяэ.",
+    brand: { subtitle: "Электромонтаж • Ida-Virumaa" },
+    menu: { home:"Главная", korter:"Квартиры", ku:"KÜ", ev:"EV-зарядки", contacts:"Контакты", call:"Заказать звонок" },
+    cta: { call: "Позвонить" },
+    cnt: { phone:"Телефон:", email:"Email:", addr:"Адрес:" },
+    form: {
+      name:"Имя", phone:"Телефон", email:"Email", msg:"Коротко о задаче",
+      namePh:"Как к вам обращаться?",
+      help:"Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.",
+      submit:"Отправить заявку",
+      alertReq:"Пожалуйста, заполните имя, телефон и email.",
+      alertOk:"Спасибо! Ваша заявка отправлена.\nМы свяжемся с вами в ближайшее время."
+    },
+    f: { btn:"Оставить заявку" },
+    ev: {
+      back:"← Назад на главную",
+      hero: {
+        badge:"EV · Зарядные станции · Ida-Virumaa",
+        utp:"90% клиентов выбирают 11 kW — и это правильно",
+        title:"Установка зарядной станции для электромобиля под ключ",
+        p:"Частные дома, дачи и бизнес в Ida-Virumaa. Лицензированный электрик — монтаж за 1 день, документы на руки.",
+        trust:"B-kategooria pädevustunnistus · Действует до 2030",
+        ctaForm:"Написать",
+        t1:"Монтаж за 1 день", t2:"Документы (tööakt)", t3:"Подбор без переплат"
+      },
+      variants: { title:"Выберите мощность", lead:"Два варианта — подберём подходящий после осмотра щита и ввода." },
+      v1: {
+        badge:"Выбор большинства", sub:"Оптимальное решение для дома",
+        f1:"Подходит для 90% электромобилей", f2:"Полная зарядка за ночь (5–8 часов)",
+        f3:"Стандартный ввод — чаще без модернизации", f4:"Меньше нагрузка на сеть",
+        note:"💡 Лучший баланс цены, скорости и надёжности"
+      },
+      v2: {
+        badge:"С запасом", sub:"Для повышенных требований",
+        f1:"Зарядка до 2× быстрее (при поддержке авто)", f2:"Подходит для бизнеса и парковок",
+        f3:"Несколько автомобилей одновременно", f4:"Требует мощного ввода и расчёта нагрузки",
+        note:"⚠ Честно скажем, когда 22 kW не даёт реального преимущества"
+      },
+      compare: {
+        title:"Сравнение 11 kW и 22 kW",
+        th: { param:"Параметр" },
+        r1: { p:"Подходит для авто" }, all:"все",
+        r2: { p:"Скорость зарядки", v1:"5–8 ч", v2:"3–5 ч" },
+        r3: { p:"Требования к сети" }, standard:"стандартные", high:"повышенные",
+        r4: { p:"Нужна модернизация" }, rarely:"редко", often:"часто",
+        r5: { p:"Стоимость установки" }, lower:"ниже", higher:"выше",
+        r6: { p:"Оптимально для дома" },
+        cta: { text:"Не уверены какой вариант подойдёт? Позвоните — разберём за 5 минут.", btn:"Позвонить" }
+      },
+      process: {
+        title:"Как проходит установка", lead:"От звонка до готовой зарядки — один рабочий день.",
+        s1: { t:"Отдельная линия от щита", p:"Прокладываем кабель нужного сечения от электрощита до места установки" },
+        s2: { t:"Защита (автомат + УЗО)", p:"Устанавливаем автоматический выключатель и устройство защитного отключения" },
+        s3: { t:"Монтаж станции", p:"Крепим и подключаем зарядную станцию — на стене гаража, парковки или дома" },
+        s4: { t:"Настройка", p:"Проверяем работу, настраиваем через приложение, при необходимости — load balancing" },
+        s5: { t:"Готово", p:"Tööakt на руки. Оплата по домашнему счётчику — без подписок и скрытых платежей" }
+      },
+      dlm: {
+        label:"Опция · Не всегда нужна",
+        title:"Умное управление нагрузкой",
+        p:"Система load balancing (DLM) регулирует мощность зарядки автоматически — чтобы не перегрузить домашнюю сеть при одновременной работе других приборов.",
+        honest:"Честно: большинству клиентов это не нужно. Скажем прямо.",
+        when:"Рекомендуем когда:",
+        c1:"Слабый ввод (3×16A) при высокой нагрузке",
+        c2:"Много мощных электроприборов одновременно",
+        c3:"Несколько автомобилей на одном объекте"
+      },
+      price: {
+        title:"Ориентировочная стоимость",
+        r1: { work:"Стандартная установка 11 kW (работа)" },
+        r2: { work:"Установка 22 kW (работа)" },
+        r3: { work:"+ Load balancing (опция)", val:"по запросу" },
+        r4: { work:"Полный комплект (работа + станция)" },
+        note:"Разброс зависит от длины кабельной трассы, состояния щита и условий объекта. Точная цена — после осмотра."
+      },
+      economy: {
+        title:"Стоимость зарядки", per100:"на 100 км", full:"полная зарядка", vs:"В 2–3 раза дешевле бензина"
+      },
+      trust: {
+        title:"Наш подход",
+        c1: { t:"Лицензированный электрик", p:"B-kategooria pädevustunnistus — государственная квалификация. Действует до 21.04.2030. Работаем официально." },
+        c2: { t:"Документы на руки", p:"Tööakt после каждой установки. Фотофиксация кабельных трасс. Гарантийный лист." },
+        c3: { t:"Не навязываем лишнее", p:"90% клиентов достаточно 11 kW. Скажем честно, если 22 kW не имеет смысла для вашего объекта." },
+        c4: { t:"1 день", p:"Типовая установка занимает один рабочий день. Без многонедельных ожиданий." }
+      },
+      faq: {
+        title:"Частые вопросы",
+        q1:"Нужно ли согласование для установки?", a1:"Для частного дома — как правило, нет, если не увеличивается договорная мощность. После осмотра скажем точно — зависит от состояния ввода и щита.",
+        q2:"Можно ли ставить на улице?", a2:"Да. Зарядные станции для наружной установки имеют степень защиты IP54 и выше — защищены от влаги и мороза эстонской зимы.",
+        q3:"Можно ли заряжать от обычной розетки?", a3:"Технически можно, но это медленно (2–3 кВт) и небезопасно для домашней проводки при длительной нагрузке. Отдельная линия со станцией — правильное решение.",
+        q4:"Кто несёт ответственность за работу?", a4:"Мы — лицензированный подрядчик с B-kategooria pädevustunnistus. После работы подписываем tööakt, в котором зафиксированы все выполненные работы. Гарантийный лист прилагается.",
+        q5:"Нужен ли load balancing?", a5:"Большинству — нет. Нужен при слабом вводе (3×16A), высокой одновременной нагрузке или нескольких авто. Оценим при осмотре и скажем честно."
+      },
+      cnt: { title:"Подберём решение под ваш дом", lead:"Оставьте заявку или позвоните — уточним мощность ввода, порекомендуем станцию и назовём точную цену после осмотра." },
+      f: { cta:"Готовы установить зарядку?", sub:"Бесплатная консультация и выезд на осмотр в день обращения." },
+      form: { msgPh:"Например: частный дом, Йыхви, интересует 11 kW" }
+    }
+  },
+  ee: {
+    metaTitle: "EV-laadijate paigaldus Ida-Virumaal — LL Elektri Expert OÜ",
+    metaDesc: "Elektriautode laadijate paigaldus Ida-Virumaal. Litsentseeritud elektrik, võtmed kätte, dokumendid. Narva, Jõhvi, Kohtla-Järve, Sillamäe.",
+    brand: { subtitle: "Elektritööd • Ida-Virumaa" },
+    menu: { home:"Avaleht", korter:"Korterid", ku:"KÜ", ev:"EV-laadijad", contacts:"Kontaktid", call:"Telli tagasikõne" },
+    cta: { call: "Helista" },
+    cnt: { phone:"Telefon:", email:"E-post:", addr:"Aadress:" },
+    form: {
+      name:"Nimi", phone:"Telefon", email:"E-post", msg:"Lühidalt ülesandest",
+      namePh:"Kuidas teid kõnetada?",
+      help:"Nupule vajutades nõustute oma andmete töötlemisega, et võtta teiega ühendust päringu osas.",
+      submit:"Saada päring",
+      alertReq:"Palun täitke nimi, telefon ja e-post.",
+      alertOk:"Aitäh! Teie päring on saadetud.\nVõtame teiega peagi ühendust."
+    },
+    f: { btn:"Esita päring" },
+    ev: {
+      back:"← Tagasi avalehele",
+      hero: {
+        badge:"EV · Laadijad · Ida-Virumaa",
+        utp:"90% klientidest valib 11 kW — ja see on õige valik",
+        title:"EV-laadija paigaldus võtmed kätte",
+        p:"Eramud, suvemajad ja ärikliendid Ida-Virumaal. Litsentseeritud elektrik — paigaldus 1 päevaga, dokumendid kätte.",
+        trust:"B-kategooria pädevustunnistus · Kehtib kuni 2030",
+        ctaForm:"Kirjuta",
+        t1:"Paigaldus 1 päevaga", t2:"Dokumendid (tööakt)", t3:"Sobiv lahendus ilma lisatasuta"
+      },
+      variants: { title:"Valige võimsus", lead:"Kaks varianti — leiame sobiva pärast kilbi ja sisendi ülevaatust." },
+      v1: {
+        badge:"Enamiku valik", sub:"Optimaalne lahendus eramusse",
+        f1:"Sobib 90% elektriautodele", f2:"Täislaadimiseks üks öö (5–8 tundi)",
+        f3:"Standardsisend — harvem vajab täiendust", f4:"Väiksem koormus võrgule",
+        note:"💡 Parim tasakaal hinna, kiiruse ja usaldusväärsuse vahel"
+      },
+      v2: {
+        badge:"Varuga", sub:"Kõrgendatud nõudmistele",
+        f1:"Laadimine kuni 2× kiirem (auto toetuse korral)", f2:"Sobib äri- ja parkimisobjektidele",
+        f3:"Mitu autot korraga", f4:"Nõuab tugeva sisendi ja koormuse arvutust",
+        note:"⚠ Ütleme ausalt, millal 22 kW tegelikku eelist ei anna"
+      },
+      compare: {
+        title:"11 kW ja 22 kW võrdlus",
+        th: { param:"Parameeter" },
+        r1: { p:"Sobib autodele" }, all:"kõik",
+        r2: { p:"Laadimise kiirus", v1:"5–8 t", v2:"3–5 t" },
+        r3: { p:"Võrgunõuded" }, standard:"standardsed", high:"kõrgendatud",
+        r4: { p:"Vajab täiendust" }, rarely:"harva", often:"sageli",
+        r5: { p:"Paigalduse hind" }, lower:"madalam", higher:"kõrgem",
+        r6: { p:"Sobilik eramusse" },
+        cta: { text:"Pole kindel, milline variant sobib? Helistage — selgitame 5 minutiga.", btn:"Helista" }
+      },
+      process: {
+        title:"Kuidas paigaldus käib", lead:"Kõnest valmis laadijani — üks tööpäev.",
+        s1: { t:"Eraldi liin kilbist", p:"Vedame vajaliku ristlõikega kaabli kilbist paigalduskohani" },
+        s2: { t:"Kaitse (automaatkaitsme + RCD)", p:"Paigaldame automaatkaitsme ja rikkevoolukaitsme" },
+        s3: { t:"Laadija paigaldus", p:"Kinnitame ja ühendame laadimisjaama — garaaži, parkla või maja seinale" },
+        s4: { t:"Seadistamine", p:"Kontrollime tööd, seadistame rakenduse kaudu, vajadusel load balancing" },
+        s5: { t:"Valmis", p:"Tööakt kätte. Tasumine kodumõõtja järgi — ilma tellimuste ja varjatud tasudeta" }
+      },
+      dlm: {
+        label:"Valik · Ei ole alati vajalik",
+        title:"Nutikas koormushaldus",
+        p:"Load balancing (DLM) reguleerib laadimise võimsust automaatselt, et kodu elektrivõrku mitte ülekoormata.",
+        honest:"Ausalt: enamikule klientidest seda vaja ei lähe. Ütleme otse.",
+        when:"Soovitame kui:",
+        c1:"Nõrk sisend (3×16A) ja kõrge samaaegne koormus",
+        c2:"Palju võimsaid kodumasinaid korraga",
+        c3:"Mitu autot samal objektil"
+      },
+      price: {
+        title:"Orienteeruvad hinnad",
+        r1: { work:"Standardpaigaldus 11 kW (töö)" },
+        r2: { work:"Paigaldus 22 kW (töö)" },
+        r3: { work:"+ Load balancing (valik)", val:"küsi hinnapakkumist" },
+        r4: { work:"Täiskomplekt (töö + jaam)" },
+        note:"Vahemik sõltub kaablitrassi pikkusest, kilbi seisundist ja objekti tingimustest. Täpne hind — pärast ülevaatust."
+      },
+      economy: {
+        title:"Laadimise maksumus", per100:"100 km kohta", full:"täislaadimiseks", vs:"2–3× odavam kui bensiin"
+      },
+      trust: {
+        title:"Meie lähenemine",
+        c1: { t:"Litsentseeritud elektrik", p:"B-kategooria pädevustunnistus — riiklik kvalifikatsioon. Kehtib kuni 21.04.2030. Töötame ametlikult." },
+        c2: { t:"Dokumendid kätte", p:"Tööakt pärast iga paigaldust. Kaablitrasside fotod. Garantiileht." },
+        c3: { t:"Ei suru peale mittevajalikku", p:"90% klientidest piisab 11 kW. Ütleme ausalt, millal 22 kW teie objektil mõtet ei tee." },
+        c4: { t:"1 päev", p:"Tüüpiline paigaldus võtab ühe tööpäeva. Ilma nädalate pikkuse ootamiseta." }
+      },
+      faq: {
+        title:"Korduma kippuvad küsimused",
+        q1:"Kas paigaldus vajab kooskõlastust?", a1:"Eramu puhul — üldjuhul mitte, kui lepinguline võimsus ei suurene. Pärast ülevaatust ütleme täpselt — oleneb sisendi ja kilbi seisundist.",
+        q2:"Kas saab paigaldada õue?", a2:"Jah. Välispaigalduseks mõeldud laadijatel on IP54 kaitseklass ja kõrgem — vastupidavad niiskusele ja Eesti talvekülmale.",
+        q3:"Kas saab laadida tavalisest pistikupesast?", a3:"Tehniliselt saab, kuid see on aeglane (2–3 kW) ja pikaajalise koormuse korral ohtlik kodusele juhtmestikule. Eraldi liin koos jaamaga on õige lahendus.",
+        q4:"Kes vastutab tehtud töö eest?", a4:"Meie — litsentseeritud töövõtja B-kategooria pädevustunnistusega. Pärast töid allkirjastame tööakti, kus on fikseeritud kõik tehtud tööd. Garantiileht lisatakse.",
+        q5:"Kas load balancing on vajalik?", a5:"Enamikule — ei. Vajalik nõrga sisendi (3×16A), kõrge samaaegse koormuse või mitme auto korral. Hindame ülevaatuse käigus ja ütleme ausalt."
+      },
+      cnt: { title:"Leiame teie majale sobiva lahenduse", lead:"Jätke päring või helistage — täpsustame sisendi võimsuse, soovitame jaama ja nimetame täpse hinna pärast ülevaatust." },
+      f: { cta:"Valmis laadijat paigaldama?", sub:"Tasuta konsultatsioon ja ülevaatusväljasõit samal päeval." },
+      form: { msgPh:"Nt: eramu, Jõhvi, huvitab 11 kW" }
+    }
+  },
+  en: {
+    metaTitle: "EV Charger Installation in Ida-Viru — LL Elektri Expert OÜ",
+    metaDesc: "EV charging station installation in Ida-Virumaa. Licensed electrician, turnkey installation, documents included. Narva, Jõhvi, Kohtla-Järve, Sillamäe.",
+    brand: { subtitle: "Electrical works • Ida-Viru" },
+    menu: { home:"Home", korter:"Apartments", ku:"HOA", ev:"EV Charging", contacts:"Contacts", call:"Request a call" },
+    cta: { call: "Call" },
+    cnt: { phone:"Phone:", email:"Email:", addr:"Address:" },
+    form: {
+      name:"Name", phone:"Phone", email:"Email", msg:"Short description",
+      namePh:"How should we address you?",
+      help:"By clicking the button you agree to the processing of your data to contact you regarding the request.",
+      submit:"Send request",
+      alertReq:"Please fill in name, phone and email.",
+      alertOk:"Thank you! Your request has been sent.\nWe will contact you shortly."
+    },
+    f: { btn:"Send request" },
+    ev: {
+      back:"← Back to home",
+      hero: {
+        badge:"EV · Charging Stations · Ida-Virumaa",
+        utp:"90% of clients choose 11 kW — and it's the right choice",
+        title:"EV charging station installation, turnkey",
+        p:"Private homes, cottages and businesses in Ida-Virumaa. Licensed electrician — installed in 1 day, documents included.",
+        trust:"B-kategooria pädevustunnistus · Valid until 2030",
+        ctaForm:"Write to us",
+        t1:"Installed in 1 day", t2:"Documents (tööakt)", t3:"Right-sized, no upsells"
+      },
+      variants: { title:"Choose your power level", lead:"Two options — we'll pick the right one after inspecting your panel and supply." },
+      v1: {
+        badge:"Most popular", sub:"The optimal home solution",
+        f1:"Compatible with 90% of EVs", f2:"Full charge overnight (5–8 hours)",
+        f3:"Standard supply — usually no upgrade needed", f4:"Lower grid load",
+        note:"💡 Best balance of price, speed and reliability"
+      },
+      v2: {
+        badge:"Extra capacity", sub:"For demanding requirements",
+        f1:"Up to 2× faster charging (if car supports it)", f2:"Suitable for business and car parks",
+        f3:"Multiple vehicles simultaneously", f4:"Requires strong supply and load calculation",
+        note:"⚠ We'll tell you honestly when 22 kW gives no real advantage"
+      },
+      compare: {
+        title:"11 kW vs 22 kW comparison",
+        th: { param:"Parameter" },
+        r1: { p:"Compatible with EVs" }, all:"all",
+        r2: { p:"Charging speed", v1:"5–8 h", v2:"3–5 h" },
+        r3: { p:"Grid requirements" }, standard:"standard", high:"elevated",
+        r4: { p:"Upgrade needed" }, rarely:"rarely", often:"often",
+        r5: { p:"Installation cost" }, lower:"lower", higher:"higher",
+        r6: { p:"Ideal for home" },
+        cta: { text:"Not sure which option suits you? Call us — we'll sort it out in 5 minutes.", btn:"Call" }
+      },
+      process: {
+        title:"How installation works", lead:"From call to ready charger — one working day.",
+        s1: { t:"Dedicated line from panel", p:"We run the correct cross-section cable from the electrical panel to the installation point" },
+        s2: { t:"Protection (MCB + RCD)", p:"We install a miniature circuit breaker and residual current device" },
+        s3: { t:"Station mounting", p:"We mount and connect the charging station — on a garage wall, parking area or house wall" },
+        s4: { t:"Configuration", p:"We verify operation, configure via the app, add load balancing if needed" },
+        s5: { t:"Done", p:"Tööakt in hand. Billed via your home meter — no subscriptions or hidden fees" }
+      },
+      dlm: {
+        label:"Option · Not always required",
+        title:"Smart load management",
+        p:"Load balancing (DLM) automatically regulates charging power to prevent overloading the home grid when other appliances run simultaneously.",
+        honest:"Honest: most clients don't need it. We'll tell you straight.",
+        when:"We recommend it when:",
+        c1:"Weak supply (3×16A) with high simultaneous loads",
+        c2:"Many high-power appliances running at once",
+        c3:"Multiple vehicles on one site"
+      },
+      price: {
+        title:"Indicative prices",
+        r1: { work:"Standard 11 kW installation (labour)" },
+        r2: { work:"22 kW installation (labour)" },
+        r3: { work:"+ Load balancing (option)", val:"on request" },
+        r4: { work:"Full package (labour + station)" },
+        note:"Range depends on cable run length, panel condition and site specifics. Exact price after on-site inspection."
+      },
+      economy: {
+        title:"Cost of charging", per100:"per 100 km", full:"full charge", vs:"2–3× cheaper than petrol"
+      },
+      trust: {
+        title:"Our approach",
+        c1: { t:"Licensed electrician", p:"B-kategooria pädevustunnistus — state qualification. Valid until 21.04.2030. We work officially." },
+        c2: { t:"Documents in hand", p:"Tööakt after every installation. Cable run photos. Warranty card." },
+        c3: { t:"No upsells", p:"90% of clients are fine with 11 kW. We'll tell you honestly if 22 kW makes no sense for your site." },
+        c4: { t:"1 day", p:"A typical installation takes one working day. No weeks-long waiting." }
+      },
+      faq: {
+        title:"Frequently asked questions",
+        q1:"Does installation require a permit?", a1:"For a private home — generally no, if the contracted supply capacity isn't increased. We'll confirm after inspection — depends on supply and panel condition.",
+        q2:"Can it be installed outdoors?", a2:"Yes. Outdoor-rated stations have IP54 protection or higher — resistant to moisture and Estonian winter frost.",
+        q3:"Can I charge from a regular socket?", a3:"Technically yes, but it's slow (2–3 kW) and unsafe for home wiring under prolonged load. A dedicated line with a station is the proper solution.",
+        q4:"Who is responsible for the work?", a4:"We are — a licensed contractor with B-kategooria pädevustunnistus. After the job we sign a tööakt documenting all work performed. A warranty card is included.",
+        q5:"Do I need load balancing?", a5:"Most clients don't. It's needed with a weak supply (3×16A), high simultaneous loads or multiple vehicles. We assess on site and give you an honest answer."
+      },
+      cnt: { title:"We'll find the right solution for your home", lead:"Leave a request or call — we'll check your supply capacity, recommend a station and give a precise price after inspection." },
+      f: { cta:"Ready to install your charger?", sub:"Free consultation and site visit on the day you contact us." },
+      form: { msgPh:"e.g., private home, Jõhvi, interested in 11 kW" }
+    }
+  }
+};
+
+// ===== App logic =====
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  let currentLang = localStorage.getItem('lang');
+  if (!currentLang || !I18N[currentLang]) {
+    const browser = (navigator.language || 'ru').toLowerCase();
+    if (browser.startsWith('et')) currentLang = 'ee';
+    else if (browser.startsWith('en')) currentLang = 'en';
+    else currentLang = 'ru';
+  }
+
+  function getDeep(obj, path) {
+    return path.split('.').reduce((o, k) => o ? o[k] : null, obj);
+  }
+
+  function updateLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang === 'ee' ? 'et' : lang;
+    const t = I18N[lang];
+    document.title = t.metaTitle;
+    document.querySelector('meta[name="description"]').setAttribute('content', t.metaDesc);
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const val = getDeep(t, el.getAttribute('data-i18n'));
+      if (val) el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.getAttribute('data-i18n-attr').split('|').forEach(pair => {
+        const [attr, key] = pair.split(':');
+        const val = getDeep(t, key);
+        if (val) el.setAttribute(attr, val);
+      });
+    });
+
+    const updateSwitcher = (sel) => {
+      document.querySelectorAll(`${sel} button`).forEach(btn => {
+        btn.className = btn.dataset.lang === lang
+          ? "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-volt text-surface shadow-sm"
+          : "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 text-gray-500 hover:text-gray-300";
+      });
+    };
+    updateSwitcher('#lang-switcher');
+    updateSwitcher('#mobile-lang-switcher');
+  }
+
+  updateLanguage(currentLang);
+  document.querySelectorAll('button[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+  });
+
+  // Header scroll
+  const header = document.getElementById('main-header');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        header.className = window.scrollY > 50
+          ? "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 header-scrolled"
+          : "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent";
+        ticking = false;
+      });
+    }
+  }, { passive: true });
+
+  // Scroll performance boost
+  let __scrollTimer = 0, __scrolling = false;
+  const __setScrolling = (on) => {
+    if (__scrolling === on) return;
+    __scrolling = on;
+    document.documentElement.classList.toggle('is-scrolling', on);
+    window.dispatchEvent(new CustomEvent('llee:scroll', { detail: { scrolling: on } }));
+  };
+  window.addEventListener('scroll', () => {
+    __setScrolling(true);
+    clearTimeout(__scrollTimer);
+    __scrollTimer = setTimeout(() => __setScrolling(false), 200);
+  }, { passive: true });
+
+  // Mobile menu
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    const icon = mobileMenu.classList.contains('hidden') ? 'menu' : 'x';
+    menuBtn.innerHTML = `<i data-lucide="${icon}"></i>`;
+    lucide.createIcons();
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+      lucide.createIcons();
+    });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
+
+  // Contact form
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const t = I18N[currentLang];
+      const name = form.querySelector('#name').value.trim();
+      const phone = form.querySelector('#phone').value.trim();
+      const email = form.querySelector('#email').value.trim();
+      if (!name || !phone || !email) { alert(t.form.alertReq); return; }
+      alert(t.form.alertOk);
+      form.reset();
+    });
+  }
+});
+
+// FAQ toggle
+function toggleFaq(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+  lucide.createIcons();
+}
+</script>
+
+<!-- PCB pulse canvas (identical to index.html) -->
+<script>
+(() => {
+  const canvas = document.getElementById('fxCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const mqReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mqReduce && mqReduce.matches) { canvas.style.display = 'none'; return; }
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  const BASE_PULSE_COUNT = isMobile ? 12 : 22;
+  const FRAME_MS = isMobile ? 33 : 24;
+  const CORE_W_MIN = isMobile ? 1.2 : 1.5, CORE_W_MAX = isMobile ? 2.4 : 3.2;
+  const TAIL_LEN_MIN = isMobile ? 60 : 80, TAIL_LEN_MAX = isMobile ? 120 : 180;
+  const SEGMENTS_MIN = 3, SEGMENTS_MAX = 8;
+  const CELL_MIN = isMobile ? 50 : 60, CELL_MAX = isMobile ? 80 : 110;
+  let w, h, activePulseCount = BASE_PULSE_COUNT, running = true, rafId = null, scrollBoost = false, scrollBoostUntil = 0;
+  const rand = (a,b) => a + Math.random()*(b-a);
+  const randi = (a,b) => Math.floor(rand(a,b+1));
+  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio||1, isMobile?1.5:2);
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize();
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize,150); }, {passive:true});
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { running=false; if(rafId){cancelAnimationFrame(rafId);rafId=null;} }
+    else { running=true; lastNow=performance.now(); lastRender=lastNow; if(!rafId)rafId=requestAnimationFrame(frame); }
+  });
+  window.addEventListener('llee:scroll', (e) => {
+    const on = !!(e&&e.detail&&e.detail.scrolling);
+    if (on) { scrollBoost=true; scrollBoostUntil=performance.now()+220; }
+    else { scrollBoost=false; }
+  });
+  let fpsFrames=0, fpsLast=performance.now();
+  function monitorFPS(now) {
+    fpsFrames++;
+    if (now-fpsLast>=2000) {
+      const fps = fpsFrames/((now-fpsLast)/1000);
+      fpsLast=now; fpsFrames=0;
+      const min=isMobile?6:10, max=BASE_PULSE_COUNT;
+      if(fps<26&&activePulseCount>min) activePulseCount=Math.max(min,activePulseCount-(isMobile?2:3));
+      else if(fps>52&&activePulseCount<max) activePulseCount=Math.min(max,activePulseCount+1);
+    }
+  }
+  function makePath() {
+    const cell=randi(CELL_MIN,CELL_MAX), cols=Math.max(8,Math.floor(w/cell)), rows=Math.max(6,Math.floor(h/cell));
+    let x=randi(0,cols-1)*cell+cell/2, y=randi(0,rows-1)*cell+cell/2;
+    const pts=[{x,y}]; let dir=pick([[1,0],[-1,0],[0,1],[0,-1]]);
+    for(let i=0;i<randi(SEGMENTS_MIN,SEGMENTS_MAX);i++) {
+      if(Math.random()<0.75) dir=(dir[0]!==0)?pick([[0,1],[0,-1]]):pick([[1,0],[-1,0]]);
+      else if(Math.random()<0.5) dir=[-dir[0],-dir[1]];
+      const len=randi(3,randi(5,11));
+      x=clamp(x+dir[0]*len*cell,cell/2,w-cell/2); y=clamp(y+dir[1]*len*cell,cell/2,h-cell/2);
+      pts.push({x,y});
+    }
+    const seg=[]; let total=0;
+    for(let i=0;i<pts.length-1;i++) {
+      const a=pts[i],b=pts[i+1],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1;
+      seg.push({a,b,L,dx,dy}); total+=L;
+    }
+    return {pts,seg,total};
+  }
+  const palette = [
+    {core:'rgba(34,211,238,0.95)',glow:'rgba(34,211,238,0.55)'},
+    {core:'rgba(245,158,11,0.95)',glow:'rgba(245,158,11,0.55)'}
+  ];
+  class Pulse {
+    constructor(){this.reset(true);}
+    reset(first=false){
+      this.path=makePath(); this.t=first?rand(0,this.path.total):0; this.life=0;
+      this.delay=first?rand(0,1.0):rand(0,2.2); this.speed=rand(160,240);
+      this.coreW=rand(CORE_W_MIN,CORE_W_MAX); this.tailLen=rand(TAIL_LEN_MIN,TAIL_LEN_MAX);
+      this.color=pick(palette); this.alpha=isMobile?rand(0.45,0.75):rand(0.55,0.95);
+    }
+    sample(dist){
+      let d=dist;
+      for(const s of this.path.seg){if(d<=s.L){const u=d/s.L;return{x:s.a.x+s.dx*u,y:s.a.y+s.dy*u,vx:(s.dx/s.L)||0,vy:(s.dy/s.L)||0};}d-=s.L;}
+      const last=this.path.seg[this.path.seg.length-1];return{x:last.b.x,y:last.b.y,vx:0,vy:0};
+    }
+    update(dt){if(this.delay>0){this.delay-=dt;return;}this.life+=dt;this.t+=this.speed*dt;if(this.t>this.path.total)this.reset();}
+    draw(opts){
+      if(this.delay>0)return;
+      const head=this.sample(this.t),tail=this.sample(Math.max(0,this.t-this.tailLen));
+      const g=ctx.createLinearGradient(tail.x,tail.y,head.x,head.y);
+      g.addColorStop(0,'rgba(0,0,0,0)');
+      g.addColorStop(0.45,this.color.glow.replace('0.55',String(0.25*this.alpha*opts.alphaMul)));
+      g.addColorStop(1,this.color.core.replace('0.95',String(0.95*this.alpha*opts.alphaMul)));
+      ctx.lineWidth=this.coreW*opts.widthMul; ctx.lineCap='round'; ctx.strokeStyle=g;
+      ctx.beginPath(); ctx.moveTo(tail.x,tail.y); ctx.lineTo(head.x,head.y); ctx.stroke();
+      if(!opts.skipHead){
+        ctx.fillStyle=this.color.core.replace('0.95',String(0.95*this.alpha*opts.alphaMul));
+        ctx.shadowColor=this.color.glow.replace('0.55',String(0.7*this.alpha*opts.alphaMul));
+        ctx.shadowBlur=opts.shadowBlur;
+        ctx.beginPath(); ctx.arc(head.x,head.y,this.coreW*1.7*opts.widthMul,0,Math.PI*2); ctx.fill();
+        ctx.shadowBlur=0;
+      }
+    }
+  }
+  const pulses=Array.from({length:BASE_PULSE_COUNT},()=>new Pulse());
+  let lastNow=performance.now(), lastRender=lastNow;
+  function frame(now){
+    if(!running){rafId=requestAnimationFrame(frame);return;}
+    if(scrollBoost&&now>scrollBoostUntil)scrollBoost=false;
+    const sinceRender=now-lastRender;
+    if(sinceRender<FRAME_MS){rafId=requestAnimationFrame(frame);return;}
+    const dt=Math.min(0.05,(now-lastNow)/1000);
+    lastNow=now; lastRender=now-(sinceRender%FRAME_MS);
+    monitorFPS(now);
+    const opts=scrollBoost?{alphaMul:0.55,widthMul:0.95,shadowBlur:0,skipHead:true}:{alphaMul:1,widthMul:1,shadowBlur:isMobile?8:10,skipHead:false};
+    const hardMin=isMobile?6:10;
+    const count=Math.min(scrollBoost?Math.max(hardMin,Math.floor(activePulseCount*0.55)):activePulseCount,pulses.length);
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=scrollBoost?'rgba(0,0,0,0.16)':'rgba(0,0,0,0.10)';
+    ctx.fillRect(0,0,w,h);
+    ctx.globalCompositeOperation='lighter';
+    for(let i=0;i<count;i++){pulses[i].update(dt);pulses[i].draw(opts);}
+    for(let i=count;i<pulses.length;i++){pulses[i].update(dt);}
+    rafId=requestAnimationFrame(frame);
+  }
+  rafId=requestAnimationFrame(frame);
+  if(mqReduce&&mqReduce.addEventListener){
+    mqReduce.addEventListener('change',(e)=>{
+      if(e.matches){canvas.style.display='none';running=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}}
+      else{canvas.style.display='';running=true;lastNow=performance.now();lastRender=lastNow;if(!rafId)rafId=requestAnimationFrame(frame);}
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
