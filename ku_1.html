@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Электрика для квартирных товариществ (KÜ) — LL Elektri Expert OÜ</title>
+<meta content="#0d1117" name="theme-color"/>
+<link href="assets/favicon-white.ico?v=2" rel="icon" sizes="any"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="Электрика для квартирных товариществ в Ida-Virumaa. Диагностика, подготовка к аудиту, общедомовые сети, автоматика теплоузлов. Нарва, Йыхви, Кохтла-Ярве." name="description"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Barlow', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace']
+        },
+        colors: {
+          brand: { blue:'#3b82f6', lightBlue:'#60a5fa', orange:'#f59e0b', lightOrange:'#fbbf24', dark:'#0d1117' },
+          surface: { DEFAULT:'#0d1117', card:'#161b22', elevated:'#1c2333', border:'#30363d' },
+          volt: { DEFAULT:'#f59e0b', light:'#fbbf24', glow:'#f59e0b33', dim:'#78350f' }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --volt: #f59e0b;
+    --volt-light: #fbbf24;
+    --volt-glow: rgba(245, 158, 11, 0.15);
+    --surface: #0d1117;
+    --surface-card: #161b22;
+    --surface-elevated: #1c2333;
+    --border: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #9ca3af;
+    --text-muted: #7c8490;
+  }
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    background-color: var(--surface);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #0d1117; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+  .circuit-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.035; }
+  .circuit-bg svg { width:100%; height:100%; }
+  .grid-overlay {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
+    background-image: linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px);
+    background-size: 60px 60px;
+  }
+  #logoWatermark {
+    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.06;
+    background-image: url('assets/hero2.png');
+    background-repeat:no-repeat; background-position:50% 70%;
+    background-size: min(900px,85vw);
+    filter: grayscale(1) contrast(1.15) brightness(1.05);
+    mix-blend-mode: soft-light;
+    contain:paint; transform:translateZ(0); backface-visibility:hidden;
+  }
+  @media (max-width:768px) {
+    #logoWatermark { opacity:.04; background-size:min(520px,92vw); background-position:50% 75%; }
+  }
+  .fx-canvas {
+    position:fixed; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:2;
+    contain:paint; transform:translateZ(0); backface-visibility:hidden;
+  }
+
+  /* Scroll animations */
+  .fade-in-section {
+    opacity:0; transform:translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    will-change: opacity, transform;
+  }
+  .fade-in-section.is-visible { opacity:1; transform:none; will-change:auto; }
+  .stagger-children .fade-in-section:nth-child(2) { transition-delay:0.08s; }
+  .stagger-children .fade-in-section:nth-child(3) { transition-delay:0.16s; }
+  .stagger-children .fade-in-section:nth-child(4) { transition-delay:0.24s; }
+  .stagger-children .fade-in-section:nth-child(5) { transition-delay:0.32s; }
+  .stagger-children .fade-in-section:nth-child(6) { transition-delay:0.40s; }
+
+  /* Cards */
+  .card-3d {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.3s ease;
+    border:1px solid var(--border); background:var(--surface-card);
+  }
+  .card-3d:hover {
+    transform:translateY(-6px);
+    box-shadow:0 0 30px rgba(245,158,11,0.08), 0 10px 30px rgba(0,0,0,0.3);
+    border-color:rgba(245,158,11,0.3);
+  }
+  .card-gradient-line {
+    transform:scaleX(0); transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    transform-origin:left;
+    background:linear-gradient(90deg,var(--volt),var(--volt-light),var(--volt)) !important;
+  }
+  .card-3d:hover .card-gradient-line { transform:scaleX(1); }
+
+  .icon-box { position:relative; transition:all 0.3s ease; }
+  .icon-box::after {
+    content:''; position:absolute; inset:-3px; border-radius:inherit;
+    background:var(--volt); opacity:0; filter:blur(8px);
+    transition:opacity 0.3s ease; z-index:-1;
+  }
+  .group:hover .icon-box::after, .card-3d:hover .icon-box::after { opacity:0.3; }
+
+  /* Buttons */
+  .btn-primary {
+    background:linear-gradient(135deg,#f59e0b 0%,#fbbf24 100%);
+    color:#0d1117; font-weight:700; position:relative; overflow:hidden;
+  }
+  .btn-primary::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);
+    opacity:0; transition:opacity 0.3s ease;
+  }
+  .btn-primary:hover::before { opacity:1; }
+  .btn-primary:hover { box-shadow:0 0 25px rgba(245,158,11,0.35); }
+  .btn-primary span, .btn-primary svg { position:relative; z-index:1; }
+
+  /* Header */
+  .header-scrolled {
+    background:rgba(13,17,23,0.85) !important;
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+
+  /* Divider */
+  .section-divider {
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--border),rgba(245,158,11,0.2),var(--border),transparent);
+  }
+
+  /* Pulse dot */
+  .pulse-dot { animation:pulse-glow 2s ease-in-out infinite; }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow:0 0 4px var(--volt),0 0 8px var(--volt-glow); }
+    50% { box-shadow:0 0 8px var(--volt),0 0 20px var(--volt-glow); }
+  }
+
+  /* Step number */
+  .step-num {
+    background:linear-gradient(135deg,rgba(245,158,11,0.1),transparent);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+
+  /* Contact icon */
+  .contact-icon { background:var(--surface-elevated); border:1px solid var(--border); transition:all 0.3s ease; }
+  .contact-icon:hover { border-color:var(--volt); box-shadow:0 0 15px var(--volt-glow); }
+
+  /* Form */
+  .dark-input {
+    background:var(--surface) !important; border-color:var(--border) !important;
+    color:var(--text-primary) !important;
+  }
+  .dark-input::placeholder { color:var(--text-muted) !important; }
+  .dark-input:focus { border-color:var(--volt) !important; box-shadow:0 0 0 3px var(--volt-glow) !important; }
+
+  /* Selection */
+  ::selection { background:rgba(245,158,11,0.25); color:#fbbf24; }
+
+  /* Back link */
+  .back-link {
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--text-muted); font-size:14px; font-weight:600;
+    transition:color 0.2s ease;
+  }
+  .back-link:hover { color:var(--volt); }
+
+  /* Noise texture */
+  body::before {
+    content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; z-index:0; opacity:0.015;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat:repeat; background-size:256px 256px;
+  }
+
+  /* Service accordion */
+  .srv-card {
+    background:var(--surface-card); border:1px solid var(--border);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+  .srv-card.open { border-color:rgba(245,158,11,0.3); }
+  .srv-card-header {
+    display:flex; align-items:center; gap:16px;
+    padding:20px 24px; cursor:pointer;
+    user-select:none;
+  }
+  .srv-card-header:hover .srv-title { color:#fbbf24; }
+  .srv-body {
+    max-height:0; overflow:hidden;
+    transition:max-height 0.4s ease, padding 0.3s ease;
+    padding:0 24px;
+  }
+  .srv-card.open .srv-body { max-height:400px; padding-bottom:20px; }
+  .srv-toggle { transition:transform 0.3s ease; color:var(--volt); flex-shrink:0; margin-left:auto; }
+  .srv-card.open .srv-toggle { transform:rotate(45deg); }
+  .srv-title { font-size:16px; font-weight:700; color:#e6edf3; transition:color 0.2s ease; }
+  .srv-sub { font-size:13px; color:var(--text-muted); margin-top:1px; }
+
+  /* Grant hint block */
+  .grant-hint {
+    background: linear-gradient(135deg, rgba(59,130,246,0.06) 0%, rgba(245,158,11,0.04) 100%);
+    border:1px solid rgba(59,130,246,0.15);
+  }
+
+  /* Process step connector */
+  @media (min-width:1024px) {
+    .process-grid > div:not(:last-child)::after {
+      content:''; position:absolute; top:38px; right:-1.5rem;
+      width:3rem; height:2px;
+      background:linear-gradient(90deg,rgba(245,158,11,0.4),transparent);
+    }
+  }
+
+  /* pkg card */
+  .pkg-card { background:var(--surface-card); border:1px solid var(--border); transition:all 0.3s ease; }
+  .pkg-card:hover { border-color:rgba(245,158,11,0.2); box-shadow:0 4px 20px rgba(0,0,0,0.2); }
+
+  /* Scroll performance */
+  .is-scrolling .header-scrolled { backdrop-filter:blur(10px) !important; -webkit-backdrop-filter:blur(10px) !important; }
+  .circuit-bg, .grid-overlay { contain:paint; transform:translateZ(0); backface-visibility:hidden; }
+
+  @media (prefers-reduced-motion:reduce) {
+    .fx-canvas { display:none !important; }
+    .fade-in-section { transition:none !important; opacity:1 !important; transform:none !important; }
+    .card-3d, .srv-card, .pkg-card, .contact-icon, .btn-primary { transition:none !important; }
+    .pulse-dot { animation:none !important; }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness","Electrician"],
+  "name": "LL Elektri Expert OÜ",
+  "url": "https://llee.ee",
+  "telephone": ["+37281271118","+37281271119"],
+  "email": "info@llee.ee",
+  "areaServed": [{"@type":"AdministrativeArea","name":"Ida-Virumaa"}],
+  "address": {"@type":"PostalAddress","addressRegion":"Ida-Virumaa","addressCountry":"EE"}
+}
+</script>
+</head>
+<body class="font-sans">
+
+<!-- Background layers -->
+<div aria-hidden="true" class="circuit-bg">
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+<line opacity="0.5" stroke="#f59e0b" stroke-width="0.5" x1="0" x2="400" y1="100" y2="100"/>
+<line opacity="0.3" stroke="#f59e0b" stroke-width="0.5" x1="500" x2="600" y1="100" y2="100"/>
+<line opacity="0.4" stroke="#3b82f6" stroke-width="0.5" x1="0" x2="300" y1="250" y2="250"/>
+<line opacity="0.4" stroke="#3b82f6" stroke-width="0.5" x1="350" x2="350" y1="250" y2="400"/>
+<line opacity="0.3" stroke="#3b82f6" stroke-width="0.5" x1="350" x2="700" y1="400" y2="400"/>
+<line opacity="0.4" stroke="#f59e0b" stroke-width="0.5" x1="800" x2="1200" y1="200" y2="200"/>
+<line opacity="0.3" stroke="#3b82f6" stroke-width="0.5" x1="900" x2="1200" y1="500" y2="500"/>
+<line opacity="0.3" stroke="#f59e0b" stroke-width="0.5" x1="600" x2="600" y1="600" y2="800"/>
+<circle cx="400" cy="100" fill="#f59e0b" opacity="0.6" r="3"/>
+<circle cx="300" cy="250" fill="#3b82f6" opacity="0.5" r="3"/>
+<circle cx="800" cy="200" fill="#f59e0b" opacity="0.5" r="3"/>
+<circle cx="600" cy="600" fill="#f59e0b" opacity="0.4" r="3"/>
+<rect fill="none" height="6" opacity="0.4" stroke="#f59e0b" stroke-width="0.5" width="6" x="148" y="97"/>
+<rect fill="none" height="6" opacity="0.3" stroke="#f59e0b" stroke-width="0.5" width="6" x="847" y="197"/>
+</svg>
+</div>
+<div aria-hidden="true" class="grid-overlay"></div>
+<canvas aria-hidden="true" class="fx-canvas" id="fxCanvas"></canvas>
+<div aria-hidden="true" id="logoWatermark"></div>
+
+<!-- HEADER -->
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent" id="main-header">
+<div class="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-10">
+  <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+    <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-surface-card border border-surface-border shadow-lg overflow-hidden">
+      <img src="logo.png" alt="LL Elektri Expert logo" class="w-full h-full object-contain p-1" loading="lazy">
+    </div>
+    <div class="block">
+      <p class="text-base md:text-lg font-extrabold text-white tracking-tight leading-tight">LL Elektri Expert OÜ</p>
+      <small class="text-xs font-medium text-volt tracking-wide block font-mono" data-i18n="brand.subtitle">Электромонтаж • Ida-Virumaa</small>
+    </div>
+  </div>
+  <nav class="hidden lg:flex items-center gap-8">
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="index.html">
+      <span data-i18n="menu.home">Главная</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="korter.html">
+      <span data-i18n="menu.korter">Квартиры</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-volt transition-colors relative group" href="ku.html">
+      <span data-i18n="menu.ku">KÜ</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="ev.html">
+      <span data-i18n="menu.ev">EV-зарядки</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="index.html#contacts">
+      <span data-i18n="menu.contacts">Контакты</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <div class="flex items-center bg-surface-elevated p-1 rounded-full border border-surface-border" id="lang-switcher">
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ru">RU</button>
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ee">EE</button>
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="en">EN</button>
+    </div>
+    <a class="btn-primary px-5 py-2.5 rounded-xl text-sm shadow-lg shadow-volt/20 hover:shadow-volt/40 transition-all hover:-translate-y-0.5 active:translate-y-0 font-bold" href="#contacts">
+      <span data-i18n="menu.call">Заказать звонок</span>
+    </a>
+  </nav>
+  <button class="lg:hidden p-2 text-gray-300" id="mobile-menu-btn">
+    <i data-lucide="menu"></i>
+  </button>
+</div>
+<!-- Mobile menu -->
+<div class="hidden lg:hidden bg-surface-card border-b border-surface-border overflow-hidden absolute top-full left-0 right-0 shadow-2xl" id="mobile-menu">
+  <div class="container mx-auto px-4 py-6 flex flex-col gap-4">
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.home" href="index.html">Главная</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.korter" href="korter.html">Квартиры</a>
+    <a class="mobile-link text-lg font-medium text-volt py-2 border-b border-surface-border" data-i18n="menu.ku" href="ku.html">KÜ</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.ev" href="ev.html">EV-зарядки</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.contacts" href="index.html#contacts">Контакты</a>
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center bg-surface-elevated p-1 rounded-full border border-surface-border" id="mobile-lang-switcher">
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ru">RU</button>
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ee">EE</button>
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="en">EN</button>
+      </div>
+      <a class="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold" data-i18n="menu.call" href="#contacts">Заказать звонок</a>
+    </div>
+  </div>
+</div>
+</header>
+
+<main class="relative z-10">
+
+  <!-- ===== HERO ===== -->
+  <section class="pt-32 pb-20 md:pt-40 md:pb-28 relative overflow-hidden">
+    <div class="absolute -top-20 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 -left-20 w-72 h-72 bg-volt/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="container mx-auto px-4 md:px-6">
+
+      <div class="mb-8 fade-in-section">
+        <a class="back-link" href="index.html">
+          <i data-lucide="arrow-left" size="16"></i>
+          <span data-i18n="ku.back">← Назад на главную</span>
+        </a>
+      </div>
+
+      <div class="max-w-3xl fade-in-section">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-card border border-surface-border mb-6">
+          <span class="w-2 h-2 rounded-full bg-volt pulse-dot"></span>
+          <span class="text-xs font-bold uppercase tracking-wider font-mono text-gray-300" data-i18n="ku.hero.badge">Квартирные товарищества · KÜ · Ida-Virumaa</span>
+        </div>
+
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight" data-i18n="ku.hero.title">
+          Электрика общедомовых систем — спокойно и по делу
+        </h2>
+        <p class="text-xl text-gray-300 mb-8 leading-relaxed" data-i18n="ku.hero.p">
+          Работаем с квартирными товариществами в Ida-Virumaa: диагностика, общедомовые сети, автоматика теплоузлов. Приедем, посмотрим, скажем честно что есть.
+        </p>
+
+        <!-- Trust row -->
+        <div class="flex flex-wrap items-center gap-3 mb-10">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-volt" data-lucide="shield-check" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="ku.hero.trust1">B-kategooria pädevustunnistus · до 2030</span>
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-blue-400" data-lucide="scan-line" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="ku.hero.trust2">Тепловизор FLIR · Fluke 1664 FC</span>
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-green-400" data-lucide="file-check" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="ku.hero.trust3">Tööakt после каждого объекта</span>
+          </div>
+        </div>
+
+        <!-- CTA #1 -->
+        <div class="flex flex-wrap gap-4">
+          <a class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" href="tel:+37281271118">
+            <i data-lucide="phone" size="18"></i>
+            <span data-i18n="cta.call">Позвонить</span>
+          </a>
+          <a class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" href="tel:+37281271119">
+            <i data-lucide="phone" size="18"></i>
+            <span data-i18n="cta.call">Позвонить</span>
+          </a>
+          <a class="px-8 py-4 rounded-xl border border-surface-border bg-surface-card text-gray-300 font-bold hover:bg-surface-elevated hover:border-volt/30 hover:text-volt transition-all flex items-center gap-2" href="#contacts">
+            <i data-lucide="mail" size="18"></i>
+            <span data-i18n="ku.hero.ctaForm">Написать</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ЧЕМ ПОМОГАЕМ ===== -->
+  <section class="py-20 relative" id="services">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ku.srv.title">Чем помогаем товариществу</h2>
+        <p class="text-gray-400 text-lg" data-i18n="ku.srv.lead">Шесть направлений — нажмите на нужное чтобы узнать подробнее.</p>
+      </div>
+
+      <div class="max-w-3xl mx-auto space-y-3 fade-in-section">
+
+        <!-- 1. Диагностика -->
+        <div class="srv-card" onclick="toggleSrv(this)">
+          <div class="srv-card-header">
+            <div class="w-10 h-10 rounded-xl bg-volt/10 text-volt flex items-center justify-center shrink-0 icon-box">
+              <i data-lucide="scan-line" size="20"></i>
+            </div>
+            <div>
+              <div class="srv-title" data-i18n="ku.s1.t">Диагностика и тепловизионный осмотр</div>
+              <div class="srv-sub" data-i18n="ku.s1.sub">Находим проблемы до того, как они стали аварией</div>
+            </div>
+            <i data-lucide="plus" size="18" class="srv-toggle"></i>
+          </div>
+          <div class="srv-body">
+            <div class="border-t border-surface-border pt-4">
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s1.f1">Тепловизионный осмотр щитов и магистральных линий — показываем перегревы на фото</span></li>
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s1.f2">Инструментальные измерения Fluke 1664 FC: изоляция, петля фаза-ноль, УЗО</span></li>
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s1.f3">Письменный отчёт с фотографиями — удобно показать жильцам на собрании</span></li>
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s1.f4">Список замечаний с приоритетами: что срочно, что можно отложить</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Подготовка к аудиту -->
+        <div class="srv-card" onclick="toggleSrv(this)">
+          <div class="srv-card-header">
+            <div class="w-10 h-10 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center shrink-0 icon-box">
+              <i data-lucide="clipboard-check" size="20"></i>
+            </div>
+            <div>
+              <div class="srv-title" data-i18n="ku.s2.t">Подготовка к электроаудиту</div>
+              <div class="srv-sub" data-i18n="ku.s2.sub">Аудит каждые 5 лет — подготовим и организуем</div>
+            </div>
+            <i data-lucide="plus" size="18" class="srv-toggle"></i>
+          </div>
+          <div class="srv-body">
+            <div class="border-t border-surface-border pt-4">
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2"><i class="text-green-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s2.f1">Пред-диагностика общедомовых сетей — выявляем замечания до прихода аудитора</span></li>
+                <li class="flex items-start gap-2"><i class="text-green-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s2.f2">Устраняем критические дефекты: соединения, номиналы автоматов, заземление</span></li>
+                <li class="flex items-start gap-2"><i class="text-green-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s2.f3">Организуем аудит через аккредитованного партнёра — аудитор независим от нашего монтажа</span></li>
+                <li class="flex items-start gap-2"><i class="text-green-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s2.f4">При негативном результате: устраняем замечания и сопровождаем повторный аудит</span></li>
+              </ul>
+              <p class="text-xs text-gray-500 mt-3 italic" data-i18n="ku.s2.note">KÜ с вводом более 35A — 2-я категория, аудит обязателен каждые 5 лет (Постановление № 86)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Общедомовые щиты и сети -->
+        <div class="srv-card" onclick="toggleSrv(this)">
+          <div class="srv-card-header">
+            <div class="w-10 h-10 rounded-xl bg-volt/10 text-volt flex items-center justify-center shrink-0 icon-box">
+              <i data-lucide="cpu" size="20"></i>
+            </div>
+            <div>
+              <div class="srv-title" data-i18n="ku.s3.t">Общедомовые щиты и сети</div>
+              <div class="srv-sub" data-i18n="ku.s3.sub">ГРЩ, этажные щиты, подъездное освещение</div>
+            </div>
+            <i data-lucide="plus" size="18" class="srv-toggle"></i>
+          </div>
+          <div class="srv-body">
+            <div class="border-t border-surface-border pt-4">
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s3.f1">Ревизия и модернизация ГРЩ: замена обгоревших клемм, маркировка, порядок</span></li>
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s3.f2">Этажные и подвальные щиты: сборка, УЗО, заземление</span></li>
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s3.f3">Подъездное и подвальное освещение — замена на LED с датчиками движения</span></li>
+                <li class="flex items-start gap-2"><i class="text-volt shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s3.f4">Устранение аварийных ситуаций: выбивание автоматов, неисправные линии</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Автоматика теплоузлов -->
+        <div class="srv-card" onclick="toggleSrv(this)">
+          <div class="srv-card-header">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center shrink-0 icon-box">
+              <i data-lucide="thermometer" size="20"></i>
+            </div>
+            <div>
+              <div class="srv-title" data-i18n="ku.s4.t">Автоматика теплоузлов</div>
+              <div class="srv-sub" data-i18n="ku.s4.sub">Жильцы жалуются на холод или перегрев — разберёмся</div>
+            </div>
+            <i data-lucide="plus" size="18" class="srv-toggle"></i>
+          </div>
+          <div class="srv-body">
+            <div class="border-t border-surface-border pt-4">
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2"><i class="text-orange-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s4.f1">Диагностика датчиков температуры: подача, обратка, наружный воздух</span></li>
+                <li class="flex items-start gap-2"><i class="text-orange-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s4.f2">Проверка регулирующих клапанов, приводов и насосов</span></li>
+                <li class="flex items-start gap-2"><i class="text-orange-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s4.f3">Настройка кривых отопления на контроллере по наружной температуре</span></li>
+                <li class="flex items-start gap-2"><i class="text-orange-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s4.f4">Диагностика ошибок и сбоев контроллера — пусконаладка новых узлов</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Видеонаблюдение -->
+        <div class="srv-card" onclick="toggleSrv(this)">
+          <div class="srv-card-header">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 icon-box">
+              <i data-lucide="cctv" size="20"></i>
+            </div>
+            <div>
+              <div class="srv-title" data-i18n="ku.s5.t">Видеонаблюдение и контроль доступа</div>
+              <div class="srv-sub" data-i18n="ku.s5.sub">Камеры в подъездах, на парковке, у входов</div>
+            </div>
+            <i data-lucide="plus" size="18" class="srv-toggle"></i>
+          </div>
+          <div class="srv-body">
+            <div class="border-t border-surface-border pt-4">
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2"><i class="text-blue-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s5.f1">Прокладка слаботочных линий и питания для камер</span></li>
+                <li class="flex items-start gap-2"><i class="text-blue-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s5.f2">Монтаж камер в подъездах, у входных групп, на парковочных зонах</span></li>
+                <li class="flex items-start gap-2"><i class="text-blue-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s5.f3">Подключение домофонных систем и электромагнитных замков</span></li>
+                <li class="flex items-start gap-2"><i class="text-blue-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s5.f4">Аварийное и эвакуационное освещение с автономными аккумуляторами</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Укрытия и кризисная готовность -->
+        <div class="srv-card" onclick="toggleSrv(this)">
+          <div class="srv-card-header">
+            <div class="w-10 h-10 rounded-xl bg-gray-500/10 text-gray-400 flex items-center justify-center shrink-0 icon-box">
+              <i data-lucide="shield" size="20"></i>
+            </div>
+            <div>
+              <div class="srv-title" data-i18n="ku.s6.t">Укрытия и кризисная готовность</div>
+              <div class="srv-sub" data-i18n="ku.s6.sub">Подготовка подвальных помещений и резервного электроснабжения</div>
+            </div>
+            <i data-lucide="plus" size="18" class="srv-toggle"></i>
+          </div>
+          <div class="srv-body">
+            <div class="border-t border-surface-border pt-4">
+              <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2"><i class="text-gray-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s6.f1">Монтаж аварийного LED-освещения с автономными аккумуляторами</span></li>
+                <li class="flex items-start gap-2"><i class="text-gray-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s6.f2">Влагозащищённые розеточные группы IP65, силовое подключение насосов</span></li>
+                <li class="flex items-start gap-2"><i class="text-gray-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s6.f3">Монтаж АВР и фасадного разъёма для подключения мобильного генератора</span></li>
+                <li class="flex items-start gap-2"><i class="text-gray-400 shrink-0 mt-0.5" data-lucide="check-circle" size="15"></i><span data-i18n="ku.s6.f4">Устранение критических дефектов ГРЩ для соответствия требованиям</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end accordion -->
+    </div>
+  </section>
+
+  <!-- ===== КАК РАБОТАЕМ ===== -->
+  <section class="py-20 relative" id="process">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ku.process.title">Как мы работаем с KÜ</h2>
+        <p class="text-gray-400 text-lg" data-i18n="ku.process.lead">Никаких сюрпризов — сначала смотрим, потом говорим цену.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-section process-grid">
+
+        <div class="relative p-7 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">01</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ku.process.s1.t">Звонок и договорённость</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.process.s1.p">Рассказываете о ситуации — договариваемся об удобном времени для осмотра. Без обязательств.</p>
+        </div>
+
+        <div class="relative p-7 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">02</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ku.process.s2.t">Осмотр с тепловизором</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.process.s2.p">Приезжаем, осматриваем щиты, подвал, подъезды. Фотографируем проблемные места — вы получаете картину на руки.</p>
+        </div>
+
+        <div class="relative p-7 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">03</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="ku.process.s3.t">Честная цена и план</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.process.s3.p">Предлагаем что нужно сделать, в какой очерёдности и сколько стоит. Принимаете решение спокойно.</p>
+        </div>
+
+        <div class="relative p-7 rounded-3xl border border-volt/20 bg-volt/5 hover:border-volt/40 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none font-mono text-volt">✓</div>
+          <h3 class="text-base font-bold text-volt mb-2" data-i18n="ku.process.s4.t">Работы и документы</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.process.s4.p">Выполняем согласованное. Tööakt, фотофиксация скрытых работ и гарантийный лист — на руки после завершения.</p>
+        </div>
+
+      </div>
+
+      <!-- Photo proof callout -->
+      <div class="max-w-3xl mx-auto mt-8 p-5 rounded-2xl bg-surface-card border border-surface-border flex items-start gap-4 fade-in-section">
+        <div class="w-10 h-10 rounded-xl bg-volt/10 text-volt flex items-center justify-center shrink-0 mt-0.5">
+          <i data-lucide="camera" size="20"></i>
+        </div>
+        <div>
+          <p class="text-white font-semibold text-sm mb-1" data-i18n="ku.process.note.t">Фотодоказательства для собрания жильцов</p>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.process.note.p">Термограммы и фотографии дефектов — конкретный аргумент для принятия решений на общем собрании. Не на словах, а с картинками.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ГРАНТЫ — НАМЁКОМ ===== -->
+  <section class="py-20 relative" id="grants">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto fade-in-section">
+        <div class="grant-hint rounded-3xl p-8 md:p-10">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="landmark" size="24"></i>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-white mb-3" data-i18n="ku.grants.title">Государственные программы для KÜ</h2>
+              <p class="text-gray-300 leading-relaxed mb-4" data-i18n="ku.grants.p">Часть работ — диагностика, модернизация сетей, укрытия, подготовка к резервному электроснабжению — может частично или полностью покрываться действующими государственными программами. Актуальность зависит от конкретного дома и сроков.</p>
+              <p class="text-gray-400 text-sm" data-i18n="ku.grants.sub">При осмотре расскажем, что сейчас доступно для вашего объекта и как это работает — без лишних обещаний.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ДОВЕРИЕ ===== -->
+  <section class="py-20 relative" id="trust">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ku.trust.title">Почему нам доверяют KÜ</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto stagger-children">
+
+        <div class="flex items-start gap-4 p-6 rounded-3xl card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line rounded-t-3xl"></div>
+          <div class="w-12 h-12 rounded-2xl bg-volt/10 text-volt flex items-center justify-center shrink-0 icon-box">
+            <i data-lucide="shield-check" size="22"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white mb-1 text-base" data-i18n="ku.trust.c1.t">Государственная квалификация</h3>
+            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.trust.c1.p">B-kategooria pädevustunnistus — право работать с общедомовыми электроустановками KÜ и подписывать акты. Действует до 21.04.2030.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-6 rounded-3xl card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line rounded-t-3xl"></div>
+          <div class="w-12 h-12 rounded-2xl bg-green-500/10 text-green-400 flex items-center justify-center shrink-0 icon-box">
+            <i data-lucide="file-check" size="22"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white mb-1 text-base" data-i18n="ku.trust.c2.t">Документы на каждый объект</h3>
+            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.trust.c2.p">Tööakt, протоколы измерений, фотофиксация — реальный пакет после каждой работы. Не на словах.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-6 rounded-3xl card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line rounded-t-3xl"></div>
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 icon-box">
+            <i data-lucide="users" size="22"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white mb-1 text-base" data-i18n="ku.trust.c3.t">Аудит — независимый партнёр</h3>
+            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.trust.c3.p">Мы делаем монтаж и диагностику, аудит подписывает аккредитованная организация. Нет конфликта интересов — это требование закона и наш принцип.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 p-6 rounded-3xl card-3d fade-in-section">
+          <div class="absolute top-0 left-0 w-full h-1 card-gradient-line rounded-t-3xl"></div>
+          <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center shrink-0 icon-box">
+            <i data-lucide="gauge" size="22"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white mb-1 text-base" data-i18n="ku.trust.c4.t">Инструментальная диагностика</h3>
+            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="ku.trust.c4.p">Fluke 1664 FC и тепловизор FLIR CM275. Результаты — в протоколе с числами и термограммами, не на глазок.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Note -->
+      <div class="max-w-3xl mx-auto mt-6 p-5 rounded-2xl bg-volt/5 border border-volt/15 text-center fade-in-section">
+        <p class="text-gray-300 text-sm italic" data-i18n="ku.trust.note">Берём только те объекты, которые умеем делать. Не обещаем того, в чём не уверены.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ПОСЛЕ ДОВЕРИЯ ===== -->
+  <section class="py-20 relative" id="pricing">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto fade-in-section">
+        <div class="p-8 md:p-10 rounded-3xl bg-surface-card border border-surface-border flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-2" data-i18n="ku.price.title">Стоимость — после осмотра</h2>
+            <p class="text-gray-400 leading-relaxed" data-i18n="ku.price.lead">Каждый дом разный. Приедем, посмотрим объект и назовём точную цену — без приблизительных цифр и неприятных сюрпризов.</p>
+          </div>
+          <div class="flex flex-col gap-3 shrink-0">
+            <a class="btn-primary px-7 py-3.5 rounded-xl text-sm font-bold whitespace-nowrap flex items-center gap-2" href="tel:+37281271118">
+              <i data-lucide="phone" size="16"></i>
+              <span data-i18n="ku.price.cta.btn">Договориться об осмотре</span>
+            </a>
+            <a class="px-7 py-3.5 rounded-xl border border-surface-border bg-surface-elevated text-gray-300 text-sm font-bold hover:border-volt/30 hover:text-volt transition-all text-center" href="#contacts" data-i18n="ku.price.cta.form">
+              Написать
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACTS (CTA #3) ===== -->
+  <section class="py-24 relative" id="contacts">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6 fade-in-section">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="ku.cnt.title">Приедем, посмотрим, скажем честно</h2>
+          <p class="text-gray-400 text-lg mb-8 leading-relaxed" data-i18n="ku.cnt.lead">Позвоните или оставьте заявку — договоримся об удобном времени для осмотра. Без давления и лишних обязательств.</p>
+          <div class="space-y-5">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-volt"><i data-lucide="phone" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.phone">Телефон</div>
+                <div class="space-y-1">
+                  <a class="block text-lg font-bold text-white hover:text-volt transition-colors" href="tel:+37281271118">+372 8127 1118</a>
+                  <a class="block text-lg font-bold text-white hover:text-volt transition-colors" href="tel:+37281271119">+372 8127 1119</a>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-volt"><i data-lucide="mail" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.email">Email</div>
+                <a class="text-lg font-bold text-white hover:text-volt transition-colors" href="/cdn-cgi/l/email-protection#acc5c2cac3ecc0c0c9c982c9c9"><span class="__cf_email__" data-cfemail="eb82858d84ab87878e8ec58e8e">[email&#160;protected]</span></a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-gray-400"><i data-lucide="map-pin" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.addr">Адрес</div>
+                <div class="text-lg font-bold text-white">Ida-Virumaa, Estonia</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card p-8 rounded-3xl border border-surface-border">
+          <form class="space-y-5" id="contact-form">
+            <div class="grid md:grid-cols-2 gap-5">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.name" for="name">Имя</label>
+                <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" data-i18n-attr="placeholder:form.namePh" id="name" name="name" placeholder="Как к вам обращаться?" required type="text"/>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.phone" for="phone">Телефон</label>
+                <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" id="phone" name="phone" placeholder="+372 ..." required type="tel"/>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.email" for="email">Email</label>
+              <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" id="email" name="email" placeholder="Email" required type="email"/>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.msg" for="message">Сообщение</label>
+              <textarea class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none resize-none" id="message" name="message" data-i18n-attr="placeholder:ku.form.msgPh" placeholder="Например: 5-этажный дом, Йыхви, проблемы с освещением в подъезде" rows="4"></textarea>
+            </div>
+            <p class="text-xs text-gray-500" data-i18n="form.help">Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.</p>
+            <button class="w-full btn-primary py-4 rounded-xl shadow-lg shadow-volt/20 text-base font-bold hover:-translate-y-1 transition-all" data-i18n="form.submit" type="submit">
+              Отправить заявку
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-surface-card border-t border-surface-border text-gray-400 py-16 relative z-10">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="bg-gradient-to-r from-volt/20 to-volt-light/10 p-8 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-8 border border-volt/20 mb-16">
+      <div class="max-w-xl">
+        <h3 class="text-2xl text-white font-bold mb-2" data-i18n="ku.f.cta">Готовы обсудить ситуацию в вашем доме?</h3>
+        <p class="text-gray-300" data-i18n="ku.f.sub">Приедем, посмотрим и скажем честно что есть — без давления.</p>
+      </div>
+      <a class="px-8 py-4 bg-volt text-surface font-extrabold rounded-xl shadow-lg shadow-volt/20 hover:bg-volt-light transition-colors whitespace-nowrap" href="#contacts" data-i18n="f.btn">Оставить заявку</a>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium opacity-70 border-t border-surface-border pt-8">
+      <div class="font-mono">© <span id="year"></span> LL Elektri Expert OÜ</div>
+      <div class="flex gap-6">
+        <a class="hover:text-volt transition-colors font-semibold" href="index.html">llee.ee</a>
+        <a class="hover:text-volt transition-colors font-semibold" href="/cdn-cgi/l/email-protection#533a3d353c133f3f36367d3636"><span class="__cf_email__" data-cfemail="88e1e6eee7c8e4e4ededa6eded">[email&#160;protected]</span></a>
+        <a class="hover:text-volt transition-colors font-semibold" href="https://instagram.com/electro_kip_est" rel="noopener noreferrer" target="_blank">@electro_kip_est</a>
+        <span>Ida-Virumaa</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-volt rounded-full flex items-center justify-center text-surface shadow-2xl shadow-volt/40 border-2 border-volt-light/30 md:hidden transition-transform hover:scale-110 active:scale-95" href="#contacts">
+  <i data-lucide="mail" size="24"></i>
+</a>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ===== i18n =====
+const I18N = {
+  ru: {
+    metaTitle: "Электрика для квартирных товариществ (KÜ) — LL Elektri Expert OÜ",
+    metaDesc: "Электрика для квартирных товариществ в Ida-Virumaa. Диагностика, подготовка к аудиту, общедомовые сети, автоматика теплоузлов. Нарва, Йыхви, Кохтла-Ярве.",
+    brand: { subtitle:"Электромонтаж • Ida-Virumaa" },
+    menu: { home:"Главная", korter:"Дом и бизнес", ku:"KÜ", ev:"EV-зарядки", contacts:"Контакты", call:"Заказать звонок" },
+    cta: { call:"Позвонить" },
+    cnt: { phone:"Телефон:", email:"Email:", addr:"Адрес:" },
+    form: {
+      name:"Имя", phone:"Телефон", email:"Email", msg:"Коротко о задаче",
+      namePh:"Как к вам обращаться?",
+      help:"Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.",
+      submit:"Отправить заявку",
+      alertReq:"Пожалуйста, заполните имя, телефон и email.",
+      alertOk:"Спасибо! Ваша заявка отправлена.\nМы свяжемся с вами в ближайшее время."
+    },
+    f: { btn:"Оставить заявку" },
+    ku: {
+      back:"← Назад на главную",
+      hero: {
+        badge:"Квартирные товарищества · KÜ · Ida-Virumaa",
+        title:"Электрика общедомовых систем — спокойно и по делу",
+        p:"Работаем с квартирными товариществами в Ida-Virumaa: диагностика, общедомовые сети, автоматика теплоузлов. Приедем, посмотрим, скажем честно что есть.",
+        trust1:"B-kategooria pädevustunnistus · до 2030",
+        trust2:"Тепловизор FLIR · Fluke 1664 FC",
+        trust3:"Tööakt после каждого объекта",
+        ctaForm:"Написать"
+      },
+      srv: {
+        title:"Чем помогаем товариществу",
+        lead:"Шесть направлений — нажмите на нужное чтобы узнать подробнее."
+      },
+      s1: {
+        t:"Диагностика и тепловизионный осмотр", sub:"Находим проблемы до того, как они стали аварией",
+        f1:"Тепловизионный осмотр щитов и магистральных линий — показываем перегревы на фото",
+        f2:"Инструментальные измерения Fluke 1664 FC: изоляция, петля фаза-ноль, УЗО",
+        f3:"Письменный отчёт с фотографиями — удобно показать жильцам на собрании",
+        f4:"Список замечаний с приоритетами: что срочно, что можно отложить"
+      },
+      s2: {
+        t:"Подготовка к электроаудиту", sub:"Аудит каждые 5 лет — подготовим и организуем",
+        f1:"Пред-диагностика общедомовых сетей — выявляем замечания до прихода аудитора",
+        f2:"Устраняем критические дефекты: соединения, номиналы автоматов, заземление",
+        f3:"Организуем аудит через аккредитованного партнёра — аудитор независим от нашего монтажа",
+        f4:"При негативном результате: устраняем замечания и сопровождаем повторный аудит",
+        note:"KÜ с вводом более 35A — 2-я категория, аудит обязателен каждые 5 лет (Постановление № 86)"
+      },
+      s3: {
+        t:"Общедомовые щиты и сети", sub:"ГРЩ, этажные щиты, подъездное освещение",
+        f1:"Ревизия и модернизация ГРЩ: замена обгоревших клемм, маркировка, порядок",
+        f2:"Этажные и подвальные щиты: сборка, УЗО, заземление",
+        f3:"Подъездное и подвальное освещение — замена на LED с датчиками движения",
+        f4:"Устранение аварийных ситуаций: выбивание автоматов, неисправные линии"
+      },
+      s4: {
+        t:"Автоматика теплоузлов", sub:"Жильцы жалуются на холод или перегрев — разберёмся",
+        f1:"Диагностика датчиков температуры: подача, обратка, наружный воздух",
+        f2:"Проверка регулирующих клапанов, приводов и насосов",
+        f3:"Настройка кривых отопления на контроллере по наружной температуре",
+        f4:"Диагностика ошибок и сбоев контроллера — пусконаладка новых узлов"
+      },
+      s5: {
+        t:"Видеонаблюдение и контроль доступа", sub:"Камеры в подъездах, на парковке, у входов",
+        f1:"Прокладка слаботочных линий и питания для камер",
+        f2:"Монтаж камер в подъездах, у входных групп, на парковочных зонах",
+        f3:"Подключение домофонных систем и электромагнитных замков",
+        f4:"Аварийное и эвакуационное освещение с автономными аккумуляторами"
+      },
+      s6: {
+        t:"Укрытия и кризисная готовность", sub:"Подготовка подвальных помещений и резервного электроснабжения",
+        f1:"Монтаж аварийного LED-освещения с автономными аккумуляторами",
+        f2:"Влагозащищённые розеточные группы IP65, силовое подключение насосов",
+        f3:"Монтаж АВР и фасадного разъёма для подключения мобильного генератора",
+        f4:"Устранение критических дефектов ГРЩ для соответствия требованиям"
+      },
+      process: {
+        title:"Как мы работаем с KÜ", lead:"Никаких сюрпризов — сначала смотрим, потом говорим цену.",
+        s1:{t:"Звонок и договорённость", p:"Рассказываете о ситуации — договариваемся об удобном времени для осмотра. Без обязательств."},
+        s2:{t:"Осмотр с тепловизором", p:"Приезжаем, осматриваем щиты, подвал, подъезды. Фотографируем проблемные места — вы получаете картину на руки."},
+        s3:{t:"Честная цена и план", p:"Предлагаем что нужно сделать, в какой очерёдности и сколько стоит. Принимаете решение спокойно."},
+        s4:{t:"Работы и документы", p:"Выполняем согласованное. Tööakt, фотофиксация скрытых работ и гарантийный лист — на руки после завершения."},
+        note:{t:"Фотодоказательства для собрания жильцов", p:"Термограммы и фотографии дефектов — конкретный аргумент для принятия решений на общем собрании. Не на словах, а с картинками."}
+      },
+      grants: {
+        title:"Государственные программы для KÜ",
+        p:"Часть работ — диагностика, модернизация сетей, укрытия, подготовка к резервному электроснабжению — может частично или полностью покрываться действующими государственными программами. Актуальность зависит от конкретного дома и сроков.",
+        sub:"При осмотре расскажем, что сейчас доступно для вашего объекта и как это работает — без лишних обещаний."
+      },
+      trust: {
+        title:"Почему нам доверяют KÜ",
+        c1:{t:"Государственная квалификация", p:"B-kategooria pädevustunnistus — право работать с общедомовыми электроустановками KÜ и подписывать акты. Действует до 21.04.2030."},
+        c2:{t:"Документы на каждый объект", p:"Tööakt, протоколы измерений, фотофиксация — реальный пакет после каждой работы. Не на словах."},
+        c3:{t:"Аудит — независимый партнёр", p:"Мы делаем монтаж и диагностику, аудит подписывает аккредитованная организация. Нет конфликта интересов — это требование закона и наш принцип."},
+        c4:{t:"Инструментальная диагностика", p:"Fluke 1664 FC и тепловизор FLIR CM275. Результаты — в протоколе с числами и термограммами, не на глазок."},
+        note:"Берём только те объекты, которые умеем делать. Не обещаем того, в чём не уверены."
+      },
+      price: {
+        title:"Стоимость — после осмотра",
+        lead:"Каждый дом разный. Приедем, посмотрим объект и назовём точную цену — без приблизительных цифр и неприятных сюрпризов.",
+        cta:{btn:"Договориться об осмотре", form:"Написать"}
+      },
+      cnt:{title:"Приедем, посмотрим, скажем честно", lead:"Позвоните или оставьте заявку — договоримся об удобном времени для осмотра. Без давления и лишних обязательств."},
+      f:{cta:"Готовы обсудить ситуацию в вашем доме?", sub:"Приедем, посмотрим и скажем честно что есть — без давления."},
+      form:{msgPh:"Например: 5-этажный дом, Йыхви, проблемы с освещением в подъезде"}
+    }
+  },
+  ee: {
+    metaTitle: "Elektritööd korteriühistutele (KÜ) — LL Elektri Expert OÜ",
+    metaDesc: "Elektritööd korteriühistutele Ida-Virumaal. Diagnostika, auditi ettevalmistus, üldvõrgud, soojussõlmede automaatika. Narva, Jõhvi, Kohtla-Järve.",
+    brand:{subtitle:"Elektritööd • Ida-Virumaa"},
+    menu:{home:"Avaleht", korter:"Kodu ja äri", ku:"KÜ", ev:"EV-laadijad", contacts:"Kontaktid", call:"Telli tagasikõne"},
+    cta:{call:"Helista"},
+    cnt:{phone:"Telefon:", email:"E-post:", addr:"Aadress:"},
+    form:{
+      name:"Nimi", phone:"Telefon", email:"E-post", msg:"Lühidalt ülesandest",
+      namePh:"Kuidas teid kõnetada?",
+      help:"Nupule vajutades nõustute oma andmete töötlemisega, et võtta teiega ühendust päringu osas.",
+      submit:"Saada päring",
+      alertReq:"Palun täitke nimi, telefon ja e-post.",
+      alertOk:"Aitäh! Teie päring on saadetud.\nVõtame teiega peagi ühendust."
+    },
+    f:{btn:"Esita päring"},
+    ku:{
+      back:"← Tagasi avalehele",
+      hero:{
+        badge:"Korteriühistud · KÜ · Ida-Virumaa",
+        title:"Üldvõrkude elektritööd — rahulikult ja asjalikult",
+        p:"Töötame korteriühistutega Ida-Virumaal: diagnostika, üldvõrgud, soojussõlmede automaatika. Tuleme, vaatame, ütleme ausalt mis on.",
+        trust1:"B-kategooria pädevustunnistus · kuni 2030",
+        trust2:"Termokaamera FLIR · Fluke 1664 FC",
+        trust3:"Tööakt iga objekti järel",
+        ctaForm:"Kirjuta"
+      },
+      srv:{title:"Mida pakume ühistule", lead:"Kuus suunda — vajutage soovitud teenusele, et lugeda lähemalt."},
+      s1:{t:"Diagnostika ja termokaamera ülevaatus", sub:"Leiame probleemid enne, kui neist saab avarii",
+        f1:"Termokaamera ülevaatus kilpidest ja magistraaljuhtmetest — näitame ülekuumenemisi fotodel",
+        f2:"Instrumentaalmõõtmised Fluke 1664 FC: isolatsioon, faas-null-ahel, RCD",
+        f3:"Kirjalik aruanne fotodega — mugav näidata elanikel koosolekul",
+        f4:"Puuduste nimekiri prioriteetide järgi: mis on kiire, mis võib oodata"},
+      s2:{t:"Elektriauditi ettevalmistus", sub:"Audit iga 5 aasta järel — valmistame ette ja korraldame",
+        f1:"Üldvõrkude eeldiagnostika — tuvastame puudused enne audiitori saabumist",
+        f2:"Kriitiliste defektide kõrvaldamine: ühendused, kaitseautomaatide nomiaalid, maandus",
+        f3:"Korraldame auditi akrediteeritud partneri kaudu — audiitor on meie paigaldusest sõltumatu",
+        f4:"Negatiivse tulemuse korral: kõrvaldame puudused ja saadame korduva auditi",
+        note:"KÜ sisendiga üle 35A — 2. kategooria, audit kohustuslik iga 5 aasta järel (määrus nr 86)"},
+      s3:{t:"Üldkilbid ja üldvõrgud", sub:"PJK, korruskilbid, trepikoja valgustus",
+        f1:"PJK revisjon ja moderniseerimine: põlenud klemmide vahetus, märgistus, kord",
+        f2:"Korrus- ja keldrikilbid: koostamine, RCD, maandus",
+        f3:"Trepikoja ja keldri valgustus — vahetus LED-ide ja liikumisanduritega",
+        f4:"Avariiolukordade likvideerimine: kaitseautomaatide väljalülitumine, rikkis liinid"},
+      s4:{t:"Soojussõlmede automaatika", sub:"Elanikud kurdavad külma või ülekuumenemist — teeme selgeks",
+        f1:"Temperatuuriandurite diagnostika: toide, tagastus, välistemperatuur",
+        f2:"Reguleerivate klappide, ajamite ja pumpade kontroll",
+        f3:"Küttekõverate seadistamine kontrolleril välistemperatuuri järgi",
+        f4:"Kontrolleri vigade ja tõrgete diagnostika — uute sõlmede käivitamine"},
+      s5:{t:"Videovalve ja ligipääsukontroll", sub:"Kaamerad trepikodades, parklas, sissepääsude juures",
+        f1:"Nõrkvooluliinide ja kaamerate toite paigaldus",
+        f2:"Kaamerate paigaldus trepikodades, sissepääsude juures, parkimisaladel",
+        f3:"Interfonisüsteemide ja elektromagnetlukustuste ühendamine",
+        f4:"Avarii- ja evakuatsioonivalgustus autonoomsete akudega"},
+      s6:{t:"Varjumiskohad ja kriisivalmidus", sub:"Keldriruumide ja varuvarustuse ettevalmistus",
+        f1:"Avarii-LED-valgustuse paigaldus autonoomsete akudega",
+        f2:"Niiskuskindlad pistikupesagrupid IP65, pumpade jõuühendus",
+        f3:"AÜL ja fassaadipistiku paigaldus mobiilse generaatori ühendamiseks",
+        f4:"PJK kriitiliste defektide kõrvaldamine nõuetele vastavuse tagamiseks"},
+      process:{
+        title:"Kuidas töötame KÜ-ga", lead:"Ilma üllatusteta — kõigepealt vaatame, siis ütleme hinna.",
+        s1:{t:"Kõne ja kokkulepe", p:"Räägite olukorrast — lepime kokku sobiva ülevaatusaja. Ilma kohustusteta."},
+        s2:{t:"Ülevaatus termokaameraga", p:"Tuleme, vaatame kilbid, kelder, trepikojad. Pildistame probleemkohad — saate pildi kätte."},
+        s3:{t:"Aus hind ja plaan", p:"Pakume mida teha, mis järjekorras ja mis see maksab. Otsustage rahulikult."},
+        s4:{t:"Tööd ja dokumendid", p:"Teeme kokkulepitu. Tööakt, varjatud tööde fotod ja garantiileht — kätte pärast lõpetamist."},
+        note:{t:"Fotodokumendid elanike koosolekuks", p:"Termogrammid ja defektide fotod — konkreetne argument otsuste tegemiseks üldkoosolekul. Mitte sõnadega, vaid piltidega."}
+      },
+      grants:{
+        title:"Riiklikud programmid KÜ-dele",
+        p:"Osa töid — diagnostika, võrkude moderniseerimine, varjumiskohad, varuvarustuse ettevalmistus — võib osaliselt või täielikult katta kehtivate riiklike programmidega. Aktuaalsus sõltub konkreetsest majast ja tähtaegadest.",
+        sub:"Ülevaatuse käigus räägime, mis teie objektile praegu saadaval on ja kuidas see toimib — ilma tühjade lubadusteta."
+      },
+      trust:{
+        title:"Miks KÜ-d meid usaldavad",
+        c1:{t:"Riiklik kvalifikatsioon", p:"B-kategooria pädevustunnistus — õigus töötada KÜ üldiste elektripaigaldistega ja allkirjastada akte. Kehtib kuni 21.04.2030."},
+        c2:{t:"Dokumendid iga objekti kohta", p:"Tööakt, mõõteprotokollid, fotod — reaalne pakett pärast iga tööd. Mitte sõnadega."},
+        c3:{t:"Audit — sõltumatu partner", p:"Meie teeme paigalduse ja diagnostika, auditi allkirjastab akrediteeritud organisatsioon. Huvide konflikti pole — see on seaduse nõue ja meie põhimõte."},
+        c4:{t:"Instrumentaaldiagnostika", p:"Fluke 1664 FC ja termokaamera FLIR CM275. Tulemused — protokollis arvude ja termogrammidega, mitte silma järgi."},
+        note:"Võtame ainult neid objekte, mida oskame teha. Ei luba midagi, milles pole kindlad."
+      },
+      price:{
+        title:"Hind — pärast ülevaatust",
+        lead:"Iga maja on erinev. Tuleme, vaatame objekti ja ütleme täpse hinna — ilma ligikaudsete numbriteta ja ebameeldivate üllatusteta.",
+        cta:{btn:"Lepi ülevaatus kokku", form:"Kirjuta"}
+      },
+      cnt:{title:"Tuleme, vaatame, ütleme ausalt", lead:"Helistage või jätke päring — lepime kokku sobiva ülevaatusaja. Ilma surve ja liigsete kohustuseta."},
+      f:{cta:"Valmis arutama olukorda teie majas?", sub:"Tuleme, vaatame ja ütleme ausalt mis on — ilma surveta."},
+      form:{msgPh:"Nt: 5-korruseline maja, Jõhvi, probleemid trepikoja valgustusega"}
+    }
+  },
+  en: {
+    metaTitle: "Electrical Services for Housing Associations (KÜ) — LL Elektri Expert OÜ",
+    metaDesc: "Electrical services for housing associations in Ida-Virumaa. Diagnostics, pre-audit, common networks, heat substation automation. Narva, Jõhvi, Kohtla-Järve.",
+    brand:{subtitle:"Electrical works • Ida-Viru"},
+    menu:{home:"Home", korter:"Home &amp; Business", ku:"HOA", ev:"EV Charging", contacts:"Contacts", call:"Request a call"},
+    cta:{call:"Call"},
+    cnt:{phone:"Phone:", email:"Email:", addr:"Address:"},
+    form:{
+      name:"Name", phone:"Phone", email:"Email", msg:"Short description",
+      namePh:"How should we address you?",
+      help:"By clicking the button you agree to the processing of your data to contact you regarding the request.",
+      submit:"Send request",
+      alertReq:"Please fill in name, phone and email.",
+      alertOk:"Thank you! Your request has been sent.\nWe will contact you shortly."
+    },
+    f:{btn:"Send request"},
+    ku:{
+      back:"← Back to home",
+      hero:{
+        badge:"Housing Associations · KÜ · Ida-Virumaa",
+        title:"Common electrical systems — calm and professional",
+        p:"We work with housing associations in Ida-Virumaa: diagnostics, common networks, heat substation automation. We come, look, and tell you honestly what we find.",
+        trust1:"B-kategooria pädevustunnistus · valid to 2030",
+        trust2:"FLIR thermal camera · Fluke 1664 FC",
+        trust3:"Acceptance act for every job",
+        ctaForm:"Write to us"
+      },
+      srv:{title:"How we can help your association", lead:"Six areas — click on the one you need to learn more."},
+      s1:{t:"Diagnostics and thermal inspection", sub:"We find problems before they become emergencies",
+        f1:"Thermal imaging of panels and main lines — we show overheating spots in photos",
+        f2:"Instrument measurements with Fluke 1664 FC: insulation, phase-neutral loop, RCD",
+        f3:"Written report with photos — easy to present to residents at a general meeting",
+        f4:"Priority list of issues: what is urgent and what can wait"},
+      s2:{t:"Electrical audit preparation", sub:"Audit every 5 years — we prepare and organise",
+        f1:"Pre-diagnostics of common networks — we identify issues before the auditor arrives",
+        f2:"Fixing critical defects: connections, breaker ratings, earthing",
+        f3:"We arrange the audit through an accredited partner — the auditor is independent of our work",
+        f4:"If the result is negative: we fix the issues and accompany the repeat audit",
+        note:"HOAs with supply over 35A — category 2, mandatory audit every 5 years (Regulation No. 86)"},
+      s3:{t:"Common panels and networks", sub:"Main distribution board, floor panels, staircase lighting",
+        f1:"Main board inspection and upgrade: replacing burnt terminals, labelling, tidying",
+        f2:"Floor and basement panels: assembly, RCD, earthing",
+        f3:"Staircase and basement lighting — replacement with LED and motion sensors",
+        f4:"Emergency repair: tripping breakers, faulty lines"},
+      s4:{t:"Heat substation automation", sub:"Residents complaining about cold or overheating — we will sort it out",
+        f1:"Temperature sensor diagnostics: supply, return, outdoor air",
+        f2:"Checking control valves, actuators and pumps",
+        f3:"Heating curve tuning on the controller based on outdoor temperature",
+        f4:"Controller fault diagnostics — commissioning of new units"},
+      s5:{t:"CCTV and access control", sub:"Cameras in stairwells, car parks, at entrances",
+        f1:"Low-voltage cable runs and power supply for cameras",
+        f2:"Camera installation in stairwells, at entrances, in parking areas",
+        f3:"Intercom systems and electromagnetic lock connections",
+        f4:"Emergency and evacuation lighting with battery backup"},
+      s6:{t:"Shelters and crisis readiness", sub:"Basement preparation and backup power",
+        f1:"Emergency LED lighting with battery backup",
+        f2:"Weatherproof IP65 socket groups, pump power connections",
+        f3:"ATS and facade socket for mobile generator connection",
+        f4:"Fixing critical main board defects for compliance"},
+      process:{
+        title:"How we work with HOAs", lead:"No surprises — we look first, then quote.",
+        s1:{t:"Call and agreement", p:"You describe the situation — we agree on a convenient inspection time. No obligation."},
+        s2:{t:"Inspection with thermal camera", p:"We arrive, inspect panels, basement, stairwells. We photograph problem areas — you get the picture in hand."},
+        s3:{t:"Honest price and plan", p:"We propose what needs doing, in what order and at what cost. You decide calmly."},
+        s4:{t:"Works and documents", p:"We carry out what was agreed. Acceptance act, concealed work photos and warranty card — handed over on completion."},
+        note:{t:"Photo evidence for the residents' meeting", p:"Thermal images and defect photos — a concrete argument for decision-making at the general meeting. Not words, but pictures."}
+      },
+      grants:{
+        title:"Government programmes for HOAs",
+        p:"Some works — diagnostics, network upgrades, shelters, backup power preparation — may be partially or fully covered by current government programmes. Eligibility depends on the specific building and deadlines.",
+        sub:"During the inspection we will explain what is currently available for your building and how it works — no empty promises."
+      },
+      trust:{
+        title:"Why HOAs trust us",
+        c1:{t:"State qualification", p:"B-kategooria pädevustunnistus — the right to work on HOA common electrical installations and sign acceptance acts. Valid until 21.04.2030."},
+        c2:{t:"Documents for every job", p:"Acceptance act, measurement protocols, photos — a real package after every job. Not just words."},
+        c3:{t:"Audit — independent partner", p:"We do the installation and diagnostics, the audit is signed by an accredited organisation. No conflict of interest — this is a legal requirement and our principle."},
+        c4:{t:"Instrument diagnostics", p:"Fluke 1664 FC and FLIR CM275 thermal camera. Results in a protocol with figures and thermal images — not by eye."},
+        note:"We only take on projects we know how to deliver. No empty promises."
+      },
+      price:{
+        title:"Price — after inspection",
+        lead:"Every building is different. We come, inspect the site and give you an exact price — no rough estimates, no unpleasant surprises.",
+        cta:{btn:"Arrange an inspection", form:"Write to us"}
+      },
+      cnt:{title:"We come, look and tell you honestly", lead:"Call or leave a request — we will agree on a convenient inspection time. No pressure, no obligations."},
+      f:{cta:"Ready to discuss your building's situation?", sub:"We come, look and tell you honestly what we find — no pressure."},
+      form:{msgPh:"e.g., 5-storey building, Jõhvi, staircase lighting issues"}
+    }
+  }
+};
+
+// ===== App =====
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  let currentLang = localStorage.getItem('lang');
+  if (!currentLang || !I18N[currentLang]) {
+    const b = (navigator.language || 'ru').toLowerCase();
+    currentLang = b.startsWith('et') ? 'ee' : b.startsWith('en') ? 'en' : 'ru';
+  }
+
+  function getDeep(obj, path) {
+    return path.split('.').reduce((o, k) => o ? o[k] : null, obj);
+  }
+
+  function updateLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang === 'ee' ? 'et' : lang;
+    const t = I18N[lang];
+    document.title = t.metaTitle;
+    document.querySelector('meta[name="description"]').setAttribute('content', t.metaDesc);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const val = getDeep(t, el.getAttribute('data-i18n'));
+      if (val !== null && val !== undefined) el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.getAttribute('data-i18n-attr').split('|').forEach(pair => {
+        const [attr, key] = pair.split(':');
+        const val = getDeep(t, key);
+        if (val) el.setAttribute(attr, val);
+      });
+    });
+    const updateSwitcher = sel => {
+      document.querySelectorAll(`${sel} button`).forEach(btn => {
+        btn.className = btn.dataset.lang === lang
+          ? "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-volt text-surface shadow-sm"
+          : "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 text-gray-500 hover:text-gray-300";
+      });
+    };
+    updateSwitcher('#lang-switcher');
+    updateSwitcher('#mobile-lang-switcher');
+  }
+
+  updateLanguage(currentLang);
+  document.querySelectorAll('button[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+  });
+
+  // Header scroll
+  const header = document.getElementById('main-header');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        header.className = window.scrollY > 50
+          ? "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 header-scrolled"
+          : "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent";
+        ticking = false;
+      });
+    }
+  }, { passive: true });
+
+  // Scroll boost
+  let __st = 0, __sc = false;
+  const __set = on => {
+    if (__sc === on) return; __sc = on;
+    document.documentElement.classList.toggle('is-scrolling', on);
+    window.dispatchEvent(new CustomEvent('llee:scroll', { detail: { scrolling: on } }));
+  };
+  window.addEventListener('scroll', () => { __set(true); clearTimeout(__st); __st = setTimeout(() => __set(false), 200); }, { passive: true });
+
+  // Mobile menu
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    menuBtn.innerHTML = mobileMenu.classList.contains('hidden') ? '<i data-lucide="menu"></i>' : '<i data-lucide="x"></i>';
+    lucide.createIcons();
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+      lucide.createIcons();
+    });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
+
+  // Contact form
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const t = I18N[currentLang];
+      const n = form.querySelector('#name').value.trim();
+      const p = form.querySelector('#phone').value.trim();
+      const em = form.querySelector('#email').value.trim();
+      if (!n || !p || !em) { alert(t.form.alertReq); return; }
+      alert(t.form.alertOk);
+      form.reset();
+    });
+  }
+});
+
+// Service accordion
+function toggleSrv(card) {
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.srv-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+  lucide.createIcons();
+}
+</script>
+
+<!-- PCB pulse canvas -->
+<script>
+(() => {
+  const canvas = document.getElementById('fxCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const mqR = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mqR && mqR.matches) { canvas.style.display = 'none'; return; }
+  const mob = /Mobi|Android/i.test(navigator.userAgent);
+  const BPC = mob ? 12 : 22, FMS = mob ? 33 : 24;
+  const CWN = mob ? 1.2 : 1.5, CWX = mob ? 2.4 : 3.2;
+  const TLN = mob ? 60 : 80, TLX = mob ? 120 : 180;
+  const CMN = mob ? 50 : 60, CMX = mob ? 80 : 110;
+  let w, h, apc = BPC, running = true, rafId = null, sb = false, sbu = 0;
+  let lN = performance.now(), lR = lN;
+  const rand = (a,b) => a+Math.random()*(b-a);
+  const ri = (a,b) => Math.floor(rand(a,b+1));
+  const cl = (v,a,b) => Math.max(a,Math.min(b,v));
+  const pk = a => a[Math.floor(Math.random()*a.length)];
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio||1, mob?1.5:2);
+    w=window.innerWidth; h=window.innerHeight;
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+    canvas.style.width=w+'px'; canvas.style.height=h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize();
+  let rt=0; window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);},{passive:true});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){running=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}}
+    else{running=true;lN=performance.now();lR=lN;if(!rafId)rafId=requestAnimationFrame(frame);}
+  });
+  window.addEventListener('llee:scroll',e=>{
+    if(e&&e.detail&&e.detail.scrolling){sb=true;sbu=performance.now()+220;}else{sb=false;}
+  });
+  let ff=0,fl=performance.now();
+  function mFPS(now){
+    ff++;
+    if(now-fl>=2000){
+      const fps=ff/((now-fl)/1000); fl=now;ff=0;
+      const mn=mob?6:10;
+      if(fps<26&&apc>mn)apc=Math.max(mn,apc-(mob?2:3));
+      else if(fps>52&&apc<BPC)apc=Math.min(BPC,apc+1);
+    }
+  }
+  function mkPath(){
+    const cell=ri(CMN,CMX),cols=Math.max(8,Math.floor(w/cell)),rows=Math.max(6,Math.floor(h/cell));
+    let x=ri(0,cols-1)*cell+cell/2,y=ri(0,rows-1)*cell+cell/2;
+    const pts=[{x,y}];let dir=pk([[1,0],[-1,0],[0,1],[0,-1]]);
+    for(let i=0;i<ri(3,8);i++){
+      if(Math.random()<0.75)dir=(dir[0]!==0)?pk([[0,1],[0,-1]]):pk([[1,0],[-1,0]]);
+      else if(Math.random()<0.5)dir=[-dir[0],-dir[1]];
+      const len=ri(3,ri(5,11));
+      x=cl(x+dir[0]*len*cell,cell/2,w-cell/2);y=cl(y+dir[1]*len*cell,cell/2,h-cell/2);
+      pts.push({x,y});
+    }
+    const seg=[];let total=0;
+    for(let i=0;i<pts.length-1;i++){
+      const a=pts[i],b=pts[i+1],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1;
+      seg.push({a,b,L,dx,dy});total+=L;
+    }
+    return{seg,total};
+  }
+  const pal=[{core:'rgba(34,211,238,0.95)',glow:'rgba(34,211,238,0.55)'},{core:'rgba(245,158,11,0.95)',glow:'rgba(245,158,11,0.55)'}];
+  class Pulse{
+    constructor(){this.reset(true);}
+    reset(first=false){
+      this.path=mkPath();this.t=first?rand(0,this.path.total):0;
+      this.delay=first?rand(0,1.0):rand(0,2.2);this.speed=rand(160,240);
+      this.cw=rand(CWN,CWX);this.tl=rand(TLN,TLX);
+      this.col=pk(pal);this.alpha=mob?rand(0.45,0.75):rand(0.55,0.95);
+    }
+    sample(d){
+      for(const s of this.path.seg){if(d<=s.L){const u=d/s.L;return{x:s.a.x+s.dx*u,y:s.a.y+s.dy*u};}d-=s.L;}
+      const l=this.path.seg[this.path.seg.length-1];return{x:l.b.x,y:l.b.y};
+    }
+    update(dt){if(this.delay>0){this.delay-=dt;return;}this.t+=this.speed*dt;if(this.t>this.path.total)this.reset();}
+    draw(o){
+      if(this.delay>0)return;
+      const h2=this.sample(this.t),t2=this.sample(Math.max(0,this.t-this.tl));
+      const g=ctx.createLinearGradient(t2.x,t2.y,h2.x,h2.y);
+      g.addColorStop(0,'rgba(0,0,0,0)');
+      g.addColorStop(0.45,this.col.glow.replace('0.55',String(0.25*this.alpha*o.am)));
+      g.addColorStop(1,this.col.core.replace('0.95',String(0.95*this.alpha*o.am)));
+      ctx.lineWidth=this.cw*o.wm;ctx.lineCap='round';ctx.strokeStyle=g;
+      ctx.beginPath();ctx.moveTo(t2.x,t2.y);ctx.lineTo(h2.x,h2.y);ctx.stroke();
+      if(!o.sh){
+        ctx.fillStyle=this.col.core.replace('0.95',String(0.95*this.alpha*o.am));
+        ctx.shadowColor=this.col.glow.replace('0.55',String(0.7*this.alpha*o.am));
+        ctx.shadowBlur=o.sb;
+        ctx.beginPath();ctx.arc(h2.x,h2.y,this.cw*1.7*o.wm,0,Math.PI*2);ctx.fill();
+        ctx.shadowBlur=0;
+      }
+    }
+  }
+  const pulses=Array.from({length:BPC},()=>new Pulse());
+  function frame(now){
+    if(!running){rafId=requestAnimationFrame(frame);return;}
+    if(sb&&now>sbu)sb=false;
+    const sr=now-lR;if(sr<FMS){rafId=requestAnimationFrame(frame);return;}
+    const dt=Math.min(0.05,(now-lN)/1000);lN=now;lR=now-(sr%FMS);
+    mFPS(now);
+    const o=sb?{am:0.55,wm:0.95,sb:0,sh:true}:{am:1,wm:1,sb:mob?8:10,sh:false};
+    const mn=mob?6:10;
+    const cnt=Math.min(sb?Math.max(mn,Math.floor(apc*0.55)):apc,pulses.length);
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=sb?'rgba(0,0,0,0.16)':'rgba(0,0,0,0.10)';
+    ctx.fillRect(0,0,w,h);
+    ctx.globalCompositeOperation='lighter';
+    for(let i=0;i<cnt;i++){pulses[i].update(dt);pulses[i].draw(o);}
+    for(let i=cnt;i<pulses.length;i++){pulses[i].update(dt);}
+    rafId=requestAnimationFrame(frame);
+  }
+  rafId=requestAnimationFrame(frame);
+  i
