@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Электрика для дома и бизнеса — LL Elektri Expert OÜ</title>
+<meta content="#0d1117" name="theme-color"/>
+<link href="assets/favicon-white.ico?v=2" rel="icon" sizes="any"/>
+<link href="assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<meta content="Электромонтаж для квартир, домов, офисов и коммерческих помещений в Ida-Virumaa. Лицензированный электрик, документы на руки. Нарва, Йыхви, Кохтла-Ярве." name="description"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Barlow', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace']
+        },
+        colors: {
+          brand: { blue:'#3b82f6', lightBlue:'#60a5fa', orange:'#f59e0b', lightOrange:'#fbbf24', dark:'#0d1117' },
+          surface: { DEFAULT:'#0d1117', card:'#161b22', elevated:'#1c2333', border:'#30363d' },
+          volt: { DEFAULT:'#f59e0b', light:'#fbbf24', glow:'#f59e0b33', dim:'#78350f' }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --volt: #f59e0b;
+    --volt-light: #fbbf24;
+    --volt-glow: rgba(245, 158, 11, 0.15);
+    --surface: #0d1117;
+    --surface-card: #161b22;
+    --surface-elevated: #1c2333;
+    --border: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #9ca3af;
+    --text-muted: #7c8490;
+  }
+  * { box-sizing: border-box; }
+  body {
+    position: relative;
+    background-color: var(--surface);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #0d1117; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+  .circuit-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.035; }
+  .circuit-bg svg { width:100%; height:100%; }
+  .grid-overlay {
+    position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
+    background-image: linear-gradient(rgba(245,158,11,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(245,158,11,0.03) 1px,transparent 1px);
+    background-size: 60px 60px;
+  }
+  #logoWatermark {
+    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.06;
+    background-image: url('assets/hero2.png');
+    background-repeat:no-repeat; background-position:50% 70%;
+    background-size: min(900px,85vw);
+    filter: grayscale(1) contrast(1.15) brightness(1.05);
+    mix-blend-mode: soft-light;
+    contain:paint; transform:translateZ(0); backface-visibility:hidden;
+  }
+  @media (max-width:768px) {
+    #logoWatermark { opacity:.04; background-size:min(520px,92vw); background-position:50% 75%; }
+  }
+  .fx-canvas {
+    position:fixed; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:2;
+    contain:paint; transform:translateZ(0); backface-visibility:hidden;
+  }
+
+  .fade-in-section {
+    opacity:0; transform:translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    will-change: opacity, transform;
+  }
+  .fade-in-section.is-visible { opacity:1; transform:none; will-change:auto; }
+  .stagger-children .fade-in-section:nth-child(2) { transition-delay:0.08s; }
+  .stagger-children .fade-in-section:nth-child(3) { transition-delay:0.16s; }
+  .stagger-children .fade-in-section:nth-child(4) { transition-delay:0.24s; }
+  .stagger-children .fade-in-section:nth-child(5) { transition-delay:0.32s; }
+  .stagger-children .fade-in-section:nth-child(6) { transition-delay:0.40s; }
+
+  .card-3d {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.3s ease;
+    border:1px solid var(--border); background:var(--surface-card);
+  }
+  .card-3d:hover {
+    transform:translateY(-6px);
+    box-shadow:0 0 30px rgba(245,158,11,0.08), 0 10px 30px rgba(0,0,0,0.3);
+    border-color:rgba(245,158,11,0.3);
+  }
+  .card-gradient-line {
+    transform:scaleX(0); transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    transform-origin:left;
+    background:linear-gradient(90deg,var(--volt),var(--volt-light),var(--volt)) !important;
+  }
+  .card-3d:hover .card-gradient-line { transform:scaleX(1); }
+
+  .service-card {
+    background:var(--surface-card); border:1px solid var(--border);
+    transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+    position:relative; overflow:hidden;
+  }
+  .service-card::before {
+    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+    background:radial-gradient(circle at 50% 0%,var(--volt-glow),transparent 70%);
+    opacity:0; transition:opacity 0.4s ease;
+  }
+  .service-card:hover::before { opacity:1; }
+  .service-card:hover {
+    border-color:rgba(245,158,11,0.25);
+    box-shadow:0 0 40px rgba(245,158,11,0.06);
+    transform:translateY(-4px);
+  }
+
+  .icon-box { position:relative; transition:all 0.3s ease; }
+  .icon-box::after {
+    content:''; position:absolute; inset:-3px; border-radius:inherit;
+    background:var(--volt); opacity:0; filter:blur(8px);
+    transition:opacity 0.3s ease; z-index:-1;
+  }
+  .group:hover .icon-box::after, .card-3d:hover .icon-box::after { opacity:0.3; }
+
+  .btn-primary {
+    background:linear-gradient(135deg,#f59e0b 0%,#fbbf24 100%);
+    color:#0d1117; font-weight:700; position:relative; overflow:hidden;
+  }
+  .btn-primary::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);
+    opacity:0; transition:opacity 0.3s ease;
+  }
+  .btn-primary:hover::before { opacity:1; }
+  .btn-primary:hover { box-shadow:0 0 25px rgba(245,158,11,0.35); }
+  .btn-primary span, .btn-primary svg { position:relative; z-index:1; }
+
+  .header-scrolled {
+    background:rgba(13,17,23,0.85) !important;
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+  .section-divider {
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--border),rgba(245,158,11,0.2),var(--border),transparent);
+  }
+  .pulse-dot { animation:pulse-glow 2s ease-in-out infinite; }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow:0 0 4px var(--volt),0 0 8px var(--volt-glow); }
+    50% { box-shadow:0 0 8px var(--volt),0 0 20px var(--volt-glow); }
+  }
+  .step-num {
+    background:linear-gradient(135deg,rgba(245,158,11,0.1),transparent);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:transparent;
+  }
+  .contact-icon { background:var(--surface-elevated); border:1px solid var(--border); transition:all 0.3s ease; }
+  .contact-icon:hover { border-color:var(--volt); box-shadow:0 0 15px var(--volt-glow); }
+  .dark-input {
+    background:var(--surface) !important; border-color:var(--border) !important;
+    color:var(--text-primary) !important;
+  }
+  .dark-input::placeholder { color:var(--text-muted) !important; }
+  .dark-input:focus { border-color:var(--volt) !important; box-shadow:0 0 0 3px var(--volt-glow) !important; }
+  ::selection { background:rgba(245,158,11,0.25); color:#fbbf24; }
+  .back-link {
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--text-muted); font-size:14px; font-weight:600;
+    transition:color 0.2s ease;
+  }
+  .back-link:hover { color:var(--volt); }
+  body::before {
+    content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; z-index:0; opacity:0.015;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat:repeat; background-size:256px 256px;
+  }
+
+  /* For-whom cards */
+  .whom-card {
+    background:var(--surface-card); border:1px solid var(--border);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius:1.5rem; padding:28px;
+  }
+  .whom-card:hover {
+    border-color:rgba(245,158,11,0.25);
+    box-shadow:0 4px 24px rgba(0,0,0,0.2);
+  }
+
+  .is-scrolling .header-scrolled { backdrop-filter:blur(10px) !important; -webkit-backdrop-filter:blur(10px) !important; }
+  .circuit-bg, .grid-overlay { contain:paint; transform:translateZ(0); backface-visibility:hidden; }
+
+  @media (prefers-reduced-motion:reduce) {
+    .fx-canvas { display:none !important; }
+    .fade-in-section { transition:none !important; opacity:1 !important; transform:none !important; }
+    .card-3d, .service-card, .whom-card, .contact-icon, .btn-primary { transition:none !important; }
+    .pulse-dot { animation:none !important; }
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness","Electrician"],
+  "name": "LL Elektri Expert OÜ",
+  "url": "https://llee.ee",
+  "telephone": ["+37281271118","+37281271119"],
+  "email": "info@llee.ee",
+  "areaServed": [{"@type":"AdministrativeArea","name":"Ida-Virumaa"}],
+  "address": {"@type":"PostalAddress","addressRegion":"Ida-Virumaa","addressCountry":"EE"}
+}
+</script>
+</head>
+<body class="font-sans">
+
+<div aria-hidden="true" class="circuit-bg">
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+<line opacity="0.5" stroke="#f59e0b" stroke-width="0.5" x1="0" x2="400" y1="100" y2="100"/>
+<line opacity="0.3" stroke="#f59e0b" stroke-width="0.5" x1="500" x2="600" y1="100" y2="100"/>
+<line opacity="0.4" stroke="#3b82f6" stroke-width="0.5" x1="0" x2="300" y1="250" y2="250"/>
+<line opacity="0.4" stroke="#3b82f6" stroke-width="0.5" x1="350" x2="350" y1="250" y2="400"/>
+<line opacity="0.3" stroke="#3b82f6" stroke-width="0.5" x1="350" x2="700" y1="400" y2="400"/>
+<line opacity="0.4" stroke="#f59e0b" stroke-width="0.5" x1="800" x2="1200" y1="200" y2="200"/>
+<line opacity="0.3" stroke="#3b82f6" stroke-width="0.5" x1="900" x2="1200" y1="500" y2="500"/>
+<line opacity="0.3" stroke="#f59e0b" stroke-width="0.5" x1="600" x2="600" y1="600" y2="800"/>
+<circle cx="400" cy="100" fill="#f59e0b" opacity="0.6" r="3"/>
+<circle cx="300" cy="250" fill="#3b82f6" opacity="0.5" r="3"/>
+<circle cx="800" cy="200" fill="#f59e0b" opacity="0.5" r="3"/>
+<circle cx="600" cy="600" fill="#f59e0b" opacity="0.4" r="3"/>
+<rect fill="none" height="6" opacity="0.4" stroke="#f59e0b" stroke-width="0.5" width="6" x="148" y="97"/>
+<rect fill="none" height="6" opacity="0.3" stroke="#f59e0b" stroke-width="0.5" width="6" x="847" y="197"/>
+</svg>
+</div>
+<div aria-hidden="true" class="grid-overlay"></div>
+<canvas aria-hidden="true" class="fx-canvas" id="fxCanvas"></canvas>
+<div aria-hidden="true" id="logoWatermark"></div>
+
+<!-- HEADER -->
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent" id="main-header">
+<div class="container mx-auto px-4 md:px-6 flex items-center justify-between relative z-10">
+  <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+    <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-surface-card border border-surface-border shadow-lg overflow-hidden">
+      <img src="logo.png" alt="LL Elektri Expert logo" class="w-full h-full object-contain p-1" loading="lazy">
+    </div>
+    <div class="block">
+      <p class="text-base md:text-lg font-extrabold text-white tracking-tight leading-tight">LL Elektri Expert OÜ</p>
+      <small class="text-xs font-medium text-volt tracking-wide block font-mono" data-i18n="brand.subtitle">Электромонтаж • Ida-Virumaa</small>
+    </div>
+  </div>
+  <nav class="hidden lg:flex items-center gap-8">
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="index.html">
+      <span data-i18n="menu.home">Главная</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-volt transition-colors relative group" href="korter.html">
+      <span data-i18n="menu.korter">Дом и бизнес</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="ku.html">
+      <span data-i18n="menu.ku">KÜ</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="ev.html">
+      <span data-i18n="menu.ev">EV-зарядки</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <a class="text-sm font-semibold text-gray-400 hover:text-volt transition-colors relative group" href="index.html#contacts">
+      <span data-i18n="menu.contacts">Контакты</span>
+      <span class="absolute inset-x-0 -bottom-1 h-0.5 bg-volt scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </a>
+    <div class="flex items-center bg-surface-elevated p-1 rounded-full border border-surface-border" id="lang-switcher">
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ru">RU</button>
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ee">EE</button>
+      <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="en">EN</button>
+    </div>
+    <a class="btn-primary px-5 py-2.5 rounded-xl text-sm shadow-lg shadow-volt/20 hover:shadow-volt/40 transition-all hover:-translate-y-0.5 active:translate-y-0 font-bold" href="#contacts">
+      <span data-i18n="menu.call">Заказать звонок</span>
+    </a>
+  </nav>
+  <button class="lg:hidden p-2 text-gray-300" id="mobile-menu-btn">
+    <i data-lucide="menu"></i>
+  </button>
+</div>
+<div class="hidden lg:hidden bg-surface-card border-b border-surface-border overflow-hidden absolute top-full left-0 right-0 shadow-2xl" id="mobile-menu">
+  <div class="container mx-auto px-4 py-6 flex flex-col gap-4">
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.home" href="index.html">Главная</a>
+    <a class="mobile-link text-lg font-medium text-volt py-2 border-b border-surface-border" data-i18n="menu.korter" href="korter.html">Дом и бизнес</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.ku" href="ku.html">KÜ</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.ev" href="ev.html">EV-зарядки</a>
+    <a class="mobile-link text-lg font-medium text-gray-200 py-2 border-b border-surface-border" data-i18n="menu.contacts" href="index.html#contacts">Контакты</a>
+    <div class="flex justify-between items-center py-4">
+      <div class="flex items-center bg-surface-elevated p-1 rounded-full border border-surface-border" id="mobile-lang-switcher">
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ru">RU</button>
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="ee">EE</button>
+        <button class="px-3 py-1 rounded-full text-xs font-bold transition-all duration-200" data-lang="en">EN</button>
+      </div>
+      <a class="btn-primary px-5 py-2.5 rounded-xl text-sm font-bold" data-i18n="menu.call" href="#contacts">Заказать звонок</a>
+    </div>
+  </div>
+</div>
+</header>
+
+<main class="relative z-10">
+
+  <!-- HERO -->
+  <section class="pt-32 pb-20 md:pt-40 md:pb-28 relative overflow-hidden">
+    <div class="absolute -top-20 right-0 w-96 h-96 bg-volt/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 -left-20 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="container mx-auto px-4 md:px-6">
+
+      <div class="mb-8 fade-in-section">
+        <a class="back-link" href="index.html">
+          <i data-lucide="arrow-left" size="16"></i>
+          <span data-i18n="hb.back">← Назад на главную</span>
+        </a>
+      </div>
+
+      <div class="max-w-3xl fade-in-section">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-card border border-surface-border mb-6">
+          <span class="w-2 h-2 rounded-full bg-volt pulse-dot"></span>
+          <span class="text-xs font-bold uppercase tracking-wider font-mono text-gray-300" data-i18n="hb.hero.badge">Дом · Офис · Бизнес · Ida-Virumaa</span>
+        </div>
+
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight" data-i18n="hb.hero.title">
+          Электрика для дома и бизнеса
+        </h2>
+        <p class="text-xl text-gray-300 mb-8 leading-relaxed" data-i18n="hb.hero.p">
+          Квартира, частный дом, офис или магазин — приедем, сделаем аккуратно и оформим документы. Те же стандарты что для крупных объектов.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 mb-10">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-volt" data-lucide="shield-check" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="hb.hero.trust1">B-kategooria pädevustunnistus</span>
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-green-400" data-lucide="file-check" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="hb.hero.trust2">Tööakt после каждой работы</span>
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border">
+            <i class="text-blue-400" data-lucide="map-pin" size="14"></i>
+            <span class="text-xs font-semibold text-gray-300 font-mono" data-i18n="hb.hero.trust3">Ida-Virumaa</span>
+          </div>
+        </div>
+
+        <!-- CTA #1 -->
+        <div class="flex flex-wrap gap-4">
+          <a class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" href="tel:+37281271118">
+            <i data-lucide="phone" size="18"></i>
+            <span data-i18n="cta.call">Позвонить</span>
+          </a>
+          <a class="btn-primary px-8 py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2" href="tel:+37281271119">
+            <i data-lucide="phone" size="18"></i>
+            <span data-i18n="cta.call">Позвонить</span>
+          </a>
+          <a class="px-8 py-4 rounded-xl border border-surface-border bg-surface-card text-gray-300 font-bold hover:bg-surface-elevated hover:border-volt/30 hover:text-volt transition-all flex items-center gap-2" href="#contacts">
+            <i data-lucide="mail" size="18"></i>
+            <span data-i18n="hb.hero.ctaForm">Написать</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ДЛЯ КОГО -->
+  <section class="py-20 relative" id="whom">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="hb.whom.title">Для кого</h2>
+        <p class="text-gray-400 text-lg" data-i18n="hb.whom.lead">Работаем с частными клиентами и бизнесом любого размера.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto stagger-children">
+
+        <div class="whom-card fade-in-section">
+          <div class="w-12 h-12 rounded-2xl bg-volt/10 text-volt flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="home" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="hb.whom.c1.t">Квартира и дом</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.whom.c1.p">Розетки, выключатели, щит, освещение, прокладка кабелей. Аккуратно, без лишнего шума и мусора.</p>
+        </div>
+
+        <div class="whom-card fade-in-section">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="building-2" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="hb.whom.c2.t">Офис и магазин</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.whom.c2.p">Монтаж под ключ при ремонте, замена щита, диагностика неисправностей, освещение торговых площадей.</p>
+        </div>
+
+        <div class="whom-card fade-in-section">
+          <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center mb-5 icon-box">
+            <i data-lucide="warehouse" size="24"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="hb.whom.c3.t">Склад и производство</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.whom.c3.p">Силовые линии под оборудование, освещение рабочих зон, щиты, заземление, диагностика.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ТИПОВЫЕ РАБОТЫ -->
+  <section class="py-20 relative" id="services">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="hb.srv.title">Типовые работы</h2>
+        <p class="text-gray-400 text-lg" data-i18n="hb.srv.lead">Берёмся за конкретные задачи — без лишних обязательств с вашей стороны.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto stagger-children">
+
+        <div class="group p-6 rounded-3xl service-card fade-in-section">
+          <div class="w-11 h-11 bg-volt/10 rounded-xl border border-volt/20 flex items-center justify-center text-volt mb-4 icon-box group-hover:scale-110 transition-transform">
+            <i data-lucide="plug" size="22"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-1 group-hover:text-volt transition-colors" data-i18n="hb.srv.s1.t">Розетки и выключатели</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.srv.s1.p">Замена, добавление новых точек, переподключение — с проверкой линии.</p>
+        </div>
+
+        <div class="group p-6 rounded-3xl service-card fade-in-section">
+          <div class="w-11 h-11 bg-volt/10 rounded-xl border border-volt/20 flex items-center justify-center text-volt mb-4 icon-box group-hover:scale-110 transition-transform">
+            <i data-lucide="lightbulb" size="22"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-1 group-hover:text-volt transition-colors" data-i18n="hb.srv.s2.t">Освещение</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.srv.s2.p">Светильники, споты, LED-ленты, датчики движения — любой сложности.</p>
+        </div>
+
+        <div class="group p-6 rounded-3xl service-card fade-in-section">
+          <div class="w-11 h-11 bg-volt/10 rounded-xl border border-volt/20 flex items-center justify-center text-volt mb-4 icon-box group-hover:scale-110 transition-transform">
+            <i data-lucide="shield" size="22"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-1 group-hover:text-volt transition-colors" data-i18n="hb.srv.s3.t">Щиты и защита</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.srv.s3.p">Сборка и модернизация щитов, автоматы, УЗО, маркировка и порядок.</p>
+        </div>
+
+        <div class="group p-6 rounded-3xl service-card fade-in-section">
+          <div class="w-11 h-11 bg-volt/10 rounded-xl border border-volt/20 flex items-center justify-center text-volt mb-4 icon-box group-hover:scale-110 transition-transform">
+            <i data-lucide="cable" size="22"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-1 group-hover:text-volt transition-colors" data-i18n="hb.srv.s4.t">Прокладка кабелей</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.srv.s4.p">В штробах, коробах, кабель-каналах — аккуратно и с фотофиксацией скрытых трасс.</p>
+        </div>
+
+        <div class="group p-6 rounded-3xl service-card fade-in-section">
+          <div class="w-11 h-11 bg-volt/10 rounded-xl border border-volt/20 flex items-center justify-center text-volt mb-4 icon-box group-hover:scale-110 transition-transform">
+            <i data-lucide="activity" size="22"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-1 group-hover:text-volt transition-colors" data-i18n="hb.srv.s5.t">Диагностика неисправностей</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.srv.s5.p">Выбивает автомат, не работает линия, мигает свет — найдём причину приборами, не на глазок.</p>
+        </div>
+
+        <div class="group p-6 rounded-3xl service-card fade-in-section">
+          <div class="w-11 h-11 bg-volt/10 rounded-xl border border-volt/20 flex items-center justify-center text-volt mb-4 icon-box group-hover:scale-110 transition-transform">
+            <i data-lucide="file-check" size="22"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-1 group-hover:text-volt transition-colors" data-i18n="hb.srv.s6.t">Документы</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.srv.s6.p">Tööakt, смета, при необходимости — протоколы измерений. На каждую работу.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- КАК РАБОТАЕМ -->
+  <section class="py-20 relative" id="process">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center mb-12 fade-in-section">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="hb.process.title">Как это работает</h2>
+        <p class="text-gray-400 text-lg" data-i18n="hb.process.lead">Просто и без лишних шагов.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-section">
+
+        <div class="relative p-7 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">01</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="hb.process.s1.t">Звонок</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.process.s1.p">Описываете задачу — уточняем детали, называем ориентировочную стоимость и договариваемся о времени.</p>
+        </div>
+
+        <div class="relative p-7 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">02</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="hb.process.s2.t">Выезд</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.process.s2.p">Приезжаем в оговорённое время. Осматриваем объект и фиксируем точную цену до начала работ.</p>
+        </div>
+
+        <div class="relative p-7 rounded-3xl border border-surface-border bg-surface-card hover:bg-surface-elevated hover:border-volt/20 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none select-none step-num font-mono">03</div>
+          <h3 class="text-base font-bold text-white mb-2" data-i18n="hb.process.s3.t">Работа</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.process.s3.p">Работаем аккуратно. Скрытые трассы фотографируем до заделки — на случай если понадобится позже.</p>
+        </div>
+
+        <div class="relative p-7 rounded-3xl border border-volt/20 bg-volt/5 hover:border-volt/40 transition-all duration-300">
+          <div class="text-5xl font-black mb-3 leading-none font-mono text-volt">✓</div>
+          <h3 class="text-base font-bold text-volt mb-2" data-i18n="hb.process.s4.t">Документы</h3>
+          <p class="text-gray-400 text-sm leading-relaxed" data-i18n="hb.process.s4.p">Tööakt и гарантийный лист на руки после завершения. Не на словах — на бумаге.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ДОВЕРИЕ -->
+  <section class="py-20 relative" id="trust">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-4 fade-in-section">
+
+          <div class="flex items-start gap-4 p-5 bg-surface-card rounded-2xl border border-surface-border hover:border-volt/20 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-volt/10 text-volt flex items-center justify-center shrink-0">
+              <i data-lucide="shield-check" size="20"></i>
+            </div>
+            <p class="text-gray-300 text-sm font-medium leading-relaxed" data-i18n="hb.trust.c1">B-kategooria pädevustunnistus — государственная квалификация. Действует до 21.04.2030.</p>
+          </div>
+
+          <div class="flex items-start gap-4 p-5 bg-surface-card rounded-2xl border border-surface-border hover:border-volt/20 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center shrink-0">
+              <i data-lucide="file-check" size="20"></i>
+            </div>
+            <p class="text-gray-300 text-sm font-medium leading-relaxed" data-i18n="hb.trust.c2">Tööakt, смета и гарантийный лист — после каждой работы без исключений.</p>
+          </div>
+
+          <div class="flex items-start gap-4 p-5 bg-surface-card rounded-2xl border border-surface-border hover:border-volt/20 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
+              <i data-lucide="clock" size="20"></i>
+            </div>
+            <p class="text-gray-300 text-sm font-medium leading-relaxed" data-i18n="hb.trust.c3">Совокупный опыт команды — более 40 лет в электромонтаже и инженерных системах.</p>
+          </div>
+
+          <div class="flex items-start gap-4 p-5 bg-surface-card rounded-2xl border border-surface-border hover:border-volt/20 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center shrink-0">
+              <i data-lucide="gauge" size="20"></i>
+            </div>
+            <p class="text-gray-300 text-sm font-medium leading-relaxed" data-i18n="hb.trust.c4">Диагностика приборами Fluke 1664 FC — измерения с результатами, не предположения.</p>
+          </div>
+
+        </div>
+
+        <div class="mt-5 p-5 rounded-2xl bg-volt/5 border border-volt/15 text-center fade-in-section">
+          <p class="text-gray-300 text-sm italic" data-i18n="hb.trust.note">Не берёмся за то, в чём не уверены. Если задача выходит за рамки — скажем честно и порекомендуем кого обратиться.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS (CTA #2) -->
+  <section class="py-24 relative" id="contacts">
+    <div class="section-divider absolute top-0 left-0 w-full"></div>
+    <div class="container mx-auto px-4 md:px-6 fade-in-section">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white" data-i18n="hb.cnt.title">Позвоните — приедем и сделаем</h2>
+          <p class="text-gray-400 text-lg mb-8 leading-relaxed" data-i18n="hb.cnt.lead">Небольшая задача или полный монтаж при ремонте — звоните, уточним детали и договоримся о времени.</p>
+          <div class="space-y-5">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-volt"><i data-lucide="phone" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.phone">Телефон</div>
+                <div class="space-y-1">
+                  <a class="block text-lg font-bold text-white hover:text-volt transition-colors" href="tel:+37281271118">+372 8127 1118</a>
+                  <a class="block text-lg font-bold text-white hover:text-volt transition-colors" href="tel:+37281271119">+372 8127 1119</a>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-volt"><i data-lucide="mail" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.email">Email</div>
+                <a class="text-lg font-bold text-white hover:text-volt transition-colors" href="mailto:info@llee.ee">info@llee.ee</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full contact-icon flex items-center justify-center text-gray-400"><i data-lucide="map-pin" size="24"></i></div>
+              <div>
+                <div class="text-xs font-bold uppercase text-gray-500 font-mono" data-i18n="cnt.addr">Адрес</div>
+                <div class="text-lg font-bold text-white">Ida-Virumaa, Estonia</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-card p-8 rounded-3xl border border-surface-border">
+          <form class="space-y-5" id="contact-form">
+            <div class="grid md:grid-cols-2 gap-5">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.name" for="name">Имя</label>
+                <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" data-i18n-attr="placeholder:form.namePh" id="name" name="name" placeholder="Как к вам обращаться?" required type="text"/>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.phone" for="phone">Телефон</label>
+                <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" id="phone" name="phone" placeholder="+372 ..." required type="tel"/>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.email" for="email">Email</label>
+              <input class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none" id="email" name="email" placeholder="Email" required type="email"/>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-gray-300 ml-1" data-i18n="form.msg" for="message">Сообщение</label>
+              <textarea class="dark-input w-full px-4 py-3 rounded-xl border transition-all outline-none resize-none" id="message" name="message" data-i18n-attr="placeholder:hb.form.msgPh" placeholder="Например: замена щита, двухкомнатная квартира, Нарва" rows="4"></textarea>
+            </div>
+            <p class="text-xs text-gray-500" data-i18n="form.help">Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.</p>
+            <button class="w-full btn-primary py-4 rounded-xl shadow-lg shadow-volt/20 text-base font-bold hover:-translate-y-1 transition-all" data-i18n="form.submit" type="submit">
+              Отправить заявку
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-surface-card border-t border-surface-border text-gray-400 py-16 relative z-10">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="bg-gradient-to-r from-volt/20 to-volt-light/10 p-8 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-8 border border-volt/20 mb-16">
+      <div class="max-w-xl">
+        <h3 class="text-2xl text-white font-bold mb-2" data-i18n="hb.f.cta">Есть задача по электрике?</h3>
+        <p class="text-gray-300" data-i18n="hb.f.sub">Звоните — уточним детали и приедем в удобное время.</p>
+      </div>
+      <a class="px-8 py-4 bg-volt text-surface font-extrabold rounded-xl shadow-lg shadow-volt/20 hover:bg-volt-light transition-colors whitespace-nowrap" href="#contacts" data-i18n="f.btn">Оставить заявку</a>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium opacity-70 border-t border-surface-border pt-8">
+      <div class="font-mono">© <span id="year"></span> LL Elektri Expert OÜ</div>
+      <div class="flex gap-6">
+        <a class="hover:text-volt transition-colors font-semibold" href="index.html">llee.ee</a>
+        <a class="hover:text-volt transition-colors font-semibold" href="mailto:info@llee.ee">info@llee.ee</a>
+        <a class="hover:text-volt transition-colors font-semibold" href="https://instagram.com/electro_kip_est" rel="noopener noreferrer" target="_blank">@electro_kip_est</a>
+        <span>Ida-Virumaa</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-volt rounded-full flex items-center justify-center text-surface shadow-2xl shadow-volt/40 border-2 border-volt-light/30 md:hidden transition-transform hover:scale-110 active:scale-95" href="#contacts">
+  <i data-lucide="mail" size="24"></i>
+</a>
+
+<script>
+const I18N = {
+  ru: {
+    metaTitle:"Электрика для дома и бизнеса — LL Elektri Expert OÜ",
+    metaDesc:"Электромонтаж для квартир, домов, офисов и коммерческих помещений в Ida-Virumaa. Лицензированный электрик, документы на руки.",
+    brand:{subtitle:"Электромонтаж • Ida-Virumaa"},
+    menu:{home:"Главная", korter:"Дом и бизнес", ku:"KÜ", ev:"EV-зарядки", contacts:"Контакты", call:"Заказать звонок"},
+    cta:{call:"Позвонить"},
+    cnt:{phone:"Телефон:", email:"Email:", addr:"Адрес:"},
+    form:{
+      name:"Имя", phone:"Телефон", email:"Email", msg:"Коротко о задаче",
+      namePh:"Как к вам обращаться?",
+      help:"Нажимая кнопку, вы соглашаетесь с обработкой данных для связи с вами по заявке.",
+      submit:"Отправить заявку",
+      alertReq:"Пожалуйста, заполните имя, телефон и email.",
+      alertOk:"Спасибо! Ваша заявка отправлена.\nМы свяжемся с вами в ближайшее время."
+    },
+    f:{btn:"Оставить заявку"},
+    hb:{
+      back:"← Назад на главную",
+      hero:{
+        badge:"Дом · Офис · Бизнес · Ida-Virumaa",
+        title:"Электрика для дома и бизнеса",
+        p:"Квартира, частный дом, офис или магазин — приедем, сделаем аккуратно и оформим документы. Те же стандарты что для крупных объектов.",
+        trust1:"B-kategooria pädevustunnistus",
+        trust2:"Tööakt после каждой работы",
+        trust3:"Ida-Virumaa",
+        ctaForm:"Написать"
+      },
+      whom:{
+        title:"Для кого", lead:"Работаем с частными клиентами и бизнесом любого размера.",
+        c1:{t:"Квартира и дом", p:"Розетки, выключатели, щит, освещение, прокладка кабелей. Аккуратно, без лишнего шума и мусора."},
+        c2:{t:"Офис и магазин", p:"Монтаж под ключ при ремонте, замена щита, диагностика неисправностей, освещение торговых площадей."},
+        c3:{t:"Склад и производство", p:"Силовые линии под оборудование, освещение рабочих зон, щиты, заземление, диагностика."}
+      },
+      srv:{
+        title:"Типовые работы", lead:"Берёмся за конкретные задачи — без лишних обязательств с вашей стороны.",
+        s1:{t:"Розетки и выключатели", p:"Замена, добавление новых точек, переподключение — с проверкой линии."},
+        s2:{t:"Освещение", p:"Светильники, споты, LED-ленты, датчики движения — любой сложности."},
+        s3:{t:"Щиты и защита", p:"Сборка и модернизация щитов, автоматы, УЗО, маркировка и порядок."},
+        s4:{t:"Прокладка кабелей", p:"В штробах, коробах, кабель-каналах — аккуратно и с фотофиксацией скрытых трасс."},
+        s5:{t:"Диагностика неисправностей", p:"Выбивает автомат, не работает линия, мигает свет — найдём причину приборами, не на глазок."},
+        s6:{t:"Документы", p:"Tööakt, смета, при необходимости — протоколы измерений. На каждую работу."}
+      },
+      process:{
+        title:"Как это работает", lead:"Просто и без лишних шагов.",
+        s1:{t:"Звонок", p:"Описываете задачу — уточняем детали, называем ориентировочную стоимость и договариваемся о времени."},
+        s2:{t:"Выезд", p:"Приезжаем в оговорённое время. Осматриваем объект и фиксируем точную цену до начала работ."},
+        s3:{t:"Работа", p:"Работаем аккуратно. Скрытые трассы фотографируем до заделки — на случай если понадобится позже."},
+        s4:{t:"Документы", p:"Tööakt и гарантийный лист на руки после завершения. Не на словах — на бумаге."}
+      },
+      trust:{
+        c1:"B-kategooria pädevustunnistus — государственная квалификация. Действует до 21.04.2030.",
+        c2:"Tööakt, смета и гарантийный лист — после каждой работы без исключений.",
+        c3:"Совокупный опыт команды — более 40 лет в электромонтаже и инженерных системах.",
+        c4:"Диагностика приборами Fluke 1664 FC — измерения с результатами, не предположения.",
+        note:"Не берёмся за то, в чём не уверены. Если задача выходит за рамки — скажем честно и порекомендуем кого обратиться."
+      },
+      cnt:{title:"Позвоните — приедем и сделаем", lead:"Небольшая задача или полный монтаж при ремонте — звоните, уточним детали и договоримся о времени."},
+      f:{cta:"Есть задача по электрике?", sub:"Звоните — уточним детали и приедем в удобное время."},
+      form:{msgPh:"Например: замена щита, двухкомнатная квартира, Нарва"}
+    }
+  },
+  ee: {
+    metaTitle:"Elektritööd kodu ja äri jaoks — LL Elektri Expert OÜ",
+    metaDesc:"Elektrimontaaž korteritele, eramutele, kontoritele ja äripindadele Ida-Virumaal. Litsentseeritud elektrik, dokumendid kätte.",
+    brand:{subtitle:"Elektritööd • Ida-Virumaa"},
+    menu:{home:"Avaleht", korter:"Kodu ja äri", ku:"KÜ", ev:"EV-laadijad", contacts:"Kontaktid", call:"Telli tagasikõne"},
+    cta:{call:"Helista"},
+    cnt:{phone:"Telefon:", email:"E-post:", addr:"Aadress:"},
+    form:{
+      name:"Nimi", phone:"Telefon", email:"E-post", msg:"Lühidalt ülesandest",
+      namePh:"Kuidas teid kõnetada?",
+      help:"Nupule vajutades nõustute oma andmete töötlemisega.",
+      submit:"Saada päring",
+      alertReq:"Palun täitke nimi, telefon ja e-post.",
+      alertOk:"Aitäh! Teie päring on saadetud.\nVõtame teiega peagi ühendust."
+    },
+    f:{btn:"Esita päring"},
+    hb:{
+      back:"← Tagasi avalehele",
+      hero:{
+        badge:"Kodu · Kontor · Äri · Ida-Virumaa",
+        title:"Elektritööd kodu ja äri jaoks",
+        p:"Korter, eramu, kontor või kauplus — tuleme, teeme korralikult ja vormistame dokumendid. Samad standardid mis suurtel objektidel.",
+        trust1:"B-kategooria pädevustunnistus",
+        trust2:"Tööakt iga töö järel",
+        trust3:"Ida-Virumaa",
+        ctaForm:"Kirjuta"
+      },
+      whom:{
+        title:"Kellele", lead:"Töötame eraisikute ja igas suuruses ettevõtetega.",
+        c1:{t:"Korter ja eramu", p:"Pistikupesad, lülitid, kilp, valgustus, kaablite paigaldus. Korralikult, ilma liigse müra ja prügita."},
+        c2:{t:"Kontor ja kauplus", p:"Võtmed kätte paigaldus remondi ajal, kilbi vahetus, rikete diagnostika, kaubandusliku pinna valgustus."},
+        c3:{t:"Ladu ja tootmine", p:"Jõuliinid seadmetele, tööalade valgustus, kilbid, maandus, diagnostika."}
+      },
+      srv:{
+        title:"Tüüpilised tööd", lead:"Võtame ette konkreetseid ülesandeid — ilma liigsete kohustuseta.",
+        s1:{t:"Pistikupesad ja lülitid", p:"Vahetus, uute punktide lisamine, ümberlülitamine — koos liini kontrollimisega."},
+        s2:{t:"Valgustus", p:"Valgustid, spotid, LED-ribad, liikumisandurid — igasuguse keerukusega."},
+        s3:{t:"Kilbid ja kaitse", p:"Kilpide koostamine ja moderniseerimine, kaitseautomaadid, RCD, märgistus ja kord."},
+        s4:{t:"Kaablite paigaldus", p:"Kraavides, karbikutes, kaablikanalites — korralikult ja varjatud trasside fotodega."},
+        s5:{t:"Rikete diagnostika", p:"Kaitseautomaat lülitub välja, liin ei tööta, tuli vilgub — leiame põhjuse instrumentidega, mitte silma järgi."},
+        s6:{t:"Dokumendid", p:"Tööakt, eelarve, vajadusel mõõteprotokollid. Iga töö kohta."}
+      },
+      process:{
+        title:"Kuidas see toimib", lead:"Lihtsalt ja ilma liigsete sammudeta.",
+        s1:{t:"Kõne", p:"Kirjeldate ülesannet — täpsustame detailid, nimetame orienteeruva maksumuse ja lepime aja kokku."},
+        s2:{t:"Väljasõit", p:"Tuleme kokkulepitud ajal. Vaatame objekti üle ja fikseerime täpse hinna enne tööde algust."},
+        s3:{t:"Töö", p:"Töötame korralikult. Varjatud trassid pildistame enne sulgemist — juhuks kui hiljem vaja läheb."},
+        s4:{t:"Dokumendid", p:"Tööakt ja garantiileht kätte pärast lõpetamist. Mitte sõnadega — paberil."}
+      },
+      trust:{
+        c1:"B-kategooria pädevustunnistus — riiklik kvalifikatsioon. Kehtib kuni 21.04.2030.",
+        c2:"Tööakt, eelarve ja garantiileht — pärast iga tööd, eranditeta.",
+        c3:"Meeskonna kogukogemus — üle 40 aasta elektripaigalduses ja insenerisüsteemides.",
+        c4:"Diagnostika Fluke 1664 FC instrumentidega — mõõtmistulemused, mitte oletused.",
+        note:"Ei võta ette seda, milles pole kindlad. Kui ülesanne ületab meie pädevust — ütleme ausalt ja soovitame kellele pöörduda."
+      },
+      cnt:{title:"Helistage — tuleme ja teeme", lead:"Väike ülesanne või täielik paigaldus remondi ajal — helistage, täpsustame detailid ja lepime aja kokku."},
+      f:{cta:"On elektritöö ülesanne?", sub:"Helistage — täpsustame detailid ja tuleme sobival ajal."},
+      form:{msgPh:"Nt: kilbi vahetus, kahetoaline korter, Narva"}
+    }
+  },
+  en: {
+    metaTitle:"Electrical Works for Home and Business — LL Elektri Expert OÜ",
+    metaDesc:"Electrical installation for apartments, houses, offices and commercial premises in Ida-Virumaa. Licensed electrician, documents included.",
+    brand:{subtitle:"Electrical works • Ida-Viru"},
+    menu:{home:"Home", korter:"Home & Business", ku:"HOA", ev:"EV Charging", contacts:"Contacts", call:"Request a call"},
+    cta:{call:"Call"},
+    cnt:{phone:"Phone:", email:"Email:", addr:"Address:"},
+    form:{
+      name:"Name", phone:"Phone", email:"Email", msg:"Short description",
+      namePh:"How should we address you?",
+      help:"By clicking the button you agree to the processing of your data to contact you regarding the request.",
+      submit:"Send request",
+      alertReq:"Please fill in name, phone and email.",
+      alertOk:"Thank you! Your request has been sent.\nWe will contact you shortly."
+    },
+    f:{btn:"Send request"},
+    hb:{
+      back:"← Back to home",
+      hero:{
+        badge:"Home · Office · Business · Ida-Virumaa",
+        title:"Electrical works for home and business",
+        p:"Apartment, house, office or shop — we come, do the job neatly and provide documents. The same standards as for large projects.",
+        trust1:"B-kategooria pädevustunnistus",
+        trust2:"Acceptance act for every job",
+        trust3:"Ida-Virumaa",
+        ctaForm:"Write to us"
+      },
+      whom:{
+        title:"Who we work with", lead:"We work with private clients and businesses of any size.",
+        c1:{t:"Apartment and house", p:"Sockets, switches, panel, lighting, cable runs. Neat, no unnecessary noise or mess."},
+        c2:{t:"Office and shop", p:"Turnkey installation during renovation, panel replacement, fault diagnostics, retail lighting."},
+        c3:{t:"Warehouse and production", p:"Power lines for equipment, work area lighting, panels, earthing, diagnostics."}
+      },
+      srv:{
+        title:"Typical works", lead:"We take on specific tasks — no unnecessary commitments on your part.",
+        s1:{t:"Sockets and switches", p:"Replacement, adding new points, rewiring — with line testing."},
+        s2:{t:"Lighting", p:"Fixtures, spotlights, LED strips, motion sensors — any complexity."},
+        s3:{t:"Panels and protection", p:"Panel assembly and upgrade, breakers, RCD, labelling and tidying."},
+        s4:{t:"Cable runs", p:"In chases, trunking, conduit — neat and with photos of concealed routes."},
+        s5:{t:"Fault diagnostics", p:"Breaker trips, dead line, flickering light — we find the cause with instruments, not by guesswork."},
+        s6:{t:"Documents", p:"Acceptance act, quote, measurement protocols if needed. For every job."}
+      },
+      process:{
+        title:"How it works", lead:"Simple and straightforward.",
+        s1:{t:"Call", p:"You describe the task — we clarify details, give an indicative price and agree on a time."},
+        s2:{t:"Site visit", p:"We arrive at the agreed time, inspect the site and confirm the exact price before starting."},
+        s3:{t:"Work", p:"We work neatly. Concealed cable runs are photographed before closing — in case it's needed later."},
+        s4:{t:"Documents", p:"Acceptance act and warranty card on completion. Not just words — in writing."}
+      },
+      trust:{
+        c1:"B-kategooria pädevustunnistus — state qualification. Valid until 21.04.2030.",
+        c2:"Acceptance act, quote and warranty card — after every job, no exceptions.",
+        c3:"Combined team experience — 40+ years in electrical installation and engineering systems.",
+        c4:"Diagnostics with Fluke 1664 FC — measured results, not guesswork.",
+        note:"We don't take on what we're not confident in. If a task is outside our scope — we'll say so honestly and point you in the right direction."
+      },
+      cnt:{title:"Call us — we come and do the job", lead:"Small task or full installation during renovation — call us, we'll clarify details and agree on a time."},
+      f:{cta:"Got an electrical task?", sub:"Call us — we'll clarify details and come at a convenient time."},
+      form:{msgPh:"e.g., panel replacement, two-room apartment, Narva"}
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  let currentLang = localStorage.getItem('lang');
+  if (!currentLang || !I18N[currentLang]) {
+    const b = (navigator.language || 'ru').toLowerCase();
+    currentLang = b.startsWith('et') ? 'ee' : b.startsWith('en') ? 'en' : 'ru';
+  }
+
+  function getDeep(obj, path) {
+    return path.split('.').reduce((o, k) => o ? o[k] : null, obj);
+  }
+
+  function updateLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang === 'ee' ? 'et' : lang;
+    const t = I18N[lang];
+    document.title = t.metaTitle;
+    document.querySelector('meta[name="description"]').setAttribute('content', t.metaDesc);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const val = getDeep(t, el.getAttribute('data-i18n'));
+      if (val !== null && val !== undefined) el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.getAttribute('data-i18n-attr').split('|').forEach(pair => {
+        const [attr, key] = pair.split(':');
+        const val = getDeep(t, key);
+        if (val) el.setAttribute(attr, val);
+      });
+    });
+    const updateSwitcher = sel => {
+      document.querySelectorAll(`${sel} button`).forEach(btn => {
+        btn.className = btn.dataset.lang === lang
+          ? "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 bg-volt text-surface shadow-sm"
+          : "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 text-gray-500 hover:text-gray-300";
+      });
+    };
+    updateSwitcher('#lang-switcher');
+    updateSwitcher('#mobile-lang-switcher');
+  }
+
+  updateLanguage(currentLang);
+  document.querySelectorAll('button[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+  });
+
+  const header = document.getElementById('main-header');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        header.className = window.scrollY > 50
+          ? "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 header-scrolled"
+          : "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-transparent";
+        ticking = false;
+      });
+    }
+  }, { passive: true });
+
+  let __st = 0, __sc = false;
+  const __set = on => {
+    if (__sc === on) return; __sc = on;
+    document.documentElement.classList.toggle('is-scrolling', on);
+    window.dispatchEvent(new CustomEvent('llee:scroll', { detail: { scrolling: on } }));
+  };
+  window.addEventListener('scroll', () => { __set(true); clearTimeout(__st); __st = setTimeout(() => __set(false), 200); }, { passive: true });
+
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    menuBtn.innerHTML = mobileMenu.classList.contains('hidden') ? '<i data-lucide="menu"></i>' : '<i data-lucide="x"></i>';
+    lucide.createIcons();
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      menuBtn.innerHTML = '<i data-lucide="menu"></i>';
+      lucide.createIcons();
+    });
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
+
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const t = I18N[currentLang];
+      const n = form.querySelector('#name').value.trim();
+      const p = form.querySelector('#phone').value.trim();
+      const em = form.querySelector('#email').value.trim();
+      if (!n || !p || !em) { alert(t.form.alertReq); return; }
+      alert(t.form.alertOk);
+      form.reset();
+    });
+  }
+});
+</script>
+
+<!-- PCB pulse canvas -->
+<script>
+(() => {
+  const canvas = document.getElementById('fxCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const mqR = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mqR && mqR.matches) { canvas.style.display = 'none'; return; }
+  const mob = /Mobi|Android/i.test(navigator.userAgent);
+  const BPC = mob?12:22, FMS = mob?33:24;
+  const CWN = mob?1.2:1.5, CWX = mob?2.4:3.2;
+  const TLN = mob?60:80, TLX = mob?120:180;
+  const CMN = mob?50:60, CMX = mob?80:110;
+  let w, h, apc=BPC, running=true, rafId=null, sb=false, sbu=0;
+  const rand=(a,b)=>a+Math.random()*(b-a), ri=(a,b)=>Math.floor(rand(a,b+1));
+  const cl=(v,a,b)=>Math.max(a,Math.min(b,v)), pk=a=>a[Math.floor(Math.random()*a.length)];
+  function resize(){
+    const dpr=Math.min(window.devicePixelRatio||1,mob?1.5:2);
+    w=window.innerWidth; h=window.innerHeight;
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+    canvas.style.width=w+'px'; canvas.style.height=h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize();
+  let rt=0; window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);},{passive:true});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){running=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}}
+    else{running=true;lN=performance.now();lR=lN;if(!rafId)rafId=requestAnimationFrame(frame);}
+  });
+  window.addEventListener('llee:scroll',e=>{
+    if(e&&e.detail&&e.detail.scrolling){sb=true;sbu=performance.now()+220;}else{sb=false;}
+  });
+  let ff=0,fl=performance.now();
+  function mFPS(now){
+    ff++;
+    if(now-fl>=2000){
+      const fps=ff/((now-fl)/1000);fl=now;ff=0;
+      const mn=mob?6:10;
+      if(fps<26&&apc>mn)apc=Math.max(mn,apc-(mob?2:3));
+      else if(fps>52&&apc<BPC)apc=Math.min(BPC,apc+1);
+    }
+  }
+  function mkPath(){
+    const cell=ri(CMN,CMX),cols=Math.max(8,Math.floor(w/cell)),rows=Math.max(6,Math.floor(h/cell));
+    let x=ri(0,cols-1)*cell+cell/2,y=ri(0,rows-1)*cell+cell/2;
+    const pts=[{x,y}];let dir=pk([[1,0],[-1,0],[0,1],[0,-1]]);
+    for(let i=0;i<ri(3,8);i++){
+      if(Math.random()<0.75)dir=(dir[0]!==0)?pk([[0,1],[0,-1]]):pk([[1,0],[-1,0]]);
+      else if(Math.random()<0.5)dir=[-dir[0],-dir[1]];
+      const len=ri(3,ri(5,11));
+      x=cl(x+dir[0]*len*cell,cell/2,w-cell/2);y=cl(y+dir[1]*len*cell,cell/2,h-cell/2);
+      pts.push({x,y});
+    }
+    const seg=[];let total=0;
+    for(let i=0;i<pts.length-1;i++){
+      const a=pts[i],b=pts[i+1],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1;
+      seg.push({a,b,L,dx,dy});total+=L;
+    }
+    return{seg,total};
+  }
+  const pal=[{core:'rgba(34,211,238,0.95)',glow:'rgba(34,211,238,0.55)'},{core:'rgba(245,158,11,0.95)',glow:'rgba(245,158,11,0.55)'}];
+  class Pulse{
+    constructor(){this.reset(true);}
+    reset(first=false){
+      this.path=mkPath();this.t=first?rand(0,this.path.total):0;
+      this.delay=first?rand(0,1.0):rand(0,2.2);this.speed=rand(160,240);
+      this.cw=rand(CWN,CWX);this.tl=rand(TLN,TLX);
+      this.col=pk(pal);this.alpha=mob?rand(0.45,0.75):rand(0.55,0.95);
+    }
+    sample(d){
+      for(const s of this.path.seg){if(d<=s.L){const u=d/s.L;return{x:s.a.x+s.dx*u,y:s.a.y+s.dy*u};}d-=s.L;}
+      const l=this.path.seg[this.path.seg.length-1];return{x:l.b.x,y:l.b.y};
+    }
+    update(dt){if(this.delay>0){this.delay-=dt;return;}this.t+=this.speed*dt;if(this.t>this.path.total)this.reset();}
+    draw(o){
+      if(this.delay>0)return;
+      const h2=this.sample(this.t),t2=this.sample(Math.max(0,this.t-this.tl));
+      const g=ctx.createLinearGradient(t2.x,t2.y,h2.x,h2.y);
+      g.addColorStop(0,'rgba(0,0,0,0)');
+      g.addColorStop(0.45,this.col.glow.replace('0.55',String(0.25*this.alpha*o.am)));
+      g.addColorStop(1,this.col.core.replace('0.95',String(0.95*this.alpha*o.am)));
+      ctx.lineWidth=this.cw*o.wm;ctx.lineCap='round';ctx.strokeStyle=g;
+      ctx.beginPath();ctx.moveTo(t2.x,t2.y);ctx.lineTo(h2.x,h2.y);ctx.stroke();
+      if(!o.sh){
+        ctx.fillStyle=this.col.core.replace('0.95',String(0.95*this.alpha*o.am));
+        ctx.shadowColor=this.col.glow.replace('0.55',String(0.7*this.alpha*o.am));
+        ctx.shadowBlur=o.sb;
+        ctx.beginPath();ctx.arc(h2.x,h2.y,this.cw*1.7*o.wm,0,Math.PI*2);ctx.fill();
+        ctx.shadowBlur=0;
+      }
+    }
+  }
+  const pulses=Array.from({length:BPC},()=>new Pulse());
+  let lN=performance.now(),lR=lN;
+  function frame(now){
+    if(!running){rafId=requestAnimationFrame(frame);return;}
+    if(sb&&now>sbu)sb=false;
+    const sr=now-lR;if(sr<FMS){rafId=requestAnimationFrame(frame);return;}
+    const dt=Math.min(0.05,(now-lN)/1000);lN=now;lR=now-(sr%FMS);
+    mFPS(now);
+    const o=sb?{am:0.55,wm:0.95,sb:0,sh:true}:{am:1,wm:1,sb:mob?8:10,sh:false};
+    const mn=mob?6:10;
+    const cnt=Math.min(sb?Math.max(mn,Math.floor(apc*0.55)):apc,pulses.length);
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=sb?'rgba(0,0,0,0.16)':'rgba(0,0,0,0.10)';
+    ctx.fillRect(0,0,w,h);
+    ctx.globalCompositeOperation='lighter';
+    for(let i=0;i<cnt;i++){pulses[i].update(dt);pulses[i].draw(o);}
+    for(let i=cnt;i<pulses.length;i++){pulses[i].update(dt);}
+    rafId=requestAnimationFrame(frame);
+  }
+  rafId=requestAnimationFrame(frame);
+  if(mqR&&mqR.addEventListener){
+    mqR.addEventListener('change',e=>{
+      if(e.matches){canvas.style.display='none';running=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}}
+      else{canvas.style.display='';running=true;lN=performance.now();lR=lN;if(!rafId)rafId=requestAnimationFrame(frame);}
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
