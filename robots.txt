@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://llee.ee/sitemap.xml
