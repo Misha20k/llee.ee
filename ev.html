@@ -1225,7 +1225,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!currentLang || !I18N[currentLang]) {
     const browser = (navigator.language || 'ru').toLowerCase();
     if (browser.startsWith('et')) currentLang = 'ee';
-    else if (browser.startsWith('en')) currentLang = 'en';
     else currentLang = 'ru';
   }
 
