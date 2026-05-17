@@ -1146,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLang = localStorage.getItem('lang');
   if (!currentLang || !I18N[currentLang]) {
     const b = (navigator.language || 'ru').toLowerCase();
-    currentLang = b.startsWith('et') ? 'ee' : b.startsWith('en') ? 'en' : 'ru';
+    currentLang = b.startsWith('et') ? 'ee' : 'ru';
   }
 
   function getDeep(obj, path) {
